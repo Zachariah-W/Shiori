@@ -1,0 +1,75 @@
+{
+  "trips": [
+    {
+      "region": "oceania",
+      "country": "Marshall Islands",
+      "startDate": "08/08/2024",
+      "endDate": "08/09/2024",
+      "events": [
+        {
+          "id": 1,
+          "title": "sfdfsd",
+          "content": "sdfsf"
+        }
+      ],
+      "id": "538f"
+    },
+    {
+      "id": "6b26",
+      "region": "europe-north-america",
+      "country": "Canada",
+      "startDate": "08/09/2024",
+      "endDate": "08/29/2024",
+      "events": [
+        {
+          "id": 1,
+          "title": "erdfdfiovjsoipdvjwpovijdposifjvpdoifjvspdoi",
+          "content": "ewr"
+        },
+        {
+          "id": 2,
+          "title": "ertr",
+          "content": "wrtg"
+        },
+        {
+          "id": 3,
+          "title": "Hello",
+          "content": "World"
+        }
+      ]
+    },
+    {
+      "id": "d831",
+      "region": "east-south-asia",
+      "country": "South Korea",
+      "startDate": "07/23/2024",
+      "endDate": " 07/29/2024",
+      "events": [
+        {
+          "id": 1,
+          "title": "地點",
+          "content": "- 弘大（非常好逛，很多店面可以買衣服且選擇性多樣，中低價衣服居多，韓國購物必去）\n- 新沙站（有一些店，有機會去逛一下不錯）\n- 漢南洞（比較多小眾的品牌，價格中上，斜坡非常多走路有一點累，如果沒有特別想要逛的店建議有多餘的時間來看看就好）\n- 樂天百貨（有非常多店家，如果在明洞的話可以去逛逛，只是多數東西的價位都是中偏高）\n- 聖水洞（較多時尚潮流品牌，但價位都偏高一點，但整體來說還是直得一去）\n- 狎鷗亭K-Star-Road （整條路都是精品名牌，路上有幾隻韓團的小熊，但除此之外沒有什麼很特別的）\n- 明洞（很好逛，衣服保養品等等的應有皆有，光是Olive Young就很多間了，有一點像台灣的夜市，小吃攤非常多，非常推薦。明洞也是換錢匯率算是最好的地方了，如果要換錢可以去明洞換）\n- 星空圖書館（在一個商場裡面，星空圖書館本身就很直得去看看，蠻壯觀的。看完圖書館後也可以直接走到商場裡面逛街）\n- 文昌宮、景福宮（有一點像是韓國的故宮博物院或是日本的淺草寺，蠻壯觀的，只是那一區除了文物以外比較沒有期他的。入內要收錢，但是好像如果有穿韓服的話就不用付門票）"
+        },
+        {
+          "id": 2,
+          "title": "食物",
+          "content": "- Idaejo Pork-on-the-Bone（排骨湯店，味道一般，骨頭很大但是肉偏少，不覺得是必去）\n- Colin 冰店（我們點柿子冰，還不錯有時間可以去去看）\n- Nudake（Bakery Shop，是名店還不錯吃，蠻推薦去吃的同時也是一個很適合拍照打卡的地方）\n- Ugly Bakery （還不錯，但並不是必吃的，尤其是如果要排很長的隊伍我覺得沒有很直得排隊）\n- Issac（三明治店，有路過或在附近的話蠻推薦去吃的）\n- EGGDROP(三明治店，還不錯吃如果有經過可以來吃吃看，整體味道感覺偏甜，相較Issac我覺得Issac比較好吃)\n- BHC Chicken 炸雞（就是一般的韓式炸雞，還不錯吃）\n- 明洞餃子（非常推薦去吃，只是裡面位子偏小，且可能會需要排個隊，但是如果麵跟餃子都要點的話份量可能會比較多）\n- 明洞烏達里醬蟹（在一棟建築物的二樓，我覺得很好吃，只是份量也有一點多就是了）\n- Musoe Kimchi Grilled Pork Belly Myeongdong Branch 서울 중구 명동8가길 7 2층（一間位在明洞的烤肉店，他們的泡菜好吃且份量很多，肉也是偏薄片形的豬肉，非常好吃）\n- Chupungnyeong Kal Grilled Pork Belly Apgujeong Branch서울 강남구 도산대로51길 41 1층（韓國的烤肉店，我覺得很好吃，且附近也蠻多可以逛的商店）\n"
+        }
+      ]
+    },
+    {
+      "id": "dfc8",
+      "region": "central-southern-asia",
+      "country": "Afghanistan",
+      "startDate": "08/07/2024",
+      "endDate": " 08/07/2024",
+      "events": [
+        {
+          "id": 1,
+          "title": "fuheruff",
+          "content": "ewrbfhewr\nerfbeiruf\nerbfuiwerbf\n\nwerfqwe\n\neqwrf"
+        }
+      ]
+    }
+  ]
+}
