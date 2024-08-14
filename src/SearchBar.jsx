@@ -15,7 +15,7 @@ const SearchBar = ({ onSearch }) => {
         <FaSearch className="search-icon" />
         <input
           id="search-input"
-          placeholder="Type to Search Countries..."
+          placeholder="Search Countries..."
           value={searchTerm}
           onChange={handleSearch}
         />

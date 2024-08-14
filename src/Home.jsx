@@ -2,18 +2,26 @@ import { useState } from "react";
 import SearchBar from "./SearchBar";
 import TripList from "./TripList";
 import useFetch from "./useFetch";
+import SwitchButton from "./SwitchButton";
 
 const Home = () => {
   const { data: trips } = useFetch("http://localhost:8000/trips");
   const [filteredTrips, setFilteredTrips] = useState([]);
+  const [regionFilterActive, setRegionFilterActive] = useState(false);
 
   const handleSearch = (searchTerm) => {
-    if (trips) {
+    if (searchTerm.trim() === "") {
+      setFilteredTrips([]);
+    } else if (trips) {
       const filtered = trips.filter(trip =>
         trip.country.toLowerCase().includes(searchTerm.toLowerCase())
       );
       setFilteredTrips(filtered);
     }
+  };
+
+  const handleRegionsFilter = () => {
+    setRegionFilterActive(!regionFilterActive);
   };
 
   const regions = {
@@ -29,17 +37,30 @@ const Home = () => {
 
   return (
     <div className="home">
-      <SearchBar onSearch={handleSearch} /><br />
+      <div className="home-filters-search">
+        <SearchBar onSearch={handleSearch} />
+        <p>|</p>
+        <div className="home-region-filter">
+          <SwitchButton onClick={handleRegionsFilter}/>
+          <p>Regions Filter</p>
+        </div>
+        <p>|</p>
+        <div className="home-date-filter">
+          <SwitchButton />
+          <p>Calendar View</p>
+        </div>
+      </div>
+      <br /><hr />
       {filteredTrips.length > 0 && <TripList trips={filteredTrips} title="Search Results" />}
-      <hr />
-      {trips && <TripList trips={trips} title="All Trips" />}
-      <hr />
-      {trips && Object.keys(regions).map(region => {
-        const regionTrips = trips.filter(trip => trip.region === region);
-        return regionTrips.length > 0 && (
-          <TripList key={region} trips={regionTrips} title={regions[region]} />
-        );
-      })}
+      {filteredTrips.length === 0 && !regionFilterActive && trips && <TripList trips={trips} title="All Trips" />}
+      {filteredTrips.length === 0 && regionFilterActive && trips && (
+        Object.keys(regions).map(region => {
+          const regionTrips = trips.filter(trip => trip.region === region);
+          return regionTrips.length > 0 && (
+            <TripList key={region} trips={regionTrips} title={regions[region]} />
+          );
+        })
+      )}
     </div>
   );
 };

@@ -52,6 +52,10 @@ const Create = () => {
     );
     setEvents(updatedEvents);
   };
+
+  const handleDateSort = () => {
+    
+  }
   
 
   const handleSubmit = (e) => {
