@@ -13,7 +13,7 @@ const Home = () => {
     if (searchTerm.trim() === "") {
       setFilteredTrips([]);
     } else if (trips) {
-      const filtered = trips.filter(trip =>
+      const filtered = trips.filter((trip) =>
         trip.country.toLowerCase().includes(searchTerm.toLowerCase())
       );
       setFilteredTrips(filtered);
@@ -31,36 +31,50 @@ const Home = () => {
     "latin-caribbean": "Latin America and the Caribbean",
     "north-africa-western-asia": "Northern Africa and Western Asia",
     "australia-new-zealand": "Australia and New Zealand",
-    "oceania": "Oceania",
-    "sub-saharan-africa": "Sub-Saharan Africa"
+    oceania: "Oceania",
+    "sub-saharan-africa": "Sub-Saharan Africa",
   };
 
+  const regionDateFilters = "flex items-center gap-[10px] text-sm";
+
   return (
-    <div className="home">
-      <div className="home-filters-search">
+    <div>
+      <div class="flex items-center gap-[20px] mt-[-40px] max-w-[600px]">
         <SearchBar onSearch={handleSearch} />
         <p>|</p>
-        <div className="home-region-filter">
-          <SwitchButton onClick={handleRegionsFilter}/>
+        <div class={regionDateFilters}>
+          <SwitchButton onClick={handleRegionsFilter} />
           <p>Regions Filter</p>
         </div>
         <p>|</p>
-        <div className="home-date-filter">
+        <div class={regionDateFilters}>
           <SwitchButton />
           <p>Calendar View</p>
         </div>
       </div>
-      <br /><hr />
-      {filteredTrips.length > 0 && <TripList trips={filteredTrips} title="Search Results" />}
-      {filteredTrips.length === 0 && !regionFilterActive && trips && <TripList trips={trips} title="All Trips" />}
-      {filteredTrips.length === 0 && regionFilterActive && trips && (
-        Object.keys(regions).map(region => {
-          const regionTrips = trips.filter(trip => trip.region === region);
-          return regionTrips.length > 0 && (
-            <TripList key={region} trips={regionTrips} title={regions[region]} />
-          );
-        })
+      <br />
+      <hr class="border-0 h-px bg-gradient-to-r from-transparent via-gray-500 to-transparent mx-[8%] mb-2.5" />
+      {filteredTrips.length > 0 && (
+        <TripList trips={filteredTrips} title="Search Results" />
       )}
+      {filteredTrips.length === 0 && !regionFilterActive && trips && (
+        <TripList trips={trips} title="All Trips" />
+      )}
+      {filteredTrips.length === 0 &&
+        regionFilterActive &&
+        trips &&
+        Object.keys(regions).map((region) => {
+          const regionTrips = trips.filter((trip) => trip.region === region);
+          return (
+            regionTrips.length > 0 && (
+              <TripList
+                key={region}
+                trips={regionTrips}
+                title={regions[region]}
+              />
+            )
+          );
+        })}
     </div>
   );
 };

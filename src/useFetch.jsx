@@ -10,7 +10,7 @@ const useFetch = (url) => {
       setLoading(true);
       try {
         const response = await fetch(url);
-        if (!response.ok) throw new Error('Network response was not ok');
+        if (!response.ok) throw new Error("Network response was not ok");
         const result = await response.json();
         setData(result);
       } catch (error) {
@@ -24,6 +24,6 @@ const useFetch = (url) => {
   }, [url]);
 
   return { data, error, loading };
-}
+};
 
 export default useFetch;

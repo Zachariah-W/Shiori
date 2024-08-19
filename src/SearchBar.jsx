@@ -10,11 +10,11 @@ const SearchBar = ({ onSearch }) => {
   };
 
   return (
-    <div className="all-home-search">
-      <div className="search-container">
-        <FaSearch className="search-icon" />
+    <div className="flex items-center">
+      <div className="max-w-[200px] h-[30px] bg-white flex items-center pl-4 transition-all duration-500 rounded-md cursor-pointer hover:bg-gray-100">
+        <FaSearch className="text-lg mr-2" />
         <input
-          id="search-input"
+          className="bg-transparent border-none w-full pl-1 text-sm outline-none focus:outline-none"
           placeholder="Search Countries..."
           value={searchTerm}
           onChange={handleSearch}
