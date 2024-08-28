@@ -31,7 +31,6 @@ const Home = () => {
     "latin-caribbean": "Latin America and the Caribbean",
     "north-africa-western-asia": "Northern Africa and Western Asia",
     "australia-new-zealand": "Australia and New Zealand",
-    oceania: "Oceania",
     "sub-saharan-africa": "Sub-Saharan Africa",
   };
 
