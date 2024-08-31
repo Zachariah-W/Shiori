@@ -1,7 +1,8 @@
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
+import { Trip } from "./Home";
 
-const useFetch = (url) => {
-  const [data, setData] = useState(null);
+const individualFetch = (id: string) => {
+  const [data, setData] = useState<Trip | null>(null);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
 
@@ -9,11 +10,11 @@ const useFetch = (url) => {
     const fetchData = async () => {
       setLoading(true);
       try {
-        const response = await fetch(url);
+        const response = await fetch("http://localhost:8000/trips/" + id);
         if (!response.ok) throw new Error("Network response was not ok");
         const result = await response.json();
         setData(result);
-      } catch (error) {
+      } catch (error: any) {
         setError(error);
       } finally {
         setLoading(false);
@@ -21,9 +22,9 @@ const useFetch = (url) => {
     };
 
     fetchData();
-  }, [url]);
+  }, [id]);
 
   return { data, error, loading };
 };
 
-export default useFetch;
+export default individualFetch;

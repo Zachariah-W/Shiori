@@ -2,23 +2,30 @@ import { useState } from "react";
 import SearchBar from "./SearchBar";
 import TripList from "./TripList";
 import useFetch from "./useFetch";
-import SwitchButton from "./SwitchButton";
+import { SwitchButton, MaterialUISwitch } from "./SwitchButton";
+import { Event } from "./EditTrip";
+export type Region =
+  | "east-south-asia"
+  | "central-southern-asia"
+  | "europe-north-america"
+  | "latin-caribbean"
+  | "north-africa-western-asia"
+  | "australia-new-zealand"
+  | "sub-saharan-africa";
+export type Trip = {
+  id: string;
+  region: Region;
+  country: string;
+  startDate: string;
+  endDate: string;
+  events: Event[];
+};
+export type Trips = Trip[];
 
 const Home = () => {
   const { data: trips } = useFetch("http://localhost:8000/trips");
-  const [filteredTrips, setFilteredTrips] = useState([]);
+  const [filteredTrips, setFilteredTrips] = useState<Trips>([]);
   const [regionFilterActive, setRegionFilterActive] = useState(false);
-
-  const handleSearch = (searchTerm) => {
-    if (searchTerm.trim() === "") {
-      setFilteredTrips([]);
-    } else if (trips) {
-      const filtered = trips.filter((trip) =>
-        trip.country.toLowerCase().includes(searchTerm.toLowerCase())
-      );
-      setFilteredTrips(filtered);
-    }
-  };
 
   const handleRegionsFilter = () => {
     setRegionFilterActive(!regionFilterActive);
@@ -34,25 +41,36 @@ const Home = () => {
     "sub-saharan-africa": "Sub-Saharan Africa",
   };
 
-  const regionDateFilters = "flex items-center gap-[10px] text-sm";
+  const regionModeFilters = "flex items-center gap-[10px] text-sm";
 
   return (
     <div>
-      <div class="flex items-center gap-[20px] mt-[-40px] max-w-[600px]">
-        <SearchBar onSearch={handleSearch} />
+      <div className="flex items-center gap-[20px] mt-[-40px] max-w-[600px]">
+        <SearchBar
+          onSearch={(searchTerm) => {
+            if (searchTerm.trim() === "") {
+              setFilteredTrips([]);
+            } else if (trips) {
+              const filtered = trips.filter((trip) =>
+                trip.country.toLowerCase().includes(searchTerm.toLowerCase())
+              );
+              setFilteredTrips(filtered);
+            }
+          }}
+        />
         <p>|</p>
-        <div class={regionDateFilters}>
+        <div className={regionModeFilters}>
           <SwitchButton onClick={handleRegionsFilter} />
           <p>Regions Filter</p>
         </div>
         <p>|</p>
-        <div class={regionDateFilters}>
-          <SwitchButton />
-          <p>Calendar View</p>
+        <div className={regionModeFilters}>
+          <MaterialUISwitch />
+          <p>Mode</p>
         </div>
       </div>
       <br />
-      <hr class="border-0 h-px bg-gradient-to-r from-transparent via-gray-500 to-transparent mx-[8%] mb-2.5" />
+      <hr className="border-0 h-px bg-gradient-to-r from-transparent via-gray-500 to-transparent mx-[8%] mb-2.5" />
       {filteredTrips.length > 0 && (
         <TripList trips={filteredTrips} title="Search Results" />
       )}
@@ -62,7 +80,7 @@ const Home = () => {
       {filteredTrips.length === 0 &&
         regionFilterActive &&
         trips &&
-        Object.keys(regions).map((region) => {
+        (Object.keys(regions) as Region[]).map((region) => {
           const regionTrips = trips.filter((trip) => trip.region === region);
           return (
             regionTrips.length > 0 && (

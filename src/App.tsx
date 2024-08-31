@@ -9,9 +9,9 @@ import EditTrip from "./EditTrip";
 function App() {
   return (
     <Router>
-      <div class="App">
+      <div className="App">
         <Navbar />
-        <div class="max-w-[600px] mx-auto my-10 p-5">
+        <div className="max-w-[600px] mx-auto my-10 p-5">
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/create" element={<Create />} />

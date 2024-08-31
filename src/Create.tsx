@@ -3,22 +3,17 @@ import { useNavigate } from "react-router-dom";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { format } from "date-fns";
-import CreateEvent from "./CreateEvent";
+import CreateEvent, { Event } from "./CreateEvent";
+import { Region, Trips } from "./Home";
 
 const Create = () => {
-  const [events, setEvents] = useState([]);
-  const [tempStartDate, setStartDate] = useState(null);
-  const [tempEndDate, setEndDate] = useState(null);
-  const [region, setRegion] = useState("");
-  const [countryOptions, setCountryOptions] = useState([]);
+  const [events, setEvents] = useState<Event[]>([]);
+  const [tempStartDate, setStartDate] = useState<Date | undefined>(undefined);
+  const [tempEndDate, setEndDate] = useState<Date | undefined>(undefined);
+  const [region, setRegion] = useState<Region>();
+  const [countryOptions, setCountryOptions] = useState<string[]>([]);
   const [selectedCountry, setSelectedCountry] = useState("");
   const navigate = useNavigate();
-
-  const handleDateChange = (range) => {
-    const [tempStartDate, tempEndDate] = range;
-    setStartDate(tempStartDate);
-    setEndDate(tempEndDate);
-  };
 
   const regions = {
     "east-south-asia": [
@@ -87,47 +82,11 @@ const Create = () => {
     ],
   };
 
-  const handleRegionChange = (event) => {
-    const region = event.target.value;
-    setRegion(region);
-    setCountryOptions(regions[region] || []);
-    setSelectedCountry("");
-  };
-
-  const handleCountryChange = (event) => {
-    setSelectedCountry(event.target.value);
-  };
-
-  const addEvent = () => {
-    setEvents([...events, { id: events.length + 1, title: "", content: "" }]);
-  };
-
-  const handleEventChange = (id, updatedEvent) => {
+  const handleEventChange = (id: number, updatedEvent: Event) => {
     const updatedEvents = events.map((event) =>
       event.id === id ? { ...event, ...updatedEvent } : event
     );
     setEvents(updatedEvents);
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log("Events:", events);
-    const startDate = `${format(tempStartDate, "MM/dd/yyyy")}`;
-    const endDate = ` ${format(tempEndDate, "MM/dd/yyyy")}`;
-    const trip = {
-      region,
-      country: selectedCountry,
-      startDate,
-      endDate,
-      events,
-    };
-    fetch("http://localhost:8000/trips", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(trip),
-    }).then(() => {
-      navigate("/");
-    });
   };
 
   const allLabels = "text-left block";
@@ -136,11 +95,41 @@ const Create = () => {
     "w-[100%] py-[6px] px-[10px] my-[10px] mx-0 border border-solid border-grey-500 box-border block";
 
   return (
-    <div class="max-w-[400px] mx-auto my-0 text-center">
-      <h2 class="text-[20px] text-blue-500  mb-[30px]">Add a New Trip</h2>
-      <form onSubmit={handleSubmit}>
-        <label class={allLabels}>Trip Region:</label>
-        <select class={allSelect} onChange={handleRegionChange} required>
+    <div className="max-w-[400px] mx-auto my-0 text-center">
+      <h2 className="text-[20px] text-blue-500  mb-[30px]">Add a New Trip</h2>
+      <form
+        onSubmit={(e) => {
+          e.preventDefault();
+          console.log("Events:", events);
+          const startDate = `${format(tempStartDate as Date, "MM/dd/yyyy")}`;
+          const endDate = `${format(tempEndDate as Date, "MM/dd/yyyy")}`;
+          const trip = {
+            region,
+            country: selectedCountry,
+            startDate,
+            endDate,
+            events,
+          };
+          fetch("http://localhost:8000/trips", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(trip),
+          }).then(() => {
+            navigate("/");
+          });
+        }}
+      >
+        <label className={allLabels}>Trip Region:</label>
+        <select
+          className={allSelect}
+          onChange={(e) => {
+            const region = e.target.value as Region;
+            setRegion(region);
+            setCountryOptions(regions[region] || []);
+            setSelectedCountry("");
+          }}
+          required
+        >
           <option value="">Select a region</option>
           <option value="east-south-asia">
             Eastern and South-Eastern Asia
@@ -162,11 +151,11 @@ const Create = () => {
           </option>
           <option value="sub-saharan-africa">Sub-Saharan Africa</option>
         </select>
-        <label class={allLabels}>Country:</label>
+        <label className={allLabels}>Country:</label>
         <select
-          class={allSelect}
+          className={allSelect}
           value={selectedCountry}
-          onChange={handleCountryChange}
+          onChange={(e) => setSelectedCountry(e.target.value)}
           required
         >
           <option value="">Select a country</option>
@@ -176,38 +165,48 @@ const Create = () => {
             </option>
           ))}
         </select>
-        <label class={allLabels}>Trip Date:</label>
+        <label className={allLabels}>Trip Date:</label>
         <DatePicker
           selected={tempStartDate}
           startDate={tempStartDate}
           endDate={tempEndDate}
           selectsRange
-          onChange={handleDateChange}
+          onChange={(range: [Date | null, Date | null]) => {
+            const [start, end] = range;
+            setStartDate(start || undefined);
+            setEndDate(end || undefined);
+          }}
           placeholderText="Choose a Date"
           wrapperClassName="w-full my-2.5 mx-0 border border-gray-300 box-border block rounded-lg bg-gray-200 text-gray-600 border-transparent"
           className="w-full py-1.5 px-2.5 border border-gray-300 box-border block rounded-lg bg-gray-200 text-gray-600 border-transparent outline-none font-medium leading-6 transition-all duration-200 cursor-pointer hover:bg-gray-100 focus:bg-white focus:text-gray-800 focus:border-gray-800"
         />
-        <label class={allLabels}>Trip Content:</label>
+        <label className={allLabels}>Trip Content:</label>
         <button
           type="button"
-          onClick={addEvent}
-          class="bg-blue-500 text-white border-none px-[8px] py-[5px] rounded-[8px] cursor-pointer"
+          onClick={() =>
+            setEvents([
+              ...events,
+              { id: events.length + 1, title: "", content: "" },
+            ])
+          }
+          className="bg-blue-500 text-white border-none px-[8px] py-[5px] rounded-[8px] cursor-pointer"
         >
           Add Event
         </button>
-        {events.map((event) => (
-          <CreateEvent
-            key={event.id}
-            event={event}
-            onEventChange={(updatedEvent) =>
-              handleEventChange(event.id, updatedEvent)
-            }
-          />
-        ))}
-        <hr class="h-[1px] bg-gradient-to-r from-transparent via-gray-500 to-transparent ml-[5%] mr-[5%] mb-[20px] mt-[20px] border-none" />
+        {events.length > 0 &&
+          events.map((event, i) => (
+            <CreateEvent
+              key={i}
+              event={event}
+              onEventChange={(updatedEvent) =>
+                handleEventChange(event.id, updatedEvent)
+              }
+            />
+          ))}
+        <hr className="h-[1px] bg-gradient-to-r from-transparent via-gray-500 to-transparent ml-[5%] mr-[5%] mb-[20px] mt-[20px] border-none" />
         <button
           type="submit"
-          class="bg-blue-500 text-white border-none py-[5px] px-[8px] rounded-[8px] cursor-pointer"
+          className="bg-blue-500 text-white border-none py-[5px] px-[8px] rounded-[8px] cursor-pointer"
         >
           Add Trip
         </button>
