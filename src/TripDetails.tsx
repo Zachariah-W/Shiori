@@ -1,14 +1,13 @@
 import { useParams, useNavigate } from "react-router-dom";
-import { useEffect, useState } from "react";
 import flagsData from "./flags.json";
 import individualFetch from "./individaulFetch";
+import { IoTrash } from "react-icons/io5";
+import { MdModeEdit } from "react-icons/md";
+import { motion } from "framer-motion";
 
 const TripDetails = () => {
   const { id } = useParams();
-  const { data: trip, error, loading } = individualFetch(id || "");
-  const [visibleEvents, setVisibleEvents] = useState<Record<number, boolean>>(
-    {}
-  );
+  const { data: trip } = individualFetch(id || "");
   const navigate = useNavigate();
 
   const getFlagFile = (country: string) => {
@@ -20,59 +19,60 @@ const TripDetails = () => {
   const flagFile = trip ? getFlagFile(trip.country) : null;
 
   const deleteEditButton =
-    "bg-blue-500 border-0 text-white px-[8px] py-[4px] rounded-md cursor-pointer";
+    "bg-transparent border border-gray-500 rounded-full p-2 cursor-pointer hover:scale-125 transition duration-300";
 
   return (
     <div>
+      <h2 className="font-bold text-xl text-black dark:text-white text-center">
+        Trip Details
+      </h2>
       {trip && (
-        <article className="leading-loose text-left">
+        <article className="leading-loose text-left text-black dark:text-white">
           <div className="flex justify-between items-center">
             <div className="m-[20px]">
-              <h2 className="text-lg text-blue-500 mb-2.5 font-semibold">
+              <h2 className="text-lg mb-2.5 font-semibold">
                 Location: {trip.country}
               </h2>
+              <p>Region: {trip.region}</p>
               <p>
-                <b>Region:</b> {trip.region}
-              </p>
-              <p>
-                <b>Date:</b> {trip.startDate} ~ {trip.endDate}
-              </p>
-              <p>
-                <b>Trip Information:</b>
+                Date: {trip.startDate} ~ {trip.endDate}
               </p>
             </div>
             {flagFile && (
               <img
-                className="w-[30%] h-auto ml-[20px] border border-black border-opacity-50"
+                className="w-[30%] h-auto border border-gray-500 border-opacity-50 brightness-100 dark:brightness-90 dark:border-none rounded-md"
                 src={flagFile}
                 alt={trip.country}
               />
             )}
           </div>
-          {trip.events.map((event) => (
-            <div
-              key={event.id}
-              className="border-b border-b-gray-200 p-0 rounded-md m-[20px]"
+          <p className="ml-5 font-bold text-lg text-black dark:text-white">
+            Trip Information:
+          </p>
+          {trip.events.map((event, i) => (
+            <motion.div
+              key={i}
+              initial={{ y: "50vh" }}
+              animate={{ y: 0 }}
+              transition={{
+                delay: i * 0.2,
+                type: "spring",
+                stiffness: 180,
+                damping: 22,
+              }}
             >
-              <button
-                onClick={() => {
-                  setVisibleEvents((prevState) => ({
-                    ...prevState,
-                    [event.id]: !prevState[event.id],
-                  }));
-                }}
-                className="w-full p-[8px] text-left border-0 bg-transparent cursor-pointer text-base outline-none rounded-md transition-all duration-500 hover:cursor-pointer hover:bg-gray-400 hover:text-white"
+              <div
+                key={event.id}
+                className="ml-6 mt-2 rounded-sm text-black dark:text-white"
               >
-                <b>Event:</b> {event.title}
-              </button>
-              {visibleEvents[event.id] && (
-                <div className="pl-[2%] m-[20px]">
-                  {event.content.split("\n").map((line, index) => (
-                    <p key={index}>{line}</p>
-                  ))}
+                <div className="w-full p-2 text-left rounded-md dark:bg-gray-800 bg-gray-100 bg-dotted-bg border border-gray-200 dark:border-gray-700">
+                  <p className="text-black dark:text-white">
+                    Event: {event.title}
+                  </p>
+                  <p className="font-normal ml-1">{event.content}</p>
                 </div>
-              )}
-            </div>
+              </div>
+            </motion.div>
           ))}
           <div className="flex items-center justify-center gap-[20px] m-[15px]">
             <button
@@ -90,13 +90,13 @@ const TripDetails = () => {
                 }
               }}
             >
-              Delete Trip
+              <IoTrash />
             </button>
             <button
               className={deleteEditButton}
               onClick={() => navigate(`/edittrip/${id}`)}
             >
-              Edit Trip
+              <MdModeEdit />
             </button>
           </div>
         </article>

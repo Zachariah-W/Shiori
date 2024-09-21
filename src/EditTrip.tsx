@@ -15,7 +15,7 @@ export type Event = {
 
 const EditTrip = () => {
   const { id } = useParams();
-  const { data: trip, error, loading } = individualFetch(id || "");
+  const { data: trip } = individualFetch(id || "");
   const [tempStartDate, setStartDate] = useState<Date | undefined>(undefined);
   const [tempEndDate, setEndDate] = useState<Date | undefined>(undefined);
   const [events, setEvents] = useState<Event[]>([]);
@@ -105,14 +105,16 @@ const EditTrip = () => {
     ],
   };
 
-  const allLabels = "text-left block";
+  const allLabels = "text-left block dark:text-white font-semibold";
 
   const allSelect =
-    "w-[100%] py-[6px] px-[10px] my-[10px] mx-0 border border-solid border-black box-border block";
+    "w-[100%] py-[6px] px-[10px] my-[10px] mx-0 border border-solid border-black box-border block font-semibold";
 
   return (
     <div className="max-w-[400px] mx-auto my-0 text-center">
-      <h2 className="text-[20px] text-blue-500  mb-[30px]">Edit Mode</h2>
+      <h2 className="text-[20px] font-bold text-black dark:text-white  mb-[30px]">
+        Edit Mode
+      </h2>
       <form
         onSubmit={(e) => {
           e.preventDefault();
@@ -194,7 +196,7 @@ const EditTrip = () => {
           }}
           placeholderText="Choose a Date"
           wrapperClassName="w-full my-2.5 mx-0 border border-gray-300 box-border block rounded-lg bg-gray-200 text-gray-600 border-transparent"
-          className="w-full py-1.5 px-2.5 border border-gray-300 box-border block rounded-lg bg-gray-200 text-gray-600 border-transparent outline-none font-medium leading-6 transition-all duration-200 cursor-pointer hover:bg-gray-100 focus:bg-white focus:text-gray-800 focus:border-gray-800"
+          className="w-full py-1.5 px-2.5 border border-gray-300 box-border block rounded-lg bg-gray-200 text-gray-600 border-transparent outline-none font-semibold leading-6 transition-all duration-200 cursor-pointer hover:bg-gray-100 focus:bg-white focus:text-gray-800 focus:border-gray-800"
         />
         <label className={allLabels}>Trip Information:</label>
         <button
@@ -205,29 +207,28 @@ const EditTrip = () => {
               { id: events.length + 1, title: "", content: "" },
             ])
           }
-          className="bg-blue-500 text-white border-none p-[8px] rounded-[8px] cursor-pointer"
+          className="text-white border-none p-[8px] rounded-[8px] cursor-pointer bg-black dark:bg-white dark:text-black"
         >
           Add Event
         </button>
-
         {events.length > 0 &&
           events.map((event, i) => (
             <CreateEvent
               key={i}
               event={event}
-              onEventChange={(updatedEvent) =>
-                (i: number, updatedEvent: Event) => {
-                  const updatedEvents = events.map((event) =>
-                    event.id === i ? { ...event, ...updatedEvent } : event
-                  );
-                  setEvents(updatedEvents);
-                }}
+              onEventChange={(updatedEvent) => {
+                const updatedEvents = events.map((ev) =>
+                  ev.id === event.id ? { ...ev, ...updatedEvent } : ev
+                );
+                setEvents(updatedEvents);
+              }}
             />
           ))}
-
+        <br />
+        <br />
         <button
           type="submit"
-          className="bg-blue-500 text-white border-none p-[8px] rounded-[8px] cursor-pointer"
+          className="text-white border-none p-[8px] rounded-[8px] cursor-pointer bg-black dark:bg-white dark:text-black"
         >
           Finish Edit
         </button>

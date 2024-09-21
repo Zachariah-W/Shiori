@@ -89,14 +89,14 @@ const Create = () => {
     setEvents(updatedEvents);
   };
 
-  const allLabels = "text-left block";
+  const allLabels = "text-left block font-semibold";
 
   const allSelect =
-    "w-[100%] py-[6px] px-[10px] my-[10px] mx-0 border border-solid border-grey-500 box-border block";
+    "w-[100%] py-[6px] px-[10px] my-[10px] mx-0 border border-solid border-grey-500 box-border block text-black font-semibold";
 
   return (
-    <div className="max-w-[400px] mx-auto my-0 text-center">
-      <h2 className="text-[20px] text-blue-500  mb-[30px]">Add a New Trip</h2>
+    <div className="max-w-[400px] mx-auto my-0 text-center text-black dark:text-white">
+      <h2 className="text-[20px] mb-[30px] font-bold">Add a New Trip</h2>
       <form
         onSubmit={(e) => {
           e.preventDefault();
@@ -178,7 +178,7 @@ const Create = () => {
           }}
           placeholderText="Choose a Date"
           wrapperClassName="w-full my-2.5 mx-0 border border-gray-300 box-border block rounded-lg bg-gray-200 text-gray-600 border-transparent"
-          className="w-full py-1.5 px-2.5 border border-gray-300 box-border block rounded-lg bg-gray-200 text-gray-600 border-transparent outline-none font-medium leading-6 transition-all duration-200 cursor-pointer hover:bg-gray-100 focus:bg-white focus:text-gray-800 focus:border-gray-800"
+          className="w-full py-1.5 px-2.5 border border-gray-300 box-border block rounded-lg bg-gray-200 text-gray-600 border-transparent font-semibold outline-none leading-6 transition-all duration-200 cursor-pointer hover:bg-gray-100 focus:bg-white focus:text-gray-800 focus:border-gray-800"
         />
         <label className={allLabels}>Trip Content:</label>
         <button
@@ -189,7 +189,7 @@ const Create = () => {
               { id: events.length + 1, title: "", content: "" },
             ])
           }
-          className="bg-blue-500 text-white border-none px-[8px] py-[5px] rounded-[8px] cursor-pointer"
+          className="bg-black text-white border-none px-[8px] py-[5px] rounded-[8px] cursor-pointer dark:bg-white dark:text-black"
         >
           Add Event
         </button>
@@ -206,7 +206,7 @@ const Create = () => {
         <hr className="h-[1px] bg-gradient-to-r from-transparent via-gray-500 to-transparent ml-[5%] mr-[5%] mb-[20px] mt-[20px] border-none" />
         <button
           type="submit"
-          className="bg-blue-500 text-white border-none py-[5px] px-[8px] rounded-[8px] cursor-pointer"
+          className="bg-black text-white border-none py-[5px] px-[8px] rounded-[8px] cursor-pointer dark:bg-white dark:text-black"
         >
           Add Trip
         </button>

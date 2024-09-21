@@ -7,5 +7,13 @@
 * {
   margin: 0;
   font-family: "Quicksand";
-  color: #333;
+  @apply transition-colors duration-200;
+}
+
+button {
+  @apply font-semibold;
+}
+
+p {
+  @apply font-semibold;
 }

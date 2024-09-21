@@ -1,11 +1,14 @@
 import { Link } from "react-router-dom";
+import { DarkModeSwitch } from "./SwitchButton";
+import { useTheme } from "./ThemeContext";
 
-const navbarLinks = "ml-4 p-1.5 no-underline hover:text-[#2b83cf]";
-
+const navbarLinks =
+  "ml-4 p-1.5 no-underline text-black dark:text-white font-semibold";
 const Navbar = () => {
+  const { theme, setTheme } = useTheme();
   return (
-    <nav className="p-5 flex items-center max-w-[600px] mx-auto border-b border-gray-200">
-      <h1 className="text-[#2b83cf] font-extrabold text-2xl ">
+    <nav className="p-5 flex items-center max-w-[600px] mx-auto">
+      <h1 className="text-black dark:text-white font-extrabold text-2xl ">
         My Trip Recorder
       </h1>
       <div className="ml-auto flex items-center gap-2.5">
@@ -15,6 +18,12 @@ const Navbar = () => {
         <Link to="/create" className={navbarLinks}>
           New Trip
         </Link>
+        <DarkModeSwitch
+          onChange={() => {
+            theme === "light" ? setTheme("dark") : setTheme("light");
+          }}
+          checked={theme === "dark"}
+        />
       </div>
     </nav>
   );

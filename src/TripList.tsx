@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import flagsData from "./flags.json";
+import { motion } from "framer-motion";
 import { Trips } from "./Home";
 
 const TripList = ({ trips, title }: { trips: Trips; title: string }) => {
@@ -11,34 +12,48 @@ const TripList = ({ trips, title }: { trips: Trips; title: string }) => {
 
   return (
     <div className="trip-list">
-      <h2 className="font-semibold text-xl">{title}</h2>
-      {trips.map((trip) => {
+      <h1 className="font-semibold text-xl text-black dark:text-white">
+        {title}
+      </h1>
+      {trips.map((trip, i) => {
         const flagFile = getFlagFile(trip.country);
         return (
-          <div
-            className="py-2.5 px-4 my-5 border-b border-grey-100 text-left hover:shadow-sm"
-            key={trip.id}
+          <motion.div
+            key={i}
+            initial={{ y: "50vh" }}
+            animate={{ y: 0 }}
+            transition={{
+              delay: i * 0.2,
+              type: "spring",
+              stiffness: 200,
+              damping: 20,
+            }}
           >
-            <Link className="no-underline" to={`/trips/${trip.id}`}>
-              <div className="flex justify-between">
-                <div>
-                  <h2 className="text-xl text-blue-400 font-semibold mb-[8px]">
-                    {trip.country}
-                  </h2>
-                  <p>
-                    Date: {trip.startDate} ~ {trip.endDate}
-                  </p>
+            <div
+              className="py-2.5 px-4 my-5 border border-gray-300 text-left dark:bg-gray-800 dark:border-gray-600 hover:bg-slate-100 dark:hover:bg-gray-700 rounded-xl transition-all duration-300 bg-dotted-bg"
+              key={trip.id}
+            >
+              <Link className="no-underline" to={`/trips/${trip.id}`}>
+                <div className="flex justify-between">
+                  <div>
+                    <h2 className="text-xl text-black dark:text-white font-semibold mb-[8px]">
+                      {trip.country}
+                    </h2>
+                    <p className="text-black dark:text-white">
+                      Date: {trip.startDate} ~ {trip.endDate}
+                    </p>
+                  </div>
+                  {flagFile && (
+                    <img
+                      className="w-[18%] h-auto brightness-100 dark:brightness-90 rounded-lg"
+                      src={flagFile}
+                      alt={trip.country}
+                    />
+                  )}
                 </div>
-                {flagFile && (
-                  <img
-                    className="w-[18%] h-auto ml-[20px] border border-grey-500"
-                    src={flagFile}
-                    alt={trip.country}
-                  />
-                )}
-              </div>
-            </Link>
-          </div>
+              </Link>
+            </div>
+          </motion.div>
         );
       })}
     </div>

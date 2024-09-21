@@ -10,8 +10,8 @@ const SearchBar = ({
 
   return (
     <div className="flex items-center">
-      <div className="max-w-[200px] h-[30px] bg-white flex items-center pl-4 transition-all duration-500 rounded-md cursor-pointer hover:bg-gray-100">
-        <FaSearch className="text-lg mr-2" />
+      <div className="max-w-[200px] h-[30px] flex items-center pl-4 transition-all hover:bg-gray-200 duration-500 font-semibold rounded-md cursor-pointer dark:hover:bg-gray-700 text-black dark:text-white">
+        <FaSearch className="text-lg mr-2 text-black dark:text-white" />
         <input
           className="bg-transparent border-none w-full pl-1 text-sm outline-none focus:outline-none"
           placeholder="Search Countries..."
