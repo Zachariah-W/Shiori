@@ -4,7 +4,7 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { format, parse } from "date-fns";
 import CreateEvent from "./CreateEvent";
-import { Region, Trip } from "./Home";
+import { Region } from "./Home";
 import individualFetch from "./individaulFetch";
 
 export type Event = {

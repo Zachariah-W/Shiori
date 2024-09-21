@@ -4,7 +4,7 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { format } from "date-fns";
 import CreateEvent, { Event } from "./CreateEvent";
-import { Region, Trips } from "./Home";
+import { Region } from "./Home";
 
 const Create = () => {
   const [events, setEvents] = useState<Event[]>([]);

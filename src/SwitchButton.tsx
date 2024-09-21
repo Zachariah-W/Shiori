@@ -1,7 +1,7 @@
 import { styled } from "@mui/material/styles";
 import Switch, { SwitchProps } from "@mui/material/Switch";
 
-const darkModeSwitch = styled(Switch)(({ theme }) => ({
+const DarkModeSwitch = styled(Switch)(({ theme }) => ({
   width: 47,
   height: 28,
   padding: 5,
@@ -111,4 +111,4 @@ const SwitchButton = styled((props: SwitchProps) => (
   },
 }));
 
-export { darkModeSwitch, SwitchButton };
+export { DarkModeSwitch, SwitchButton };

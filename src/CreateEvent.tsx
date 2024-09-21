@@ -1,5 +1,3 @@
-import { useState } from "react";
-
 export type Event = {
   id: number;
   title: string;
