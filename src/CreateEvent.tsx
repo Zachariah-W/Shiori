@@ -14,7 +14,7 @@ const CreateEvent = ({
   const { id: tripId } = useParams();
 
   return (
-    <div className="border-b border-solid border-gray-200">
+    <div className="border-b border-solid border-gray-100">
       <label className="text-left text-black dark:text-white block font-semibold">
         Event:
       </label>

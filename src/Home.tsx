@@ -1,15 +1,6 @@
 import { useEffect, useState } from "react";
 import TripList from "./TripList";
 import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectGroup,
-  SelectLabel,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import {
   collection,
   doc,
   getDoc,
@@ -27,6 +18,15 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { IoMdArrowDropdown } from "react-icons/io";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 export type FirestoreTrip = {
   id: string;
@@ -42,6 +42,11 @@ export type Event = {
   content: string;
 };
 
+type TimeSort = {
+  earliest: boolean;
+  latest: boolean;
+};
+
 const Home = () => {
   const [dataCollectionHolder, setDataCollectionHolder] = useState<
     FirestoreTrip[]
@@ -50,6 +55,10 @@ const Home = () => {
   const [countryList, setCountryList] = useState<string[]>([]);
   const [prevCountryFilter, setPrevCountryFilter] = useState<string[]>([]);
   const tripsRef = collection(db, `users`, `${auth.currentUser?.uid}`, `trips`);
+  const [timeSortFilter, setTimeSortFilter] = useState<TimeSort>({
+    earliest: false,
+    latest: false,
+  });
 
   const getFilteredData = async () => {
     const q = query(tripsRef, where("country", "in", countryFilter));
@@ -139,25 +148,28 @@ const Home = () => {
           </DropdownMenu>
         </div>
         <p className="text-black dark:text-white">|</p>
-        <Select>
-          <SelectTrigger className="w-36 h-8 text-black bg-gray-100 hover:bg-gray-200 dark:text-white dark:bg-gray-800 dark:hover:bg-gray-700">
-            <SelectValue placeholder="Sort Time" />
+        <Select
+          onValueChange={(value) => {
+            if (value == "earliest") {
+              const sortEarliest = [...dataCollectionHolder].sort(
+                (a, b) => a.startDate.toMillis() - b.startDate.toMillis()
+              );
+              setDataCollectionHolder(sortEarliest);
+            } else if (value == "latest") {
+              const sortLatest = [...dataCollectionHolder].sort(
+                (a, b) => b.startDate.toMillis() - a.startDate.toMillis()
+              );
+              setDataCollectionHolder(sortLatest);
+            }
+          }}
+        >
+          <SelectTrigger className="w-45 h-8 font-semibold text-black bg-gray-100 hover:bg-gray-200 dark:text-white dark:bg-gray-800 dark:hover:bg-gray-700 gap-5">
+            <SelectValue placeholder="Sort Time" className="pl-2" />
           </SelectTrigger>
           <SelectContent>
             <SelectGroup>
-              <SelectLabel className="pl-4">Time</SelectLabel>
-              <SelectItem value="early" className="pl-6">
-                Earliet Trips
-              </SelectItem>
-              <SelectItem value="late" className="pl-6" onClick={() => {}}>
-                Latest Trips
-              </SelectItem>
-              <SelectItem value="future" className="pl-6" onClick={() => {}}>
-                Future Trips
-              </SelectItem>
-              <SelectItem value="past" className="pl-6" onClick={() => {}}>
-                Past Trips
-              </SelectItem>
+              <SelectItem value="earliest">Sort By Earliest</SelectItem>
+              <SelectItem value="latest">Sort By Latest</SelectItem>
             </SelectGroup>
           </SelectContent>
         </Select>

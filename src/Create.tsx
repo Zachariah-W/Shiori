@@ -10,9 +10,9 @@ import {
   getDoc,
   writeBatch,
 } from "firebase/firestore";
-import { Event } from "./Home";
 import CreateEvent from "./CreateEvent";
 import { EditEvent } from "./EditTrip";
+import { IoAdd } from "react-icons/io5";
 
 const Create = () => {
   const [events, setEvents] = useState<EditEvent[]>([]);
@@ -108,25 +108,28 @@ const Create = () => {
           wrapperClassName="w-full my-2.5 mx-0 border border-gray-300 box-border block rounded-lg bg-gray-200 text-gray-600 border-transparent"
           className="w-full py-1.5 px-2.5 border border-gray-300 box-border block rounded-lg bg-gray-200 text-gray-600 border-transparent font-semibold outline-none leading-6 transition-all duration-200 cursor-pointer hover:bg-gray-100 focus:bg-white focus:text-gray-800 focus:border-gray-800"
         />
-        <label className={allLabels}>Trip Content:</label>
-        <button
-          type="button"
-          onClick={() =>
-            setEvents([
-              ...events,
-              {
-                id: `${events.length + 1}`,
-                title: "",
-                content: "",
-                new: true,
-                update: false,
-              },
-            ])
-          }
-          className="bg-black text-white border-none px-[8px] py-[5px] rounded-[8px] cursor-pointer dark:bg-white dark:text-black"
-        >
-          Add Event
-        </button>
+        <div className="flex items-center justify-between">
+          <label className={allLabels}>Trip Description:</label>
+          <button
+            type="button"
+            onClick={() =>
+              setEvents([
+                ...events,
+                {
+                  id: `${events.length + 1}`,
+                  title: "",
+                  content: "",
+                  new: true,
+                  update: false,
+                },
+              ])
+            }
+            className="text-gray-700 border py-1.5 border-gray-600 h-5 w-5 rounded-full cursor-pointer flex items-center justify-center hover:scale-105 hover:rotate-180 duration-150 dark:border-white"
+          >
+            <IoAdd className="h-4 w-4 dark:text-white" />
+          </button>
+        </div>
+
         {events.length > 0 &&
           events.map((event, i) => (
             <CreateEvent
@@ -140,7 +143,7 @@ const Create = () => {
         <hr className="h-[1px] bg-gradient-to-r from-transparent via-gray-500 to-transparent ml-[5%] mr-[5%] mb-[20px] mt-[20px] border-none" />
         <button
           type="submit"
-          className="bg-black text-white border-none py-[5px] px-[8px] rounded-[8px] cursor-pointer dark:bg-white dark:text-black"
+          className="bg-gray-200 text-black hover:bg-gray-300 border-none py-[5px] px-[8px] rounded-[8px] cursor-pointer dark:bg-gray-700 dark:hover:bg-gray-600 dark:text-white"
         >
           Add Trip
         </button>
