@@ -9,10 +9,10 @@ const Navbar = () => {
   return (
     <nav className="p-5 flex items-center max-w-[600px] mx-auto">
       <h1 className="text-black dark:text-white font-extrabold text-2xl ">
-        My Trip Recorder
+        Shiori
       </h1>
       <div className="ml-auto flex items-center gap-2.5">
-        <Link to="/" className={navbarLinks}>
+        <Link to="/Home" className={navbarLinks}>
           Home
         </Link>
         <Link to="/create" className={navbarLinks}>

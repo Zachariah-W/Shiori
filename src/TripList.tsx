@@ -1,9 +1,18 @@
 import { Link } from "react-router-dom";
 import flagsData from "./flags.json";
 import { motion } from "framer-motion";
-import { Trips } from "./Home";
+import { FirestoreTrip } from "./Home";
+import { format } from "date-fns";
+import { useEffect } from "react";
+import TripDetails from "./TripDetails";
 
-const TripList = ({ trips, title }: { trips: Trips; title: string }) => {
+const TripList = ({
+  trips,
+  title,
+}: {
+  trips: FirestoreTrip[];
+  title: string;
+}) => {
   const getFlagFile = (country: string) => {
     const flags = flagsData.flags;
     const flag = flags.find((flag) => flag.country === country);
@@ -29,18 +38,30 @@ const TripList = ({ trips, title }: { trips: Trips; title: string }) => {
               damping: 20,
             }}
           >
-            <div
-              className="py-2.5 px-4 my-5 border border-gray-300 text-left dark:bg-gray-800 dark:border-gray-600 hover:bg-slate-100 dark:hover:bg-gray-700 rounded-xl transition-all duration-300 bg-dotted-bg"
-              key={trip.id}
-            >
-              <Link className="no-underline" to={`/trips/${trip.id}`}>
+            <div className="py-2.5 px-4 my-2 border border-gray-300 text-left dark:bg-gray-800 dark:border-gray-600 hover:bg-slate-100 dark:hover:bg-gray-700 rounded-xl transition-all duration-300 bg-dotted-bg">
+              <Link className="no-underline" to={`/trip/${trip.id}`}>
                 <div className="flex justify-between">
                   <div>
                     <h2 className="text-xl text-black dark:text-white font-semibold mb-[8px]">
                       {trip.country}
                     </h2>
                     <p className="text-black dark:text-white">
-                      Date: {trip.startDate} ~ {trip.endDate}
+                      Date:{" "}
+                      {trip.startDate &&
+                        format(
+                          trip.startDate instanceof Date
+                            ? trip.startDate
+                            : trip.startDate.toDate(),
+                          "MM/dd/yyyy"
+                        )}{" "}
+                      ~{" "}
+                      {trip.endDate &&
+                        format(
+                          trip.endDate instanceof Date
+                            ? trip.endDate
+                            : trip.endDate.toDate(),
+                          "MM/dd/yyyy"
+                        )}
                     </p>
                   </div>
                   {flagFile && (

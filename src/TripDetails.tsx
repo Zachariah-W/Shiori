@@ -1,22 +1,64 @@
 import { useParams, useNavigate } from "react-router-dom";
-import flagsData from "./flags.json";
-import individualFetch from "./individaulFetch";
 import { IoTrash } from "react-icons/io5";
 import { MdModeEdit } from "react-icons/md";
 import { motion } from "framer-motion";
+import { useEffect, useState } from "react";
+import { Event, FirestoreTrip } from "./Home";
+import { auth, db } from "../firebaseConfig";
+import {
+  arrayRemove,
+  collection,
+  doc,
+  getDoc,
+  getDocs,
+  writeBatch,
+} from "firebase/firestore";
+import { onAuthStateChanged } from "firebase/auth";
+import { format } from "date-fns";
 
 const TripDetails = () => {
-  const { id } = useParams();
-  const { data: trip } = individualFetch(id || "");
+  let { id } = useParams();
   const navigate = useNavigate();
 
-  const getFlagFile = (country: string) => {
-    const flags = flagsData.flags;
-    const flag = flags.find((flag) => flag.country === country);
-    return flag ? flag.file : null;
+  const batch = writeBatch(db);
+  const [trip, setTrip] = useState<FirestoreTrip>();
+  const [tripEvents, setTripEvents] = useState<Event[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
+
+  const getTripData = () => {
+    onAuthStateChanged(auth, async (user) => {
+      if (user) {
+        const tripDocRef = doc(db, `users`, `${user.uid}`, `trips`, `${id}`);
+        const tripEventsDetailRef = collection(
+          db,
+          `users`,
+          `${user.uid}`,
+          `trips`,
+          `${id}`,
+          `events`
+        );
+        const tripEventsSnap = await getDocs(tripEventsDetailRef);
+        const tripDocSnap = await getDoc(tripDocRef);
+        setTrip({
+          ...tripDocSnap.data(),
+          id: tripDocSnap.id,
+        } as FirestoreTrip);
+        const tempArray: Event[] = [];
+        tripEventsSnap.forEach((doc) => {
+          tempArray.push({ ...doc.data() } as Event);
+        });
+        setTripEvents(tempArray);
+        setLoading(false);
+      } else {
+        console.log("error");
+      }
+    });
   };
 
-  const flagFile = trip ? getFlagFile(trip.country) : null;
+  useEffect(() => {
+    id === undefined && navigate("/Home");
+    getTripData();
+  }, [loading]);
 
   const deleteEditButton =
     "bg-transparent border border-gray-500 rounded-full p-2 cursor-pointer hover:scale-125 transition duration-300";
@@ -33,23 +75,30 @@ const TripDetails = () => {
               <h2 className="text-lg mb-2.5 font-semibold">
                 Location: {trip.country}
               </h2>
-              <p>Region: {trip.region}</p>
               <p>
-                Date: {trip.startDate} ~ {trip.endDate}
+                Date:{" "}
+                {trip.startDate &&
+                  format(
+                    trip.startDate instanceof Date
+                      ? trip.startDate
+                      : trip.startDate.toDate(),
+                    "MM/dd/yyyy"
+                  )}{" "}
+                ~{" "}
+                {trip.endDate &&
+                  format(
+                    trip.endDate instanceof Date
+                      ? trip.endDate
+                      : trip.endDate.toDate(),
+                    "MM/dd/yyyy"
+                  )}
               </p>
             </div>
-            {flagFile && (
-              <img
-                className="w-[30%] h-auto border border-gray-500 border-opacity-50 brightness-100 dark:brightness-90 dark:border-none rounded-md"
-                src={flagFile}
-                alt={trip.country}
-              />
-            )}
           </div>
           <p className="ml-5 font-bold text-lg text-black dark:text-white">
             Trip Information:
           </p>
-          {trip.events.map((event, i) => (
+          {tripEvents.map((event, i) => (
             <motion.div
               key={i}
               initial={{ y: "50vh" }}
@@ -62,7 +111,7 @@ const TripDetails = () => {
               }}
             >
               <div
-                key={event.id}
+                key={i}
                 className="ml-6 mt-2 rounded-sm text-black dark:text-white"
               >
                 <div className="w-full p-2 text-left rounded-md dark:bg-gray-800 bg-gray-100 bg-dotted-bg border border-gray-200 dark:border-gray-700">
@@ -77,21 +126,74 @@ const TripDetails = () => {
           <div className="flex items-center justify-center gap-[20px] m-[15px]">
             <button
               className={deleteEditButton}
-              onClick={() => {
+              onClick={async () => {
                 const userConfirmed = window.confirm(
-                  "Are you sure you want to delete?"
+                  "You can't restore the data you delete, are you sure you want to delete?"
                 );
                 if (userConfirmed) {
-                  fetch("http://localhost:8000/trips/" + trip.id, {
-                    method: "DELETE",
-                  }).then(() => {
-                    navigate("/");
+                  const eventsDeletionPromises = tripEvents.map((document) => {
+                    const tempEventsDocHolder = doc(
+                      db,
+                      `users`,
+                      `${auth.currentUser?.uid}`,
+                      `trips`,
+                      `${id}`,
+                      `events`,
+                      `${document.id}`
+                    );
+                    batch.delete(tempEventsDocHolder);
                   });
+
+                  const tempTripDocHolder = doc(
+                    db,
+                    `users`,
+                    `${auth.currentUser?.uid}`,
+                    `trips`,
+                    `${id}`
+                  );
+                  batch.delete(tempTripDocHolder);
+
+                  await Promise.all(eventsDeletionPromises);
+
+                  const existingCountries = collection(
+                    db,
+                    `users`,
+                    `${auth.currentUser?.uid}`,
+                    `trips`
+                  );
+                  const existingCountriesSnap = await getDocs(
+                    existingCountries
+                  );
+                  const tempArray: string[] = [];
+                  existingCountriesSnap.forEach((doc) => {
+                    tempArray.push(doc.data().country);
+                  });
+
+                  const countryListRef = doc(
+                    db,
+                    `users`,
+                    `${auth.currentUser?.uid}`
+                  );
+                  const countryListSnap = await getDoc(countryListRef);
+                  if (
+                    countryListSnap.exists() &&
+                    tempArray.length > 0 &&
+                    tempArray.includes(trip.country)
+                  ) {
+                    batch.update(countryListRef, {
+                      countryList: arrayRemove(`${trip.country}`),
+                    });
+                  }
+
+                  await batch.commit();
+
+                  navigate("/Home");
                 }
               }}
             >
               <IoTrash />
             </button>
+
             <button
               className={deleteEditButton}
               onClick={() => navigate(`/edittrip/${id}`)}

@@ -1,94 +1,171 @@
-import { useState } from "react";
-import SearchBar from "./SearchBar";
+import { useEffect, useState } from "react";
 import TripList from "./TripList";
-import useFetch from "./useFetch";
-import { SwitchButton } from "./SwitchButton";
-import { Event } from "./EditTrip";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectGroup,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import {
+  collection,
+  doc,
+  getDoc,
+  getDocs,
+  query,
+  Timestamp,
+  where,
+} from "firebase/firestore";
+import { auth, db } from "../firebaseConfig";
+import { Button } from "@/components/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuCheckboxItem,
+  DropdownMenuContent,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { IoMdArrowDropdown } from "react-icons/io";
 
-export type Region =
-  | "east-south-asia"
-  | "central-southern-asia"
-  | "europe-north-america"
-  | "latin-caribbean"
-  | "north-africa-western-asia"
-  | "australia-new-zealand"
-  | "sub-saharan-africa";
-export type Trip = {
+export type FirestoreTrip = {
   id: string;
-  region: Region;
   country: string;
-  startDate: string;
-  endDate: string;
+  startDate: Timestamp;
+  endDate: Timestamp;
   events: Event[];
 };
-export type Trips = Trip[];
+
+export type Event = {
+  id: string;
+  title: string;
+  content: string;
+};
 
 const Home = () => {
-  const { data: trips } = useFetch("http://localhost:8000/trips");
-  const [filteredTrips, setFilteredTrips] = useState<Trips>([]);
-  const [regionFilterActive, setRegionFilterActive] = useState(false);
+  const [dataCollectionHolder, setDataCollectionHolder] = useState<
+    FirestoreTrip[]
+  >([]);
+  const [countryFilter, setCountryFilter] = useState<string[]>([]);
+  const [countryList, setCountryList] = useState<string[]>([]);
+  const [prevCountryFilter, setPrevCountryFilter] = useState<string[]>([]);
+  const tripsRef = collection(db, `users`, `${auth.currentUser?.uid}`, `trips`);
 
-  const regions = {
-    "east-south-asia": "Eastern and South-Eastern Asia",
-    "central-southern-asia": "Central and Southern Asia",
-    "europe-north-america": "Europe and Northern America",
-    "latin-caribbean": "Latin America and the Caribbean",
-    "north-africa-western-asia": "Northern Africa and Western Asia",
-    "australia-new-zealand": "Australia and New Zealand",
-    "sub-saharan-africa": "Sub-Saharan Africa",
+  const getFilteredData = async () => {
+    const q = query(tripsRef, where("country", "in", countryFilter));
+    const querySnapShot = await getDocs(q);
+    const tempArray: FirestoreTrip[] = [];
+    querySnapShot.forEach((doc) => {
+      tempArray.push({ ...doc.data(), id: doc.id } as FirestoreTrip);
+    });
+    setDataCollectionHolder(tempArray);
   };
 
-  const filters =
-    "flex items-center gap-[10px] text-sm text-black dark:text-white";
+  const [loading, setLoading] = useState(true);
+
+  const getSortCountryData = async () => {
+    const countryListRef = doc(db, `users`, `${auth.currentUser?.uid}`);
+    const countryListSnap = await getDoc(countryListRef);
+    countryListSnap.exists() &&
+      setCountryList(countryListSnap.data().countryList as string[]);
+  };
+
+  const getMainData = async () => {
+    const tripsSnap = await getDocs(tripsRef);
+    !tripsSnap.empty &&
+      (() => {
+        const tempTripsArray: FirestoreTrip[] = [];
+        tripsSnap.forEach((doc) => {
+          tempTripsArray.push({ ...doc.data(), id: doc.id } as FirestoreTrip);
+        });
+        setDataCollectionHolder(tempTripsArray);
+      })();
+    setLoading(false);
+  };
+
+  useEffect(() => {
+    getMainData();
+    getSortCountryData();
+  }, [loading]);
 
   return (
     <div>
-      <div className="flex items-center gap-[20px] mt-1 max-w-[600px]">
-        <SearchBar
-          onSearch={(searchTerm) => {
-            if (searchTerm.trim() === "") {
-              setFilteredTrips([]);
-            } else if (trips) {
-              const filtered = trips.filter((trip) =>
-                trip.country.toLowerCase().includes(searchTerm.toLowerCase())
-              );
-              setFilteredTrips(filtered);
-            }
-          }}
-        />
-        <p className="text-black dark:text-white">|</p>
-        <div className={filters}>
-          <SwitchButton
-            onChange={() => {
-              setRegionFilterActive(!regionFilterActive);
+      <div className="flex items-center gap-4 mt-1 max-w-[600px]">
+        <div className="flex items-center gap-5 text-sm text-black dark:text-white">
+          <DropdownMenu
+            onOpenChange={() => {
+              setPrevCountryFilter(countryFilter);
             }}
-          />
-          <p>Regions Filter</p>
+          >
+            <DropdownMenuTrigger asChild>
+              <Button className="w-40 h-8 font-semibold text-black bg-gray-100 hover:bg-gray-200 dark:text-white dark:bg-gray-800 dark:hover:bg-gray-700 gap-5">
+                Select Country <IoMdArrowDropdown />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent
+              className="w-40"
+              onInteractOutside={() => {
+                countryFilter.length === 0
+                  ? getMainData()
+                  : JSON.stringify(prevCountryFilter.sort()) !==
+                      JSON.stringify(countryFilter.sort()) && getFilteredData();
+              }}
+            >
+              {countryList.map((country, i) => {
+                return (
+                  <DropdownMenuCheckboxItem
+                    key={i}
+                    checked={countryFilter.includes(country)}
+                    onSelect={(e) => {
+                      e.preventDefault();
+                      countryFilter.includes(country)
+                        ? (() => {
+                            setCountryFilter(
+                              countryFilter.filter((c) => c !== country)
+                            );
+                            console.log(countryFilter);
+                          })()
+                        : (() => {
+                            setCountryFilter([...countryFilter, country]);
+                            console.log(countryFilter);
+                          })();
+                    }}
+                  >
+                    {country}
+                  </DropdownMenuCheckboxItem>
+                );
+              })}
+            </DropdownMenuContent>
+          </DropdownMenu>
         </div>
         <p className="text-black dark:text-white">|</p>
+        <Select>
+          <SelectTrigger className="w-36 h-8 text-black bg-gray-100 hover:bg-gray-200 dark:text-white dark:bg-gray-800 dark:hover:bg-gray-700">
+            <SelectValue placeholder="Sort Time" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectGroup>
+              <SelectLabel className="pl-4">Time</SelectLabel>
+              <SelectItem value="early" className="pl-6">
+                Earliet Trips
+              </SelectItem>
+              <SelectItem value="late" className="pl-6" onClick={() => {}}>
+                Latest Trips
+              </SelectItem>
+              <SelectItem value="future" className="pl-6" onClick={() => {}}>
+                Future Trips
+              </SelectItem>
+              <SelectItem value="past" className="pl-6" onClick={() => {}}>
+                Past Trips
+              </SelectItem>
+            </SelectGroup>
+          </SelectContent>
+        </Select>
       </div>
       <br />
-      {filteredTrips.length > 0 && (
-        <TripList trips={filteredTrips} title="Search Results" />
+      {dataCollectionHolder.length > 0 && (
+        <TripList trips={dataCollectionHolder} title="Trips" />
       )}
-      {filteredTrips.length === 0 && !regionFilterActive && trips && (
-        <TripList trips={trips} title="All Trips" />
-      )}
-      {filteredTrips.length === 0 &&
-        regionFilterActive &&
-        trips &&
-        (Object.keys(regions) as Region[]).map((region) => {
-          const regionTrips = trips.filter((trip) => trip.region === region);
-          return (
-            regionTrips.length > 0 && (
-              <TripList
-                key={region}
-                trips={regionTrips}
-                title={regions[region]}
-              />
-            )
-          );
-        })}
     </div>
   );
 };

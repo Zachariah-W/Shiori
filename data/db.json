@@ -1,0 +1,12 @@
+{
+  "trips": [
+    {
+      "id": "d85c",
+      "region": "sub-saharan-africa",
+      "country": "Kenya",
+      "startDate": "2024-09-06T07:00:00.000Z",
+      "endDate": "2024-09-20T07:00:00.000Z",
+      "events": []
+    }
+  ]
+}

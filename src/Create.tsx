@@ -2,87 +2,26 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import { format } from "date-fns";
-import CreateEvent, { Event } from "./CreateEvent";
-import { Region } from "./Home";
+import { auth, db } from "../firebaseConfig";
+import {
+  arrayUnion,
+  collection,
+  doc,
+  getDoc,
+  writeBatch,
+} from "firebase/firestore";
+import { Event } from "./Home";
+import CreateEvent from "./CreateEvent";
+import { EditEvent } from "./EditTrip";
 
 const Create = () => {
-  const [events, setEvents] = useState<Event[]>([]);
-  const [tempStartDate, setStartDate] = useState<Date | undefined>(undefined);
-  const [tempEndDate, setEndDate] = useState<Date | undefined>(undefined);
-  const [region, setRegion] = useState<Region>();
-  const [countryOptions, setCountryOptions] = useState<string[]>([]);
-  const [selectedCountry, setSelectedCountry] = useState("");
+  const [events, setEvents] = useState<EditEvent[]>([]);
+  const [startDate, setStartDate] = useState<Date | undefined>(undefined);
+  const [endDate, setEndDate] = useState<Date | undefined>(undefined);
+  const [country, setCountry] = useState("");
   const navigate = useNavigate();
 
-  const regions = {
-    "east-south-asia": [
-      "China",
-      "Japan",
-      "South Korea",
-      "Thailand",
-      "Indonesia",
-      "Malaysia",
-      "Singapore",
-      "Philippines",
-      "Vietnam",
-      "Cambodia",
-      "Taiwan",
-    ],
-    "central-southern-asia": [
-      "India",
-      "Bangladesh",
-      "Sri Lanka",
-      "Nepal",
-      "Pakistan",
-      "Kazakhstan",
-      "Uzbekistan",
-      "Kyrgyzstan",
-      "Maldives",
-      "Tajikistan",
-    ],
-    "europe-north-america": [
-      "France",
-      "Italy",
-      "Spain",
-      "Germany",
-      "United Kingdom",
-      "United States",
-      "Canada",
-      "Netherlands",
-      "Switzerland",
-      "Austria",
-    ],
-    "latin-caribbean": [
-      "Mexico",
-      "Brazil",
-      "Argentina",
-      "Colombia",
-      "Chile",
-      "Costa Rica",
-      "Cuba",
-      "Peru",
-    ],
-    "north-africa-western-asia": [
-      "Turkey",
-      "United Arab Emirates",
-      "Egypt",
-      "Saudi Arabia",
-      "Jordan",
-      "Israel",
-      "Morocco",
-    ],
-    "australia-new-zealand": ["Australia", "New Zealand"],
-    "sub-saharan-africa": [
-      "South Africa",
-      "Kenya",
-      "Nigeria",
-      "Ghana",
-      "Ethiopia",
-    ],
-  };
-
-  const handleEventChange = (id: number, updatedEvent: Event) => {
+  const handleEventChange = (id: string, updatedEvent: EditEvent) => {
     const updatedEvents = events.map((event) =>
       event.id === id ? { ...event, ...updatedEvent } : event
     );
@@ -91,85 +30,74 @@ const Create = () => {
 
   const allLabels = "text-left block font-semibold";
 
-  const allSelect =
-    "w-[100%] py-[6px] px-[10px] my-[10px] mx-0 border border-solid border-grey-500 box-border block text-black font-semibold";
-
   return (
     <div className="max-w-[400px] mx-auto my-0 text-center text-black dark:text-white">
       <h2 className="text-[20px] mb-[30px] font-bold">Add a New Trip</h2>
       <form
-        onSubmit={(e) => {
+        onSubmit={async (e) => {
           e.preventDefault();
-          console.log("Events:", events);
-          const startDate = `${format(tempStartDate as Date, "MM/dd/yyyy")}`;
-          const endDate = `${format(tempEndDate as Date, "MM/dd/yyyy")}`;
-          const trip = {
-            region,
-            country: selectedCountry,
-            startDate,
-            endDate,
-            events,
-          };
-          fetch("http://localhost:8000/trips", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(trip),
-          }).then(() => {
-            navigate("/");
+          const currentUser = auth.currentUser;
+          if (!currentUser?.uid) {
+            alert("You must be logged in to add a trip.");
+            return;
+          }
+
+          const batch = writeBatch(db);
+
+          const createTripRef = doc(
+            collection(db, "users", currentUser.uid, "trips")
+          );
+
+          batch.set(createTripRef, {
+            country: country,
+            startDate: startDate,
+            endDate: endDate,
           });
+
+          if (events.length > 0) {
+            events.forEach(async (event) => {
+              const createEventsRef = doc(
+                collection(
+                  db,
+                  "users",
+                  currentUser.uid,
+                  "trips",
+                  createTripRef.id,
+                  "events"
+                )
+              );
+              batch.set(createEventsRef, {
+                title: event.title,
+                content: event.content,
+              });
+            });
+          }
+
+          const countryListRef = doc(db, "users", currentUser.uid);
+          const countryListSnap = await getDoc(countryListRef);
+
+          countryListSnap.exists() &&
+            batch.update(countryListRef, {
+              countryList: arrayUnion(country),
+            });
+          await batch.commit();
+          navigate("/Home");
         }}
       >
-        <label className={allLabels}>Trip Region:</label>
-        <select
-          className={allSelect}
-          onChange={(e) => {
-            const region = e.target.value as Region;
-            setRegion(region);
-            setCountryOptions(regions[region] || []);
-            setSelectedCountry("");
-          }}
-          required
-        >
-          <option value="">Select a region</option>
-          <option value="east-south-asia">
-            Eastern and South-Eastern Asia
-          </option>
-          <option value="central-southern-asia">
-            Central and Southern Asia
-          </option>
-          <option value="europe-north-america">
-            Europe and Northern America
-          </option>
-          <option value="latin-caribbean">
-            Latin America and the Caribbean
-          </option>
-          <option value="north-africa-western-asia">
-            Northern Africa and Western Asia
-          </option>
-          <option value="australia-new-zealand">
-            Australia and New Zealand
-          </option>
-          <option value="sub-saharan-africa">Sub-Saharan Africa</option>
-        </select>
         <label className={allLabels}>Country:</label>
-        <select
-          className={allSelect}
-          value={selectedCountry}
-          onChange={(e) => setSelectedCountry(e.target.value)}
-          required
-        >
-          <option value="">Select a country</option>
-          {countryOptions.map((country) => (
-            <option key={country} value={country}>
-              {country}
-            </option>
-          ))}
-        </select>
+        <input
+          className="w-full py-1.5 px-2.5 my-2.5 mx-0 border border-gray-300 box-border block rounded-lg bg-gray-200 text-gray-600 border-transparent p-4 outline-none leading-6 transition-all duration-200 cursor-pointer font-semibold hover:bg-gray-100 focus:bg-white focus:text-gray-800 focus:border-gray-800 resize-none"
+          type="text"
+          placeholder="Type your event title..."
+          onChange={(e) => {
+            setCountry(e.target.value);
+          }}
+        />
         <label className={allLabels}>Trip Date:</label>
         <DatePicker
-          selected={tempStartDate}
-          startDate={tempStartDate}
-          endDate={tempEndDate}
+          selected={startDate}
+          startDate={startDate}
+          endDate={endDate}
           selectsRange
           onChange={(range: [Date | null, Date | null]) => {
             const [start, end] = range;
@@ -186,7 +114,13 @@ const Create = () => {
           onClick={() =>
             setEvents([
               ...events,
-              { id: events.length + 1, title: "", content: "" },
+              {
+                id: `${events.length + 1}`,
+                title: "",
+                content: "",
+                new: true,
+                update: false,
+              },
             ])
           }
           className="bg-black text-white border-none px-[8px] py-[5px] rounded-[8px] cursor-pointer dark:bg-white dark:text-black"
