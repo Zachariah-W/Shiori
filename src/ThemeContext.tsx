@@ -8,12 +8,12 @@ type ThemeProviderState = {
 };
 
 export const ThemeContext = createContext<ThemeProviderState>({
-  theme: "light",
+  theme: "dark",
   setTheme: () => null,
 });
 
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
-  const [theme, setTheme] = useState<Theme>("light");
+  const [theme, setTheme] = useState<Theme>("dark");
 
   useEffect(() => {
     const root = window.document.documentElement;

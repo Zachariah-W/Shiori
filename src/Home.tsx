@@ -23,7 +23,6 @@ import {
   SelectContent,
   SelectGroup,
   SelectItem,
-  SelectLabel,
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
@@ -55,10 +54,6 @@ const Home = () => {
   const [countryList, setCountryList] = useState<string[]>([]);
   const [prevCountryFilter, setPrevCountryFilter] = useState<string[]>([]);
   const tripsRef = collection(db, `users`, `${auth.currentUser?.uid}`, `trips`);
-  const [timeSortFilter, setTimeSortFilter] = useState<TimeSort>({
-    earliest: false,
-    latest: false,
-  });
 
   const getFilteredData = async () => {
     const q = query(tripsRef, where("country", "in", countryFilter));
