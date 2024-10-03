@@ -1,10 +1,9 @@
 import { Link } from "react-router-dom";
-import flagsData from "./flags.json";
 import { motion } from "framer-motion";
 import { FirestoreTrip } from "./Home";
 import { format } from "date-fns";
-import { useEffect } from "react";
-import TripDetails from "./TripDetails";
+import ReactCountryFlag from "react-country-flag";
+import lookup from "country-code-lookup";
 
 const TripList = ({
   trips,
@@ -13,19 +12,12 @@ const TripList = ({
   trips: FirestoreTrip[];
   title: string;
 }) => {
-  const getFlagFile = (country: string) => {
-    const flags = flagsData.flags;
-    const flag = flags.find((flag) => flag.country === country);
-    return flag ? flag.file : null;
-  };
-
   return (
     <div className="trip-list">
       <h1 className="font-semibold text-xl text-black dark:text-white">
         {title}
       </h1>
       {trips.map((trip, i) => {
-        const flagFile = getFlagFile(trip.country);
         return (
           <motion.div
             key={i}
@@ -64,11 +56,17 @@ const TripList = ({
                         )}
                     </p>
                   </div>
-                  {flagFile && (
-                    <img
-                      className="w-[18%] h-auto brightness-100 dark:brightness-90 rounded-lg"
-                      src={flagFile}
-                      alt={trip.country}
+                  {lookup.byCountry(trip.country)?.internet != undefined && (
+                    <ReactCountryFlag
+                      className="emojiFlag"
+                      countryCode={`${
+                        lookup.byCountry(trip.country)?.internet
+                      }`}
+                      style={{
+                        fontSize: "2em",
+                        lineHeight: "2em",
+                      }}
+                      aria-label={trip.country}
                     />
                   )}
                 </div>

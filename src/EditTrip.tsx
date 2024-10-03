@@ -13,6 +13,7 @@ import {
 import { auth, db } from "../firebaseConfig";
 import { Event, FirestoreTrip } from "./Home";
 import { onAuthStateChanged } from "firebase/auth";
+import { IoAdd } from "react-icons/io5";
 
 export type EditEvent = {
   id: string;
@@ -76,7 +77,6 @@ const EditTrip = () => {
 
   return (
     <div className="max-w-[400px] mx-auto my-0 text-center">
-      <pre>{JSON.stringify(events)}</pre>
       <h2 className="text-[20px] font-bold text-black dark:text-white  mb-[30px]">
         Edit Mode
       </h2>
@@ -141,7 +141,7 @@ const EditTrip = () => {
         <input
           className="w-full py-1.5 px-2.5 my-2.5 mx-0 border border-gray-300 box-border block rounded-lg bg-gray-200 text-gray-600 border-transparent p-4 outline-none leading-6 transition-all duration-200 cursor-pointer font-semibold hover:bg-gray-100 focus:bg-white focus:text-gray-800 focus:border-gray-800 resize-none"
           type="text"
-          placeholder="Type your event title..."
+          placeholder="Please type in the official country name..."
           value={trip.country}
           required
         />
@@ -160,25 +160,27 @@ const EditTrip = () => {
           wrapperClassName="w-full my-2.5 mx-0 border border-gray-300 box-border block rounded-lg bg-gray-200 text-gray-600 border-transparent"
           className="w-full py-1.5 px-2.5 border border-gray-300 box-border block rounded-lg bg-gray-200 text-gray-600 border-transparent outline-none font-semibold leading-6 transition-all duration-200 cursor-pointer hover:bg-gray-100 focus:bg-white focus:text-gray-800 focus:border-gray-800"
         />
-        <label className={allLabels}>Trip Information:</label>
-        <button
-          type="button"
-          onClick={() =>
-            setEvents([
-              ...events,
-              {
-                id: `${events.length + 1}`,
-                title: "",
-                content: "",
-                update: false,
-                new: true,
-              },
-            ])
-          }
-          className="text-white border-none p-[8px] rounded-[8px] cursor-pointer bg-black dark:bg-white dark:text-black"
-        >
-          Add Event
-        </button>
+        <div className="flex items-center justify-between">
+          <label className={allLabels}>Trip Description:</label>
+          <button
+            type="button"
+            onClick={() =>
+              setEvents([
+                ...events,
+                {
+                  id: `${events.length + 1}`,
+                  title: "",
+                  content: "",
+                  new: true,
+                  update: false,
+                },
+              ])
+            }
+            className="text-gray-700 border py-1.5 border-gray-600 h-5 w-5 rounded-full cursor-pointer flex items-center justify-center hover:scale-105 hover:rotate-180 duration-150 dark:border-white"
+          >
+            <IoAdd className="h-4 w-4 dark:text-white" />
+          </button>
+        </div>
         {events.length > 0 &&
           events.map((event, i) => (
             <CreateEvent

@@ -88,7 +88,7 @@ const Create = () => {
         <input
           className="w-full py-1.5 px-2.5 my-2.5 mx-0 border border-gray-300 box-border block rounded-lg bg-gray-200 text-gray-600 border-transparent p-4 outline-none leading-6 transition-all duration-200 cursor-pointer font-semibold hover:bg-gray-100 focus:bg-white focus:text-gray-800 focus:border-gray-800 resize-none"
           type="text"
-          placeholder="Type your event title..."
+          placeholder="Please type in the official country name..."
           onChange={(e) => {
             setCountry(e.target.value);
           }}
