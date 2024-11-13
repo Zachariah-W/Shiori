@@ -11,7 +11,7 @@ import {
   writeBatch,
 } from "firebase/firestore";
 import { auth, db } from "../firebaseConfig";
-import { Event, FirestoreTrip } from "./Home";
+import { FirestoreTrip } from "./Home";
 import { onAuthStateChanged } from "firebase/auth";
 import { IoAdd } from "react-icons/io5";
 

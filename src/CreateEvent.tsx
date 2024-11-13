@@ -1,7 +1,3 @@
-import { IoTrash } from "react-icons/io5";
-import { auth, db } from "../firebaseConfig";
-import { deleteDoc, doc } from "firebase/firestore";
-import { useParams } from "react-router-dom";
 import { EditEvent } from "./EditTrip";
 
 const CreateEvent = ({
@@ -11,8 +7,6 @@ const CreateEvent = ({
   event: EditEvent;
   onEventChange: (updatedEvent: EditEvent) => void;
 }) => {
-  const { id: tripId } = useParams();
-
   return (
     <div className="border-b border-solid border-gray-100">
       <label className="text-left text-black dark:text-white block font-semibold">

@@ -41,11 +41,6 @@ export type Event = {
   content: string;
 };
 
-type TimeSort = {
-  earliest: boolean;
-  latest: boolean;
-};
-
 const Home = () => {
   const [dataCollectionHolder, setDataCollectionHolder] = useState<
     FirestoreTrip[]
