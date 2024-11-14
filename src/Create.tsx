@@ -27,13 +27,6 @@ const Create = () => {
   });
   const navigate = useNavigate();
 
-  const handleEventChange = (id: string, updatedEvent: EditEvent) => {
-    const updatedEvents = events.map((event) =>
-      event.id === id ? { ...event, ...updatedEvent } : event
-    );
-    setEvents(updatedEvents);
-  };
-
   const allLabels = "text-left block font-semibold";
 
   return (
@@ -43,25 +36,20 @@ const Create = () => {
         onSubmit={async (e) => {
           e.preventDefault();
           const currentUser = auth.currentUser;
-          if (!currentUser?.uid) {
-            alert("You must be logged in to add a trip.");
-            return;
-          }
+          if (currentUser) {
+            const batch = writeBatch(db);
 
-          const batch = writeBatch(db);
+            const createTripRef = doc(
+              collection(db, "users", currentUser.uid, "trips")
+            );
 
-          const createTripRef = doc(
-            collection(db, "users", currentUser.uid, "trips")
-          );
+            batch.set(createTripRef, {
+              country: filter.country,
+              startDate: filter.startDate,
+              endDate: filter.endDate,
+            });
 
-          batch.set(createTripRef, {
-            country: filter.country,
-            startDate: filter.startDate,
-            endDate: filter.endDate,
-          });
-
-          if (events.length > 0) {
-            events.forEach(async (event) => {
+            if (events.length > 0) {
               const createEventsRef = doc(
                 collection(
                   db,
@@ -72,24 +60,27 @@ const Create = () => {
                   "events"
                 )
               );
-              batch.set(createEventsRef, {
-                title: event.title,
-                content: event.content,
+
+              events.forEach(async (event) => {
+                batch.set(createEventsRef, {
+                  title: event.title,
+                  content: event.content,
+                });
               });
-            });
+            }
+
+            const countryListRef = doc(db, "users", currentUser.uid);
+            const countryListSnap = await getDoc(countryListRef);
+
+            if (countryListSnap.exists()) {
+              batch.update(countryListRef, {
+                countryList: arrayUnion(filter.country),
+              });
+            }
+
+            await batch.commit();
+            navigate("/home");
           }
-
-          const countryListRef = doc(db, "users", currentUser.uid);
-          const countryListSnap = await getDoc(countryListRef);
-
-          if (countryListSnap.exists()) {
-            batch.update(countryListRef, {
-              countryList: arrayUnion(filter.country),
-            });
-          }
-
-          await batch.commit();
-          navigate("/Home");
         }}
       >
         <label className={allLabels}>Country:</label>
@@ -150,7 +141,11 @@ const Create = () => {
               key={i}
               event={event}
               onEventChange={(updatedEvent) =>
-                handleEventChange(event.id, updatedEvent)
+                setEvents(
+                  events.map((e) =>
+                    e.id === event.id ? { ...e, ...updatedEvent } : e
+                  )
+                )
               }
             />
           ))}
