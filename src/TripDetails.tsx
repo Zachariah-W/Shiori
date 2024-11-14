@@ -25,6 +25,7 @@ const TripDetails = () => {
   const [tripEvents, setTripEvents] = useState<Event[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [openDialog, setOpenDialog] = useState<boolean>(false);
+  const [eventExist, setEventExist] = useState<boolean>(false);
   const [dialogData, setDialogData] = useState<Event>({
     id: "",
     title: "",
@@ -43,13 +44,18 @@ const TripDetails = () => {
           `${id}`,
           `events`
         );
-        const tripEventsSnap = await getDocs(tripEventsDetailRef);
         const tripDocSnap = await getDoc(tripDocRef);
         setTrip({
           ...tripDocSnap.data(),
           id: tripDocSnap.id,
         } as FirestoreTrip);
         const tempArray: Event[] = [];
+        const tripEventsSnap = await getDocs(tripEventsDetailRef);
+        if (tripEventsSnap.size == 0) {
+          console.log("no event");
+          setEventExist(false);
+          return;
+        }
         tripEventsSnap.forEach((doc) => {
           tempArray.push({ ...doc.data() } as Event);
         });
@@ -101,41 +107,44 @@ const TripDetails = () => {
               </p>
             </div>
           </div>
-          <p className="ml-2 font-bold text-lg text-black dark:text-white">
-            Trip Information:
-          </p>
-          {tripEvents.map((event, i) => (
-            <motion.div
-              key={i}
-              initial={{ y: "50vh" }}
-              animate={{ y: 0 }}
-              transition={{
-                delay: i * 0.2,
-                type: "spring",
-                stiffness: 180,
-                damping: 22,
-              }}
-            >
-              <button
-                className="ml-2 mt-2 rounded-sm text-black dark:text-white w-11/12"
-                onClick={() => {
-                  setDialogData({
-                    id: event.id,
-                    title: event.title,
-                    content: event.content,
-                  });
-                  setOpenDialog(true);
-                }}
-              >
-                <div className="w-full p-2 text-left rounded-md dark:bg-gray-800 bg-gray-100 bg-dotted-bg border border-gray-200 dark:border-gray-700 dark:hover:bg-gray-700">
-                  <p className="text-black dark:text-white">
-                    Event: {event.title}
-                  </p>
-                </div>
-              </button>
-            </motion.div>
-          ))}
-
+          {eventExist && (
+            <>
+              <p className="ml-2 font-bold text-lg text-black dark:text-white">
+                Trip Information:
+              </p>
+              {tripEvents.map((event, i) => (
+                <motion.div
+                  key={i}
+                  initial={{ y: "50vh" }}
+                  animate={{ y: 0 }}
+                  transition={{
+                    delay: i * 0.2,
+                    type: "spring",
+                    stiffness: 180,
+                    damping: 22,
+                  }}
+                >
+                  <button
+                    className="ml-2 mt-2 rounded-sm text-black dark:text-white w-11/12"
+                    onClick={() => {
+                      setDialogData({
+                        id: event.id,
+                        title: event.title,
+                        content: event.content,
+                      });
+                      setOpenDialog(true);
+                    }}
+                  >
+                    <div className="w-full p-2 text-left rounded-md dark:bg-gray-800 bg-gray-100 bg-dotted-bg border border-gray-200 dark:border-gray-700 dark:hover:bg-gray-700">
+                      <p className="text-black dark:text-white">
+                        Event: {event.title}
+                      </p>
+                    </div>
+                  </button>
+                </motion.div>
+              ))}
+            </>
+          )}
           <div className="flex items-center justify-center gap-[20px] m-[15px]">
             <button
               className={deleteEditButton}
