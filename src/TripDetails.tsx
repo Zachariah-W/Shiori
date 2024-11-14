@@ -143,67 +143,66 @@ const TripDetails = () => {
                 const userConfirmed = window.confirm(
                   "You can't restore the data you delete, are you sure you want to delete?"
                 );
-                if (userConfirmed) {
-                  const eventsDeletionPromises = tripEvents.map((document) => {
-                    const tempEventsDocHolder = doc(
-                      db,
-                      `users`,
-                      `${auth.currentUser?.uid}`,
-                      `trips`,
-                      `${id}`,
-                      `events`,
-                      `${document.id}`
-                    );
-                    batch.delete(tempEventsDocHolder);
-                  });
-                  const tempTripDocHolder = doc(
+                if (!userConfirmed) {
+                  return;
+                }
+                const eventsDeletionPromises = tripEvents.map((document) => {
+                  const tempEventsDocHolder = doc(
                     db,
                     `users`,
                     `${auth.currentUser?.uid}`,
                     `trips`,
-                    `${id}`
+                    `${id}`,
+                    `events`,
+                    `${document.id}`
                   );
-                  batch.delete(tempTripDocHolder);
-                  await Promise.all(eventsDeletionPromises);
-                  const existingCountries = collection(
-                    db,
-                    `users`,
-                    `${auth.currentUser?.uid}`,
-                    `trips`
-                  );
-                  const existingCountriesSnap = await getDocs(
-                    existingCountries
-                  );
-                  const tempArray: string[] = [];
-                  existingCountriesSnap.forEach((doc) => {
-                    tempArray.push(doc.data().country);
-                  });
-                  const countryListRef = doc(
-                    db,
-                    `users`,
-                    `${auth.currentUser?.uid}`
-                  );
-                  const countryListSnap = await getDoc(countryListRef);
-                  if (
-                    countryListSnap.exists() &&
-                    tempArray.length > 0 &&
-                    tempArray.includes(trip.country)
-                  ) {
-                    let countryNum = 0;
-                    tempArray.forEach((country) => {
-                      if (trip.country == country) {
-                        countryNum++;
-                      }
-                    });
-                    if (countryNum == 1) {
-                      batch.update(countryListRef, {
-                        countryList: arrayRemove(`${trip.country}`),
-                      });
+                  batch.delete(tempEventsDocHolder);
+                });
+                const tempTripDocHolder = doc(
+                  db,
+                  `users`,
+                  `${auth.currentUser?.uid}`,
+                  `trips`,
+                  `${id}`
+                );
+                batch.delete(tempTripDocHolder);
+                await Promise.all(eventsDeletionPromises);
+                const existingCountries = collection(
+                  db,
+                  `users`,
+                  `${auth.currentUser?.uid}`,
+                  `trips`
+                );
+                const existingCountriesSnap = await getDocs(existingCountries);
+                const tempArray: string[] = [];
+                existingCountriesSnap.forEach((doc) => {
+                  tempArray.push(doc.data().country);
+                });
+                const countryListRef = doc(
+                  db,
+                  `users`,
+                  `${auth.currentUser?.uid}`
+                );
+                const countryListSnap = await getDoc(countryListRef);
+                if (
+                  countryListSnap.exists() &&
+                  tempArray.length > 0 &&
+                  tempArray.includes(trip.country)
+                ) {
+                  let countryNum = 0;
+                  tempArray.forEach((country) => {
+                    if (trip.country == country) {
+                      countryNum++;
                     }
+                  });
+                  if (countryNum == 1) {
+                    batch.update(countryListRef, {
+                      countryList: arrayRemove(`${trip.country}`),
+                    });
                   }
-                  await batch.commit();
-                  navigate("/Home");
                 }
+                await batch.commit();
+                navigate("/Home");
               }}
             >
               <IoTrash />
