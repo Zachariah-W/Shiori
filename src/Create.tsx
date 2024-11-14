@@ -13,6 +13,7 @@ import {
 import CreateEvent from "./CreateEvent";
 import { EditEvent } from "./EditTrip";
 import { IoAdd } from "react-icons/io5";
+import { Button } from "./components/ui/button";
 
 const Create = () => {
   const [events, setEvents] = useState<EditEvent[]>([]);
@@ -30,8 +31,8 @@ const Create = () => {
   const allLabels = "text-left block font-semibold";
 
   return (
-    <div className="max-w-[400px] mx-auto my-0 text-center text-black dark:text-white">
-      <h2 className="text-[20px] mb-[30px] font-bold">Add a New Trip</h2>
+    <div className="my-0 text-black dark:text-white">
+      <h2 className="text-lg font-medium">Add a New Trip</h2>
       <form
         onSubmit={async (e) => {
           e.preventDefault();
@@ -150,12 +151,7 @@ const Create = () => {
             />
           ))}
         <hr className="h-[1px] bg-gradient-to-r from-transparent via-gray-500 to-transparent ml-[5%] mr-[5%] mb-[20px] mt-[20px] border-none" />
-        <button
-          type="submit"
-          className="bg-gray-200 text-black hover:bg-gray-300 border-none py-[5px] px-[8px] rounded-[8px] cursor-pointer dark:bg-gray-700 dark:hover:bg-gray-600 dark:text-white"
-        >
-          Add Trip
-        </button>
+        <Button type="submit">Add Trip</Button>
       </form>
     </div>
   );
