@@ -11,7 +11,7 @@ import {
   writeBatch,
 } from "firebase/firestore";
 import { auth, db } from "../firebaseConfig";
-import { Event, FirestoreTrip } from "./Home";
+import { FirestoreTrip } from "./Home";
 import { onAuthStateChanged } from "firebase/auth";
 
 export type EditEvent = {
@@ -66,7 +66,7 @@ const EditTrip = () => {
   };
 
   useEffect(() => {
-    id === undefined && navigate("/Home");
+    if (id === undefined) navigate("/Home");
     getInfo();
   }, []);
 

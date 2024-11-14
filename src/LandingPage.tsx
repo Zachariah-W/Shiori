@@ -48,7 +48,6 @@ const LandingPage = () => {
         } else {
           console.log("No such trip found!");
         }
-      } else {
       }
 
       navigate("/Home");
