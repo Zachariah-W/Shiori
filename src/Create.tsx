@@ -16,9 +16,15 @@ import { IoAdd } from "react-icons/io5";
 
 const Create = () => {
   const [events, setEvents] = useState<EditEvent[]>([]);
-  const [startDate, setStartDate] = useState<Date | undefined>(undefined);
-  const [endDate, setEndDate] = useState<Date | undefined>(undefined);
-  const [country, setCountry] = useState("");
+  const [filter, setFilter] = useState<{
+    startDate: Date | undefined;
+    endDate: Date | undefined;
+    country: string;
+  }>({
+    startDate: undefined,
+    endDate: undefined,
+    country: "",
+  });
   const navigate = useNavigate();
 
   const handleEventChange = (id: string, updatedEvent: EditEvent) => {
@@ -49,9 +55,9 @@ const Create = () => {
           );
 
           batch.set(createTripRef, {
-            country: country,
-            startDate: startDate,
-            endDate: endDate,
+            country: filter.country,
+            startDate: filter.startDate,
+            endDate: filter.endDate,
           });
 
           if (events.length > 0) {
@@ -76,10 +82,12 @@ const Create = () => {
           const countryListRef = doc(db, "users", currentUser.uid);
           const countryListSnap = await getDoc(countryListRef);
 
-          countryListSnap.exists() &&
+          if (countryListSnap.exists()) {
             batch.update(countryListRef, {
-              countryList: arrayUnion(country),
+              countryList: arrayUnion(filter.country),
             });
+          }
+
           await batch.commit();
           navigate("/Home");
         }}
@@ -90,19 +98,25 @@ const Create = () => {
           type="text"
           placeholder="Please type in the official country name..."
           onChange={(e) => {
-            setCountry(e.target.value);
+            setFilter({
+              ...filter,
+              country: e.target.value,
+            });
           }}
         />
         <label className={allLabels}>Trip Date:</label>
         <DatePicker
-          selected={startDate}
-          startDate={startDate}
-          endDate={endDate}
+          selected={filter.startDate}
+          startDate={filter.startDate}
+          endDate={filter.endDate}
           selectsRange
           onChange={(range: [Date | null, Date | null]) => {
             const [start, end] = range;
-            setStartDate(start || undefined);
-            setEndDate(end || undefined);
+            setFilter({
+              ...filter,
+              startDate: start || undefined,
+              endDate: end || undefined,
+            });
           }}
           placeholderText="Choose a Date"
           wrapperClassName="w-full my-2.5 mx-0 border border-gray-300 box-border block rounded-lg bg-gray-200 text-gray-600 border-transparent"
