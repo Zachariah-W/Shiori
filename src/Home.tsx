@@ -17,7 +17,7 @@ import {
   DropdownMenuContent,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { IoMdArrowDropdown } from "react-icons/io";
+import { ChevronDown } from "lucide-react";
 import {
   Select,
   SelectContent,
@@ -97,8 +97,9 @@ const Home = () => {
             }}
           >
             <DropdownMenuTrigger asChild>
-              <Button className="w-40 h-8 font-semibold text-black bg-gray-100 hover:bg-gray-200 dark:text-white dark:bg-gray-800 dark:hover:bg-gray-700 gap-5">
-                Select Country <IoMdArrowDropdown />
+              <Button className="w-40 h-8 font-semibold text-black bg-gray-100 hover:bg-gray-200 dark:text-white dark:bg-gray-800 dark:hover:bg-gray-700 gap-5 p-0 flex items-center">
+                <span>Select Country</span>
+                <ChevronDown className="h-4 w-4 opacity-50" />
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent
