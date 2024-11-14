@@ -67,7 +67,7 @@ const EditTrip = () => {
   };
 
   useEffect(() => {
-    id === undefined && navigate("/Home");
+    if (id === undefined) navigate("/Home");
     getInfo();
   }, []);
 

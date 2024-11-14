@@ -20,9 +20,7 @@ const Navbar = () => {
           New Trip
         </Link>
         <DarkModeSwitch
-          onChange={() => {
-            theme === "light" ? setTheme("dark") : setTheme("light");
-          }}
+          onChange={() => setTheme(theme === "light" ? "dark" : "light")}
           checked={theme === "dark"}
         />
       </div>
