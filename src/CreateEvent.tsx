@@ -1,19 +1,17 @@
+import { NewEvent } from "./Create";
 import { EditEvent } from "./EditTrip";
 
 const CreateEvent = ({
   event,
   onEventChange,
 }: {
-  event: EditEvent;
-  onEventChange: (updatedEvent: EditEvent) => void;
+  event: EditEvent | NewEvent;
+  onEventChange: (updatedEvent: EditEvent | NewEvent) => void;
 }) => {
   return (
-    <div className="border-b border-solid border-gray-100">
-      <label className="text-left text-black dark:text-white block font-semibold">
-        Event:
-      </label>
+    <div>
       <input
-        className="w-full py-1.5 px-2.5 my-2.5 mx-0 border border-gray-300 box-border block rounded-lg bg-gray-200 text-gray-600 border-transparent p-4 outline-none leading-6 transition-all duration-200 cursor-pointer font-semibold hover:bg-gray-100 focus:bg-white focus:text-gray-800 focus:border-gray-800 resize-none"
+        className="title-input"
         type="text"
         placeholder="Type your event title..."
         value={event.title}
@@ -21,7 +19,7 @@ const CreateEvent = ({
         required
       />
       <textarea
-        className="w-full py-1.5 px-2.5 my-2.5 mx-0 border border-gray-300 box-border block rounded-lg bg-gray-200 text-gray-600 border-transparent p-4 outline-none font-semibold leading-6 transition-all duration-200 cursor-pointer hover:bg-gray-100 focus:bg-white focus:text-gray-800 focus:border-gray-800 resize-y overflow-y-auto"
+        className="content-textarea"
         value={event.content}
         onChange={(e) => onEventChange({ ...event, content: e.target.value })}
         placeholder="Type your event content..."

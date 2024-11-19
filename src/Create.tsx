@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
@@ -11,12 +11,17 @@ import {
   writeBatch,
 } from "firebase/firestore";
 import CreateEvent from "./CreateEvent";
-import { EditEvent } from "./EditTrip";
+import EditTrip, { EditEvent } from "./EditTrip";
 import { IoAdd } from "react-icons/io5";
 
+export type NewEvent = {
+  title: string;
+  content: string;
+};
+
 const Create = () => {
-  const [events, setEvents] = useState<EditEvent[]>([]);
-  const [filter, setFilter] = useState<{
+  const [events, setEvents] = useState<Map<string, NewEvent>>();
+  const [trip, setTrip] = useState<{
     startDate: Date | undefined;
     endDate: Date | undefined;
     country: string;
@@ -27,11 +32,18 @@ const Create = () => {
   });
   const navigate = useNavigate();
 
-  const handleEventChange = (id: string, updatedEvent: EditEvent) => {
-    const updatedEvents = events.map((event) =>
-      event.id === id ? { ...event, ...updatedEvent } : event
-    );
-    setEvents(updatedEvents);
+  useEffect(() => {
+    console.log(events);
+  });
+
+  const handleEventChange = (id: string, updatedEvent: NewEvent) => {
+    setEvents((prevEvents) => {
+      if (!prevEvents) return undefined;
+      const updatedEvents = new Map(prevEvents);
+      const existingEvent = updatedEvents.get(id);
+      updatedEvents.set(id, { ...existingEvent, ...updatedEvent });
+      return updatedEvents;
+    });
   };
 
   const allLabels = "text-left block font-semibold";
@@ -43,25 +55,21 @@ const Create = () => {
         onSubmit={async (e) => {
           e.preventDefault();
           const currentUser = auth.currentUser;
-          if (!currentUser?.uid) {
-            alert("You must be logged in to add a trip.");
+          if (currentUser === null) {
             return;
           }
-
           const batch = writeBatch(db);
-
           const createTripRef = doc(
             collection(db, "users", currentUser.uid, "trips")
           );
-
           batch.set(createTripRef, {
-            country: filter.country,
-            startDate: filter.startDate,
-            endDate: filter.endDate,
+            country: trip.country,
+            startDate: trip.startDate,
+            endDate: trip.endDate,
           });
 
-          if (events.length > 0) {
-            events.forEach(async (event) => {
+          if (events !== undefined) {
+            Array.from(events.values()).forEach((event) => {
               const createEventsRef = doc(
                 collection(
                   db,
@@ -72,19 +80,19 @@ const Create = () => {
                   "events"
                 )
               );
-              batch.set(createEventsRef, {
-                title: event.title,
-                content: event.content,
-              });
+              batch.set(createEventsRef, event);
             });
           }
 
+          // shouldn't need to go to database, if you have an existing
+          // country list. you're just adding a single country
+          // to the existing list.
           const countryListRef = doc(db, "users", currentUser.uid);
           const countryListSnap = await getDoc(countryListRef);
 
           if (countryListSnap.exists()) {
             batch.update(countryListRef, {
-              countryList: arrayUnion(filter.country),
+              countryList: arrayUnion(trip.country),
             });
           }
 
@@ -94,65 +102,81 @@ const Create = () => {
       >
         <label className={allLabels}>Country:</label>
         <input
-          className="w-full py-1.5 px-2.5 my-2.5 mx-0 border border-gray-300 box-border block rounded-lg bg-gray-200 text-gray-600 border-transparent p-4 outline-none leading-6 transition-all duration-200 cursor-pointer font-semibold hover:bg-gray-100 focus:bg-white focus:text-gray-800 focus:border-gray-800 resize-none"
+          className="title-input"
           type="text"
           placeholder="Please type in the official country name..."
           onChange={(e) => {
-            setFilter({
-              ...filter,
+            setTrip({
+              ...trip,
               country: e.target.value,
             });
           }}
         />
         <label className={allLabels}>Trip Date:</label>
         <DatePicker
-          selected={filter.startDate}
-          startDate={filter.startDate}
-          endDate={filter.endDate}
+          selected={trip.startDate}
+          startDate={trip.startDate}
+          endDate={trip.endDate}
           selectsRange
           onChange={(range: [Date | null, Date | null]) => {
             const [start, end] = range;
-            setFilter({
-              ...filter,
+            setTrip({
+              ...trip,
               startDate: start || undefined,
               endDate: end || undefined,
             });
           }}
           placeholderText="Choose a Date"
-          wrapperClassName="w-full my-2.5 mx-0 border border-gray-300 box-border block rounded-lg bg-gray-200 text-gray-600 border-transparent"
-          className="w-full py-1.5 px-2.5 border border-gray-300 box-border block rounded-lg bg-gray-200 text-gray-600 border-transparent font-semibold outline-none leading-6 transition-all duration-200 cursor-pointer hover:bg-gray-100 focus:bg-white focus:text-gray-800 focus:border-gray-800"
+          wrapperClassName="w-full"
+          className="title-input"
         />
         <div className="flex items-center justify-between">
           <label className={allLabels}>Trip Description:</label>
           <button
             type="button"
-            onClick={() =>
-              setEvents([
-                ...events,
-                {
-                  id: `${events.length + 1}`,
+            onClick={() => {
+              setEvents((prevEvents) => {
+                const newEvent = new Map(prevEvents);
+                const newId = `new${newEvent.size + 1}`;
+                newEvent.set(newId, {
                   title: "",
                   content: "",
-                  new: true,
-                  update: false,
-                },
-              ])
-            }
+                });
+                return newEvent;
+              });
+            }}
             className="text-gray-700 border py-1.5 border-gray-600 h-5 w-5 rounded-full cursor-pointer flex items-center justify-center hover:scale-105 hover:rotate-180 duration-150 dark:border-white"
           >
             <IoAdd className="h-4 w-4 dark:text-white" />
           </button>
         </div>
 
-        {events.length > 0 &&
-          events.map((event, i) => (
-            <CreateEvent
-              key={i}
-              event={event}
-              onEventChange={(updatedEvent) =>
-                handleEventChange(event.id, updatedEvent)
-              }
-            />
+        {events &&
+          Array.from(events.entries()).map(([key, event]) => (
+            <div className="border border-b-white pb-3" key={key}>
+              <CreateEvent
+                event={event}
+                onEventChange={(newEvent) => handleEventChange(key, newEvent)}
+              />
+              <button
+                type="button"
+                className="border border-red-800 rounded-sm cursor-pointer w-32 h-6 text-red-800 hover:bg-red-800 hover:text-white"
+                onClick={() => {
+                  const userConfirmed = window.confirm(
+                    "Your data will not be actually deleted until you click on finish editing"
+                  );
+                  if (!userConfirmed) return;
+                  setEvents((prevEvents) => {
+                    if (!prevEvents) return undefined;
+                    const updatedEvents = new Map(prevEvents);
+                    updatedEvents.delete(key);
+                    return updatedEvents;
+                  });
+                }}
+              >
+                Delete Event
+              </button>
+            </div>
           ))}
         <hr className="h-[1px] bg-gradient-to-r from-transparent via-gray-500 to-transparent ml-[5%] mr-[5%] mb-[20px] mt-[20px] border-none" />
         <button

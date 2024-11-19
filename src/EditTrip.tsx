@@ -6,28 +6,35 @@ import CreateEvent from "./CreateEvent";
 import {
   collection,
   doc,
+  DocumentData,
+  DocumentSnapshot,
   getDoc,
   getDocs,
+  QueryDocumentSnapshot,
+  QuerySnapshot,
   writeBatch,
 } from "firebase/firestore";
 import { auth, db } from "../firebaseConfig";
 import { FirestoreTrip } from "./Home";
 import { onAuthStateChanged } from "firebase/auth";
 import { IoAdd } from "react-icons/io5";
+import { title } from "process";
+import { NewEvent } from "./Create";
 
-export type EditEvent = {
-  id: string;
-  update: boolean;
+type Event = {
   title: string;
   content: string;
-  new: boolean;
+};
+
+export type EditEvent = Event & {
+  status: "new" | "deleted" | "updated" | "unchanged";
 };
 
 const EditTrip = () => {
   const { id } = useParams();
   const [tempStartDate, setStartDate] = useState<Date | undefined>(undefined);
   const [tempEndDate, setEndDate] = useState<Date | undefined>(undefined);
-  const [events, setEvents] = useState<EditEvent[]>([]);
+  const [events, setEvents] = useState<Map<string, EditEvent>>();
   const [trip, setTrip] = useState<FirestoreTrip>();
   const navigate = useNavigate();
 
@@ -51,17 +58,15 @@ const EditTrip = () => {
           `${id}`,
           `events`
         );
-        const eventsSnap = await getDocs(eventsRef);
-        const tempEventsHolder: EditEvent[] = [];
+        const eventsSnap = (await getDocs(eventsRef)) as QuerySnapshot<Event>;
+        const tempEvents = new Map<string, EditEvent>();
         eventsSnap.forEach((doc) => {
-          tempEventsHolder.push({
+          tempEvents.set(doc.id, {
             ...doc.data(),
-            id: doc.id,
-            update: false,
-            new: false,
-          } as EditEvent);
+            status: "unchanged",
+          });
         });
-        setEvents(tempEventsHolder);
+        setEvents(tempEvents);
       }
     });
   };
@@ -84,10 +89,7 @@ const EditTrip = () => {
         onSubmit={async (e) => {
           e.preventDefault();
           const currentUser = auth.currentUser;
-          if (!currentUser?.uid) {
-            alert("You must be logged in to add a trip.");
-            return;
-          }
+          if (!currentUser) return;
           const batch = writeBatch(db);
           const tripDocRef = doc(
             db,
@@ -101,47 +103,60 @@ const EditTrip = () => {
             startDate: tempStartDate,
             endDate: tempEndDate,
           });
-          events.forEach((newDoc) => {
-            if (newDoc.new == true) {
-              const newEventRef = doc(
-                collection(
+          if (events) {
+            Array.from(events.entries()).forEach(([key, event]) => {
+              if (event.status == "new") {
+                const newEventRef = doc(
+                  collection(
+                    db,
+                    `users`,
+                    `${currentUser.uid}`,
+                    `trips`,
+                    `${id}`,
+                    `events`
+                  )
+                );
+                batch.set(newEventRef, event);
+              } else if (event.status == "updated") {
+                const updateEventRef = doc(
                   db,
                   `users`,
                   `${currentUser.uid}`,
                   `trips`,
                   `${id}`,
-                  `events`
-                )
-              );
-              batch.set(newEventRef, {
-                title: newDoc.title,
-                content: newDoc.content,
-              });
-            } else if (newDoc.update == true) {
-              const updateEventRef = doc(
-                db,
-                `users`,
-                `${currentUser.uid}`,
-                `trips`,
-                `${id}`,
-                `events`,
-                `${newDoc.id}`
-              );
-              batch.update(updateEventRef, {
-                title: newDoc.title,
-                content: newDoc.content,
-              });
-            }
-          });
+                  `events`,
+                  `${key}`
+                );
+                batch.update(updateEventRef, event);
+              } else if (event.status == "deleted") {
+                const deletEventRef = doc(
+                  db,
+                  `users`,
+                  `${auth.currentUser?.uid}`,
+                  `trips`,
+                  `${id}`,
+                  `events`,
+                  `${key}`
+                );
+                batch.delete(deletEventRef);
+              }
+            });
+          }
           await batch.commit();
           navigate("/Home");
         }}
       >
         <label className={allLabels}>Country:</label>
         <input
-          className="w-full py-1.5 px-2.5 my-2.5 mx-0 border border-gray-300 box-border block rounded-lg bg-gray-200 text-gray-600 border-transparent p-4 outline-none leading-6 transition-all duration-200 cursor-pointer font-semibold hover:bg-gray-100 focus:bg-white focus:text-gray-800 focus:border-gray-800 resize-none"
+          className="title-input"
           type="text"
           placeholder="Please type in the official country name..."
+          onChange={(e) => {
+            setTrip({
+              ...trip,
+              country: e.target.value,
+            });
+          }}
           value={trip.country}
           required
         />
@@ -157,46 +172,90 @@ const EditTrip = () => {
             setEndDate(end || undefined);
           }}
           placeholderText="Choose a Date"
-          wrapperClassName="w-full my-2.5 mx-0 border border-gray-300 box-border block rounded-lg bg-gray-200 text-gray-600 border-transparent"
-          className="w-full py-1.5 px-2.5 border border-gray-300 box-border block rounded-lg bg-gray-200 text-gray-600 border-transparent outline-none font-semibold leading-6 transition-all duration-200 cursor-pointer hover:bg-gray-100 focus:bg-white focus:text-gray-800 focus:border-gray-800"
+          wrapperClassName="w-full"
+          className="title-input"
         />
         <div className="flex items-center justify-between">
-          <label className={allLabels}>Trip Description:</label>
+          <label className={allLabels}>Trip Information:</label>
           <button
             type="button"
             onClick={() =>
-              setEvents([
-                ...events,
-                {
-                  id: `${events.length + 1}`,
+              setEvents((prevEvents) => {
+                if (!prevEvents) return undefined;
+                const newEvent = new Map(prevEvents);
+                const newId = `new${newEvent.size + 1}`;
+                newEvent.set(newId, {
                   title: "",
                   content: "",
-                  new: true,
-                  update: false,
-                },
-              ])
+                  status: "new",
+                });
+                return newEvent;
+              })
             }
             className="text-gray-700 border py-1.5 border-gray-600 h-5 w-5 rounded-full cursor-pointer flex items-center justify-center hover:scale-105 hover:rotate-180 duration-150 dark:border-white"
           >
             <IoAdd className="h-4 w-4 dark:text-white" />
           </button>
         </div>
-        {events.length > 0 &&
-          events.map((event, i) => (
-            <CreateEvent
-              key={i}
-              event={event}
-              onEventChange={(updatedEvent) => {
-                const updatedEvents = events.map((e) =>
-                  e.id === event.id
-                    ? { ...e, ...updatedEvent, update: true }
-                    : e
-                );
-                setEvents(updatedEvents);
-              }}
-            />
-          ))}
-
+        {events &&
+          Array.from(events.entries()).map(([key, event]) => {
+            if (event.status === "deleted") return null;
+            return (
+              <div className="border border-b-white pb-3" key={key}>
+                <CreateEvent
+                  event={event}
+                  onEventChange={(updatedEvent) => {
+                    setEvents((prevEvents) => {
+                      if (!prevEvents) return undefined;
+                      const updatedEvents = new Map(prevEvents);
+                      const existingEvent = updatedEvents.get(key);
+                      if (existingEvent && existingEvent.status === "new") {
+                        updatedEvents.set(key, {
+                          ...existingEvent,
+                          ...updatedEvent,
+                          status: "new",
+                        });
+                      } else {
+                        updatedEvents.set(key, {
+                          ...existingEvent,
+                          ...updatedEvent,
+                          status: "updated",
+                        });
+                      }
+                      return updatedEvents;
+                    });
+                  }}
+                />
+                <button
+                  type="button"
+                  className="border border-red-800 rounded-sm cursor-pointer w-32 h-6 text-red-800 hover:bg-red-800 hover:text-white"
+                  onClick={() => {
+                    const userConfirmed = window.confirm(
+                      "Your data will not be actually deleted until you click on finish editing"
+                    );
+                    if (!userConfirmed) return;
+                    setEvents((prevEvents) => {
+                      if (!prevEvents) return undefined;
+                      const updatedEvents = new Map(prevEvents);
+                      const targetEvent = events.get(key);
+                      if (!targetEvent) return updatedEvents;
+                      if (targetEvent.status === "new") {
+                        updatedEvents.delete(key);
+                      } else {
+                        updatedEvents.set(key, {
+                          ...targetEvent,
+                          status: "deleted",
+                        });
+                      }
+                      return updatedEvents;
+                    });
+                  }}
+                >
+                  Delete Event
+                </button>
+              </div>
+            );
+          })}
         <br />
         <br />
         <button
