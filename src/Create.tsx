@@ -83,9 +83,6 @@ const Create = () => {
             });
           }
 
-          // shouldn't need to go to database, if you have an existing
-          // country list. you're just adding a single country
-          // to the existing list.
           const countryListRef = doc(db, "users", currentUser.uid);
           const countryListSnap = await getDoc(countryListRef);
 

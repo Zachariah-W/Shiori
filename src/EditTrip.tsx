@@ -4,6 +4,8 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import CreateEvent from "./CreateEvent";
 import {
+  arrayRemove,
+  arrayUnion,
   collection,
   doc,
   getDoc,
@@ -31,6 +33,8 @@ const EditTrip = () => {
   const [tempEndDate, setEndDate] = useState<Date | undefined>(undefined);
   const [events, setEvents] = useState<Map<string, EditEvent>>();
   const [trip, setTrip] = useState<FirestoreTrip>();
+  const [ogData, setOgData] = useState<string[]>();
+  const [ogCountry, setOgCountry] = useState<string>();
   const navigate = useNavigate();
 
   const getInfo = () => {
@@ -44,6 +48,12 @@ const EditTrip = () => {
           const formattedTripEndDate = tripSnap.data().endDate.toDate();
           setStartDate(formattedTripStartDate);
           setEndDate(formattedTripEndDate);
+          setOgData([
+            `${tripSnap.data().country}`,
+            `${formattedTripStartDate}`,
+            `${formattedTripEndDate}`,
+          ]);
+          setOgCountry(`${tripSnap.data().country}`);
         }
         const eventsRef = collection(
           db,
@@ -86,18 +96,52 @@ const EditTrip = () => {
           const currentUser = auth.currentUser;
           if (!currentUser) return;
           const batch = writeBatch(db);
-          const tripDocRef = doc(
-            db,
-            `users`,
-            `${currentUser.uid}`,
-            `trips`,
-            `${id}`
-          );
-          batch.update(tripDocRef, {
-            country: trip.country,
-            startDate: tempStartDate,
-            endDate: tempEndDate,
-          });
+          const currentData = [
+            `${trip?.country}`,
+            `${tempStartDate}`,
+            `${tempEndDate}`,
+          ];
+          if (JSON.stringify(ogData) !== JSON.stringify(currentData)) {
+            const tripDocRef = doc(
+              db,
+              `users`,
+              `${currentUser.uid}`,
+              `trips`,
+              `${id}`
+            );
+            batch.update(tripDocRef, {
+              country: trip.country,
+              startDate: tempStartDate,
+              endDate: tempEndDate,
+            });
+
+            //Country List check and update
+            const existingCountries = collection(
+              db,
+              `users`,
+              `${auth.currentUser?.uid}`,
+              `trips`
+            );
+            const existingCountriesSnap = await getDocs(existingCountries);
+            const tempArray: string[] = [];
+            existingCountriesSnap.forEach((doc) => {
+              tempArray.push(doc.data().country);
+            });
+            const countryListRef = doc(db, "users", currentUser.uid);
+            let countryNum = tempArray.filter(
+              (country) => country === ogCountry
+            ).length;
+            if (countryNum == 1) {
+              batch.update(countryListRef, {
+                countryList: arrayRemove(`${ogCountry}`),
+              });
+            }
+            if (!tempArray.includes(trip.country)) {
+              batch.update(countryListRef, {
+                countryList: arrayUnion(trip.country),
+              });
+            }
+          }
           if (events) {
             Array.from(events.entries()).forEach(([key, event]) => {
               if (event.status == "new") {
