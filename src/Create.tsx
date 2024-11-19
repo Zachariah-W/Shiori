@@ -14,11 +14,6 @@ import CreateEvent from "./CreateEvent";
 import EditTrip, { EditEvent } from "./EditTrip";
 import { IoAdd } from "react-icons/io5";
 
-export type NewEvent = {
-  title: string;
-  content: string;
-};
-
 const Create = () => {
   const [events, setEvents] = useState<Map<string, NewEvent>>();
   const [trip, setTrip] = useState<{
@@ -32,44 +27,41 @@ const Create = () => {
   });
   const navigate = useNavigate();
 
-  useEffect(() => {
-    console.log(events);
-  });
-
-  const handleEventChange = (id: string, updatedEvent: NewEvent) => {
-    setEvents((prevEvents) => {
-      if (!prevEvents) return undefined;
-      const updatedEvents = new Map(prevEvents);
-      const existingEvent = updatedEvents.get(id);
-      updatedEvents.set(id, { ...existingEvent, ...updatedEvent });
-      return updatedEvents;
-    });
+  const handleEventChange = (id: string, updatedEvent: EditEvent) => {
+    const updatedEvents = events.map((event) =>
+      event.id === id ? { ...event, ...updatedEvent } : event
+    );
+    setEvents(updatedEvents);
   };
 
   const allLabels = "text-left block font-semibold";
 
   return (
-    <div className="max-w-[400px] mx-auto my-0 text-center text-black dark:text-white">
-      <h2 className="text-[20px] mb-[30px] font-bold">Add a New Trip</h2>
+    <div className="my-0 text-black dark:text-white">
+      <h2 className="text-lg font-medium">Add a New Trip</h2>
       <form
         onSubmit={async (e) => {
           e.preventDefault();
           const currentUser = auth.currentUser;
-          if (currentUser === null) {
+          if (!currentUser?.uid) {
+            alert("You must be logged in to add a trip.");
             return;
           }
+
           const batch = writeBatch(db);
+
           const createTripRef = doc(
             collection(db, "users", currentUser.uid, "trips")
           );
+
           batch.set(createTripRef, {
-            country: trip.country,
-            startDate: trip.startDate,
-            endDate: trip.endDate,
+            country: filter.country,
+            startDate: filter.startDate,
+            endDate: filter.endDate,
           });
 
-          if (events !== undefined) {
-            Array.from(events.values()).forEach((event) => {
+          if (events.length > 0) {
+            events.forEach(async (event) => {
               const createEventsRef = doc(
                 collection(
                   db,
@@ -80,24 +72,25 @@ const Create = () => {
                   "events"
                 )
               );
-              batch.set(createEventsRef, event);
+              batch.set(createEventsRef, {
+                title: event.title,
+                content: event.content,
+              });
             });
           }
 
-          // shouldn't need to go to database, if you have an existing
-          // country list. you're just adding a single country
-          // to the existing list.
           const countryListRef = doc(db, "users", currentUser.uid);
           const countryListSnap = await getDoc(countryListRef);
 
           if (countryListSnap.exists()) {
             batch.update(countryListRef, {
-              countryList: arrayUnion(trip.country),
+              countryList: arrayUnion(filter.country),
             });
           }
 
-          await batch.commit();
-          navigate("/Home");
+            await batch.commit();
+            navigate("/home");
+          }
         }}
       >
         <label className={allLabels}>Country:</label>
@@ -151,40 +144,18 @@ const Create = () => {
           </button>
         </div>
 
-        {events &&
-          Array.from(events.entries()).map(([key, event]) => (
-            <div className="border border-b-white pb-3" key={key}>
-              <CreateEvent
-                event={event}
-                onEventChange={(newEvent) => handleEventChange(key, newEvent)}
-              />
-              <button
-                type="button"
-                className="border border-red-800 rounded-sm cursor-pointer w-32 h-6 text-red-800 hover:bg-red-800 hover:text-white"
-                onClick={() => {
-                  const userConfirmed = window.confirm(
-                    "Your data will not be actually deleted until you click on finish editing"
-                  );
-                  if (!userConfirmed) return;
-                  setEvents((prevEvents) => {
-                    if (!prevEvents) return undefined;
-                    const updatedEvents = new Map(prevEvents);
-                    updatedEvents.delete(key);
-                    return updatedEvents;
-                  });
-                }}
-              >
-                Delete Event
-              </button>
-            </div>
+        {events.length > 0 &&
+          events.map((event, i) => (
+            <CreateEvent
+              key={i}
+              event={event}
+              onEventChange={(updatedEvent) =>
+                handleEventChange(event.id, updatedEvent)
+              }
+            />
           ))}
         <hr className="h-[1px] bg-gradient-to-r from-transparent via-gray-500 to-transparent ml-[5%] mr-[5%] mb-[20px] mt-[20px] border-none" />
-        <button
-          type="submit"
-          className="bg-gray-200 text-black hover:bg-gray-300 border-none py-[5px] px-[8px] rounded-[8px] cursor-pointer dark:bg-gray-700 dark:hover:bg-gray-600 dark:text-white"
-        >
-          Add Trip
-        </button>
+        <Button type="submit">Add Trip</Button>
       </form>
     </div>
   );
