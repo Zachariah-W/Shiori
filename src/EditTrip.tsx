@@ -6,11 +6,8 @@ import CreateEvent from "./CreateEvent";
 import {
   collection,
   doc,
-  DocumentData,
-  DocumentSnapshot,
   getDoc,
   getDocs,
-  QueryDocumentSnapshot,
   QuerySnapshot,
   writeBatch,
 } from "firebase/firestore";
@@ -18,8 +15,6 @@ import { auth, db } from "../firebaseConfig";
 import { FirestoreTrip } from "./Home";
 import { onAuthStateChanged } from "firebase/auth";
 import { IoAdd } from "react-icons/io5";
-import { title } from "process";
-import { NewEvent } from "./Create";
 
 type Event = {
   title: string;
