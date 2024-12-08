@@ -12,6 +12,7 @@ import {
 } from "firebase/firestore";
 import CreateEvent from "./CreateEvent";
 import { IoAdd } from "react-icons/io5";
+import ImageSearch, { UnsplashImage } from "./ImageSearch";
 
 export type NewEvent = {
   title: string;
@@ -30,6 +31,9 @@ const Create = () => {
     country: "",
   });
   const navigate = useNavigate();
+  const [unsplashPhoto, setUnsplashPhoto] = useState<UnsplashImage | undefined>(
+    undefined
+  );
 
   useEffect(() => {
     console.log(events);
@@ -126,6 +130,13 @@ const Create = () => {
           wrapperClassName="w-full"
           className="title-input"
         />
+        <p className={allLabels}>Search Image:</p>
+        <ImageSearch
+          unsplashPhoto={unsplashPhoto}
+          onPhotoChange={(e) => {
+            setUnsplashPhoto(e);
+          }}
+        />
         <div className="flex items-center justify-between">
           <label className={allLabels}>Trip Description:</label>
           <button
@@ -146,7 +157,6 @@ const Create = () => {
             <IoAdd className="h-4 w-4 dark:text-white" />
           </button>
         </div>
-
         {events &&
           Array.from(events.entries()).map(([key, event]) => (
             <div className="border border-b-white pb-3" key={key}>

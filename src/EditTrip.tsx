@@ -18,12 +18,12 @@ import { FirestoreTrip } from "./Home";
 import { onAuthStateChanged } from "firebase/auth";
 import { IoAdd } from "react-icons/io5";
 
-type Event = {
+type EventDetails = {
   title: string;
   content: string;
 };
 
-export type EditEvent = Event & {
+export type EditEvent = EventDetails & {
   status: "new" | "deleted" | "updated" | "unchanged";
 };
 
@@ -63,7 +63,9 @@ const EditTrip = () => {
           `${id}`,
           `events`
         );
-        const eventsSnap = (await getDocs(eventsRef)) as QuerySnapshot<Event>;
+        const eventsSnap = (await getDocs(
+          eventsRef
+        )) as QuerySnapshot<EventDetails>;
         const tempEvents = new Map<string, EditEvent>();
         eventsSnap.forEach((doc) => {
           tempEvents.set(doc.id, {
@@ -115,7 +117,6 @@ const EditTrip = () => {
               endDate: tempEndDate,
             });
 
-            //Country List check and update
             const existingCountries = collection(
               db,
               `users`,

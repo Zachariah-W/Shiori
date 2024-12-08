@@ -11,6 +11,7 @@ import {
   doc,
   getDoc,
   getDocs,
+  QuerySnapshot,
   writeBatch,
 } from "firebase/firestore";
 import { onAuthStateChanged } from "firebase/auth";
@@ -22,10 +23,9 @@ const TripDetails = () => {
   const navigate = useNavigate();
   const batch = writeBatch(db);
   const [trip, setTrip] = useState<FirestoreTrip>();
-  const [tripEvents, setTripEvents] = useState<Event[]>([]);
+  const [events, setEvents] = useState<Event[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [openDialog, setOpenDialog] = useState<boolean>(false);
-  const [eventExist, setEventExist] = useState<boolean>(false);
   const [dialogData, setDialogData] = useState<Event>({
     id: "",
     title: "",
@@ -36,6 +36,11 @@ const TripDetails = () => {
     onAuthStateChanged(auth, async (user) => {
       if (user) {
         const tripDocRef = doc(db, `users`, `${user.uid}`, `trips`, `${id}`);
+        const tripDocSnap = await getDoc(tripDocRef);
+        setTrip({
+          ...tripDocSnap.data(),
+          id: tripDocSnap.id,
+        } as FirestoreTrip);
         const tripEventsDetailRef = collection(
           db,
           `users`,
@@ -44,25 +49,19 @@ const TripDetails = () => {
           `${id}`,
           `events`
         );
-        const tripDocSnap = await getDoc(tripDocRef);
-        setTrip({
-          ...tripDocSnap.data(),
-          id: tripDocSnap.id,
-        } as FirestoreTrip);
-        const tempArray: Event[] = [];
-        const tripEventsSnap = await getDocs(tripEventsDetailRef);
-        if (tripEventsSnap.size == 0) {
-          console.log("no event");
-          setEventExist(false);
-          return;
-        }
-        tripEventsSnap.forEach((doc) => {
-          tempArray.push({ ...doc.data() } as Event);
+        const tripEventsSnap = (await getDocs(
+          tripEventsDetailRef
+        )) as QuerySnapshot<Event>;
+        if (tripEventsSnap.empty) return;
+        setEvents(() => {
+          tripEventsSnap.forEach((doc) => {
+            events.push({ ...doc.data() } as Event);
+          });
+          return events;
         });
-        setTripEvents(tempArray);
+        [...tripEventsSnap.docs];
+
         setLoading(false);
-      } else {
-        console.log("error");
       }
     });
   };
@@ -107,12 +106,12 @@ const TripDetails = () => {
               </p>
             </div>
           </div>
-          {eventExist && (
+          {events && (
             <>
               <p className="ml-2 font-bold text-lg text-black dark:text-white">
                 Trip Information:
               </p>
-              {tripEvents.map((event, i) => (
+              {events.map((event, i) => (
                 <motion.div
                   key={i}
                   initial={{ y: "50vh" }}
@@ -155,7 +154,7 @@ const TripDetails = () => {
                 if (!userConfirmed) {
                   return;
                 }
-                const eventsDeletionPromises = tripEvents.map((document) => {
+                const eventsDeletionPromises = events.map((document) => {
                   const tempEventsDocHolder = doc(
                     db,
                     `users`,
@@ -216,7 +215,6 @@ const TripDetails = () => {
             >
               <IoTrash />
             </button>
-
             <button
               className={deleteEditButton}
               onClick={() => navigate(`/edittrip/${id}`)}
