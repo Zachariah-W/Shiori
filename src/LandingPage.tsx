@@ -5,7 +5,6 @@ import { doc, getDoc, setDoc, collection, addDoc } from "firebase/firestore";
 import { db } from "../firebaseConfig";
 import { Timestamp } from "firebase/firestore";
 import GoogleSvg from "./GoogleSvg";
-import ImageSearch from "./ImageSearch";
 
 const LandingPage = () => {
   const navigate = useNavigate();
