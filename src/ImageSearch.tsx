@@ -2,12 +2,8 @@ import { useState } from "react";
 
 export type UnsplashImage = {
   urls: {
-    raw: string;
     full: string;
-    regular: string;
     small: string;
-    thumb: string;
-    small_s3: string;
   };
   links: {
     download_location: string;

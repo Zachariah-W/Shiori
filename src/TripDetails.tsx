@@ -53,13 +53,11 @@ const TripDetails = () => {
           tripEventsDetailRef
         )) as QuerySnapshot<Event>;
         if (tripEventsSnap.empty) return;
-        setEvents(() => {
-          tripEventsSnap.forEach((doc) => {
-            events.push({ ...doc.data() } as Event);
-          });
-          return events;
+        const tempEventArray: Event[] = [];
+        tripEventsSnap.forEach((doc) => {
+          tempEventArray.push({ ...doc.data() } as Event);
         });
-        [...tripEventsSnap.docs];
+        setEvents(tempEventArray);
 
         setLoading(false);
       }
@@ -81,6 +79,11 @@ const TripDetails = () => {
       </h2>
       {trip && (
         <article className="leading-loose text-left text-black dark:text-white">
+          <img
+            src={trip.image.urls.full}
+            alt={trip.image.alt_description}
+            className="rounded-md mb-2 w-full h-96"
+          />
           <div className="flex justify-between items-center">
             <div className="m-2">
               <h2 className="text-lg mb-2.5 font-semibold">

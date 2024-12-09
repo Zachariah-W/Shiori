@@ -26,12 +26,14 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { UnsplashImage } from "./ImageSearch";
 
 export type FirestoreTrip = {
   id: string;
   country: string;
   startDate: Timestamp;
   endDate: Timestamp;
+  image: UnsplashImage;
   events: Event[];
 };
 

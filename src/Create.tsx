@@ -25,15 +25,14 @@ const Create = () => {
     startDate: Date | undefined;
     endDate: Date | undefined;
     country: string;
+    image: UnsplashImage | undefined;
   }>({
     startDate: undefined,
     endDate: undefined,
     country: "",
+    image: undefined,
   });
   const navigate = useNavigate();
-  const [unsplashPhoto, setUnsplashPhoto] = useState<UnsplashImage | undefined>(
-    undefined
-  );
 
   useEffect(() => {
     console.log(events);
@@ -69,6 +68,7 @@ const Create = () => {
             country: trip.country,
             startDate: trip.startDate,
             endDate: trip.endDate,
+            image: trip.image,
           });
 
           if (events !== undefined) {
@@ -132,9 +132,9 @@ const Create = () => {
         />
         <p className={allLabels}>Search Image:</p>
         <ImageSearch
-          unsplashPhoto={unsplashPhoto}
+          unsplashPhoto={trip.image}
           onPhotoChange={(e) => {
-            setUnsplashPhoto(e);
+            setTrip({ ...trip, image: e });
           }}
         />
         <div className="flex items-center justify-between">

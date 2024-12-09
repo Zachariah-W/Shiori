@@ -17,6 +17,7 @@ import { auth, db } from "../firebaseConfig";
 import { FirestoreTrip } from "./Home";
 import { onAuthStateChanged } from "firebase/auth";
 import { IoAdd } from "react-icons/io5";
+import ImageSearch, { UnsplashImage } from "./ImageSearch";
 
 type EventDetails = {
   title: string;
@@ -36,6 +37,9 @@ const EditTrip = () => {
   const [ogData, setOgData] = useState<string[]>();
   const [ogCountry, setOgCountry] = useState<string>();
   const navigate = useNavigate();
+  const [unsplashPhoto, setUnsplashPhoto] = useState<UnsplashImage | undefined>(
+    undefined
+  );
 
   const getInfo = () => {
     onAuthStateChanged(auth, async (user) => {
@@ -214,6 +218,12 @@ const EditTrip = () => {
           placeholderText="Choose a Date"
           wrapperClassName="w-full"
           className="title-input"
+        />
+        <ImageSearch
+          unsplashPhoto={unsplashPhoto}
+          onPhotoChange={(e) => {
+            setUnsplashPhoto(e);
+          }}
         />
         <div className="flex items-center justify-between">
           <label className={allLabels}>Trip Information:</label>
