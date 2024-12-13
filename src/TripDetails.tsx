@@ -74,15 +74,12 @@ const TripDetails = () => {
 
   return (
     <div className="min-w-fit">
-      <h2 className="font-bold text-xl text-black dark:text-white text-center">
-        Trip Details
-      </h2>
       {trip && (
         <article className="leading-loose text-left text-black dark:text-white">
           <img
             src={trip.image.urls.regular}
             alt={trip.image.alt_description}
-            className="rounded-md mb-2 w-full h-96"
+            className="rounded-md mb-2 w-full h-48 object-cover"
           />
           <div className="flex justify-between items-center">
             <div className="m-2">
