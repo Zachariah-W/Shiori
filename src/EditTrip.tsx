@@ -120,12 +120,22 @@ const EditTrip = () => {
               `trips`,
               `${id}`
             );
-            batch.update(tripDocRef, {
+            const updateData: {
+              country: string;
+              startDate: Date | undefined;
+              endDate: Date | undefined;
+              image?: UnsplashImage;
+            } = {
               country: trip.country,
               startDate: tempStartDate,
               endDate: tempEndDate,
-              image: unsplashPhoto,
-            });
+            };
+
+            if (unsplashPhoto !== undefined) {
+              updateData.image = unsplashPhoto;
+            }
+
+            batch.update(tripDocRef, updateData);
 
             const existingCountries = collection(
               db,
