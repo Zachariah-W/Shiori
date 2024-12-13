@@ -80,7 +80,7 @@ const TripDetails = () => {
       {trip && (
         <article className="leading-loose text-left text-black dark:text-white">
           <img
-            src={trip.image.urls.full}
+            src={trip.image.urls.regular}
             alt={trip.image.alt_description}
             className="rounded-md mb-2 w-full h-96"
           />
@@ -109,7 +109,7 @@ const TripDetails = () => {
               </p>
             </div>
           </div>
-          {events && (
+          {events.length !== 0 && (
             <>
               <p className="ml-2 font-bold text-lg text-black dark:text-white">
                 Trip Information:

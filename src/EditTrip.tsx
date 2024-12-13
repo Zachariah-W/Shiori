@@ -56,6 +56,7 @@ const EditTrip = () => {
             `${tripSnap.data().country}`,
             `${formattedTripStartDate}`,
             `${formattedTripEndDate}`,
+            `${tripSnap.data().image}`,
           ]);
           setOgCountry(`${tripSnap.data().country}`);
         }
@@ -107,7 +108,11 @@ const EditTrip = () => {
             `${tempStartDate}`,
             `${tempEndDate}`,
           ];
-          if (JSON.stringify(ogData) !== JSON.stringify(currentData)) {
+          if (
+            JSON.stringify(ogData) !== JSON.stringify(currentData) ||
+            unsplashPhoto !== undefined
+          ) {
+            console.log("Bruh");
             const tripDocRef = doc(
               db,
               `users`,
@@ -119,6 +124,7 @@ const EditTrip = () => {
               country: trip.country,
               startDate: tempStartDate,
               endDate: tempEndDate,
+              image: unsplashPhoto,
             });
 
             const existingCountries = collection(
@@ -219,6 +225,7 @@ const EditTrip = () => {
           wrapperClassName="w-full"
           className="title-input"
         />
+        <label className={allLabels}>Search New Image:</label>
         <ImageSearch
           unsplashPhoto={unsplashPhoto}
           onPhotoChange={(e) => {

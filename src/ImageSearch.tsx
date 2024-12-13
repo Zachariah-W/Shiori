@@ -2,7 +2,7 @@ import { useState } from "react";
 
 export type UnsplashImage = {
   urls: {
-    full: string;
+    regular: string;
     small: string;
   };
   links: {
@@ -59,7 +59,7 @@ const ImageSearch = ({
                 data.results.map((result: UnsplashImage) => {
                   return {
                     urls: {
-                      full: result.urls.full,
+                      regular: result.urls.regular,
                       small: result.urls.small,
                     },
                     links: {

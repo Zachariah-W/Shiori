@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
@@ -33,10 +33,6 @@ const Create = () => {
     image: undefined,
   });
   const navigate = useNavigate();
-
-  useEffect(() => {
-    console.log(events);
-  });
 
   const handleEventChange = (id: string, updatedEvent: NewEvent) => {
     setEvents((prevEvents) => {
