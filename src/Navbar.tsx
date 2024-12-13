@@ -9,7 +9,7 @@ const Navbar = () => {
   return (
     <nav className=" py-6 flex items-center max-w-[600px] mx-auto">
       <div className="flex align-middle">
-        <img src="./src/images/shiori-logo.svg" className="w-8 mr-2" />
+        <object data="./src/images/shiori-logo.svg" className="w-8 mr-2" />
         <h1 className="text-black dark:text-white font-bold text-2xl ">
           Shiori
         </h1>

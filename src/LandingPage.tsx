@@ -59,6 +59,7 @@ const LandingPage = () => {
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen">
+      <object data="./src/images/shiori-logo.svg" className="w-44 mb-4" />
       <div className="text-3xl font-bold mb-8">Welcome to Shiori</div>
       <button
         className="px-5 py-2 bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200 font-semibold shadow focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-75 transition duration-200 flex items-center justify-center gap-1 rounded-full border border-gray-200 dark:border-gray-700"
