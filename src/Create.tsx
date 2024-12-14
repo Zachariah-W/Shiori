@@ -60,12 +60,23 @@ const Create = () => {
           const createTripRef = doc(
             collection(db, "users", currentUser.uid, "trips")
           );
-          batch.set(createTripRef, {
+
+          const fieldSubmit: {
+            country: string;
+            startDate: Date | undefined;
+            endDate: Date | undefined;
+            image?: UnsplashImage;
+          } = {
             country: trip.country,
             startDate: trip.startDate,
             endDate: trip.endDate,
-            image: trip.image,
-          });
+          };
+
+          if (trip.image !== undefined) {
+            fieldSubmit.image == trip.image;
+          }
+
+          batch.set(createTripRef, fieldSubmit);
 
           if (events !== undefined) {
             Array.from(events.values()).forEach((event) => {
