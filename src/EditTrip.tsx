@@ -268,7 +268,7 @@ const EditTrip = () => {
           Array.from(events.entries()).map(([key, event]) => {
             if (event.status === "deleted") return null;
             return (
-              <div className="border border-b-white pb-3" key={key}>
+              <div className="pb-3" key={key}>
                 <CreateEvent
                   event={event}
                   onEventChange={(updatedEvent) => {

@@ -29,7 +29,7 @@ const ImageSearch = ({
 
   return (
     <div>
-      <div className="flex flex-row items-center">
+      <div className="flex flex-row items-center mb-2">
         <input
           type="text"
           placeholder="Enter search content..."

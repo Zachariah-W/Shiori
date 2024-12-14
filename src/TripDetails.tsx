@@ -124,7 +124,7 @@ const TripDetails = () => {
                   }}
                 >
                   <button
-                    className="ml-2 mt-2 rounded-sm text-black dark:text-white w-11/12"
+                    className="ml-2 mt-2 rounded-sm text-black dark:text-white w-full"
                     onClick={() => {
                       setDialogData({
                         id: event.id,

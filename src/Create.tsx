@@ -155,7 +155,7 @@ const Create = () => {
         </div>
         {events &&
           Array.from(events.entries()).map(([key, event]) => (
-            <div className="border border-b-white pb-3" key={key}>
+            <div className="pb-3" key={key}>
               <CreateEvent
                 event={event}
                 onEventChange={(newEvent) => handleEventChange(key, newEvent)}

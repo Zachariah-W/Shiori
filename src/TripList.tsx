@@ -30,13 +30,27 @@ const TripList = ({
               damping: 20,
             }}
           >
-            <div className="py-2.5 px-4 my-2 border border-gray-300 text-left dark:bg-gray-800 dark:border-gray-600 hover:bg-slate-100 dark:hover:bg-gray-700 rounded-xl transition-all duration-300 bg-dotted-bg">
+            <div className=" py-2 my-2 px-2 border border-gray-300 text-left dark:bg-gray-800 dark:border-gray-600 hover:bg-slate-100 dark:hover:bg-gray-700 rounded-xl transition-all duration-300 bg-dotted-bg">
               <Link className="no-underline" to={`/trip/${trip.id}`}>
-                <div className="flex justify-between">
-                  <div>
-                    <h2 className="text-xl text-black dark:text-white font-semibold mb-[8px]">
+                <div className="flex justify-between items-center">
+                  <div className="ml-1">
+                    <h2 className="mt-1 text-xl text-black dark:text-white font-semibold flex items-center gap-2">
                       {trip.country}
+                      {lookup.byCountry(trip.country)?.internet !=
+                        undefined && (
+                        <ReactCountryFlag
+                          countryCode={`${
+                            lookup.byCountry(trip.country)?.internet
+                          }`}
+                          style={{
+                            fontSize: "1.3em",
+                            paddingTop: "2px",
+                          }}
+                          aria-label={trip.country}
+                        />
+                      )}
                     </h2>
+
                     <p className="text-black dark:text-white">
                       Date:{" "}
                       {trip.startDate &&
@@ -56,19 +70,12 @@ const TripList = ({
                         )}
                     </p>
                   </div>
-                  {lookup.byCountry(trip.country)?.internet != undefined && (
-                    <ReactCountryFlag
-                      className="emojiFlag"
-                      countryCode={`${
-                        lookup.byCountry(trip.country)?.internet
-                      }`}
-                      style={{
-                        fontSize: "2em",
-                        lineHeight: "2em",
-                      }}
-                      aria-label={trip.country}
-                    />
-                  )}
+                  <div
+                    className="bg-cover bg-center w-1/2 h-16 rounded-md"
+                    style={{
+                      backgroundImage: `url(${trip.image.urls.regular})`,
+                    }}
+                  ></div>
                 </div>
               </Link>
             </div>
