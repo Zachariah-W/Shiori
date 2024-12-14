@@ -73,14 +73,13 @@ const Home = () => {
 
   const getMainData = async () => {
     const tripsSnap = await getDocs(tripsRef);
-    !tripsSnap.empty &&
-      (() => {
-        const tempTripsArray: FirestoreTrip[] = [];
-        tripsSnap.forEach((doc) => {
-          tempTripsArray.push({ ...doc.data(), id: doc.id } as FirestoreTrip);
-        });
-        setDataCollectionHolder(tempTripsArray);
-      })();
+    if (!tripsSnap.empty) {
+      const tempTripsArray: FirestoreTrip[] = [];
+      tripsSnap.forEach((doc) => {
+        tempTripsArray.push({ ...doc.data(), id: doc.id } as FirestoreTrip);
+      });
+      setDataCollectionHolder(tempTripsArray);
+    }
     setLoading(false);
   };
 
@@ -99,7 +98,7 @@ const Home = () => {
             }}
           >
             <DropdownMenuTrigger asChild>
-              <Button className="w-40 h-8 font-semibold text-black bg-gray-100 hover:bg-gray-200 dark:text-white dark:bg-gray-800 dark:hover:bg-gray-700 gap-5 p-0 flex items-center">
+              <Button className="w-40 h-8 font-semibold text-black bg-white border border-input dark:border-input-dark hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600 gap-5 p-0 flex items-center rounded-md outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2">
                 <span>Select Country</span>
                 <ChevronDown className="h-4 w-4 opacity-50" />
               </Button>
@@ -107,48 +106,46 @@ const Home = () => {
             <DropdownMenuContent
               className="w-40"
               onInteractOutside={() => {
-                countryFilter.length === 0
-                  ? getMainData()
-                  : JSON.stringify(prevCountryFilter.sort()) !==
-                      JSON.stringify(countryFilter.sort()) && getFilteredData();
+                if (countryFilter.length === 0) {
+                  getMainData();
+                } else if (
+                  JSON.stringify(prevCountryFilter.sort()) !==
+                  JSON.stringify(countryFilter.sort())
+                ) {
+                  getFilteredData();
+                }
               }}
             >
-              {countryList.map((country, i) => {
-                return (
-                  <DropdownMenuCheckboxItem
-                    key={i}
-                    checked={countryFilter.includes(country)}
-                    onSelect={(e) => {
-                      e.preventDefault();
-                      countryFilter.includes(country)
-                        ? (() => {
-                            setCountryFilter(
-                              countryFilter.filter((c) => c !== country)
-                            );
-                            console.log(countryFilter);
-                          })()
-                        : (() => {
-                            setCountryFilter([...countryFilter, country]);
-                            console.log(countryFilter);
-                          })();
-                    }}
-                  >
-                    {country}
-                  </DropdownMenuCheckboxItem>
-                );
-              })}
+              {countryList.map((country, i) => (
+                <DropdownMenuCheckboxItem
+                  key={i}
+                  checked={countryFilter.includes(country)}
+                  onSelect={(e) => {
+                    e.preventDefault();
+                    if (countryFilter.includes(country)) {
+                      setCountryFilter(
+                        countryFilter.filter((c) => c !== country)
+                      );
+                    } else {
+                      setCountryFilter([...countryFilter, country]);
+                    }
+                  }}
+                >
+                  {country}
+                </DropdownMenuCheckboxItem>
+              ))}
             </DropdownMenuContent>
           </DropdownMenu>
         </div>
         <p className="text-black dark:text-white">|</p>
         <Select
           onValueChange={(value) => {
-            if (value == "earliest") {
+            if (value === "earliest") {
               const sortEarliest = [...dataCollectionHolder].sort(
                 (a, b) => a.startDate.toMillis() - b.startDate.toMillis()
               );
               setDataCollectionHolder(sortEarliest);
-            } else if (value == "latest") {
+            } else if (value === "latest") {
               const sortLatest = [...dataCollectionHolder].sort(
                 (a, b) => b.startDate.toMillis() - a.startDate.toMillis()
               );
@@ -156,7 +153,7 @@ const Home = () => {
             }
           }}
         >
-          <SelectTrigger className="w-45 h-8 font-semibold text-black bg-gray-100 hover:bg-gray-200 dark:text-white dark:bg-gray-800 dark:hover:bg-gray-700 gap-5">
+          <SelectTrigger className="w-45 h-8 font-semibold text-black dark:bg-gray-700 border border-input dark:border-input-dark hover:bg-gray-200 dark:hover:bg-gray-600 dark:text-white gap-5 px-3 py-2 rounded-md focus:ring-2 focus:ring-ring focus:ring-offset-2">
             <SelectValue placeholder="Sort Time" className="pl-2" />
           </SelectTrigger>
           <SelectContent>
