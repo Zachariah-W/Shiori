@@ -18,10 +18,11 @@ p {
   @apply font-semibold;
 }
 
+input[type="text"]{
+  @apply mx-0 my-2.5 box-border block w-full cursor-pointer resize-none rounded-xl border-2 border-transparent bg-neutral-200 dark:bg-neutral-800  px-3 py-1.5 font-medium leading-6 text-neutral-800 dark:text-neutral-200 outline-none transition-all duration-200 focus:bg-neutral-100 dark:focus:bg-neutral-900 focus:border-neutral-300 dark:focus:border-neutral-700 placeholder:text-neutral-400 dark:placeholder:text-neutral-500;
+}
+
 @layer components {
-  .title-input {
-    @apply mx-0 my-2.5 box-border block w-full cursor-pointer resize-none rounded-lg border border-gray-300 border-transparent bg-gray-200 p-4 px-2.5 py-1.5 font-semibold leading-6 text-gray-600 outline-none transition-all duration-200 hover:bg-gray-100 focus:border-gray-800 focus:bg-white focus:text-gray-800;
-  }
   .content-textarea {
     @apply mx-0 my-2.5 box-border block w-full cursor-pointer resize-y overflow-y-auto rounded-lg border border-gray-300 border-transparent bg-gray-200 p-4 px-2.5 py-1.5 font-semibold leading-6 text-gray-600 outline-none transition-all duration-200 hover:bg-gray-100 focus:border-gray-800 focus:bg-white focus:text-gray-800;
   }

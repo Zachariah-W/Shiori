@@ -109,7 +109,6 @@ const Create = () => {
       >
         <label className={allLabels}>Country:</label>
         <input
-          className="title-input"
           type="text"
           placeholder="Please type in the official country name..."
           onChange={(e) => {

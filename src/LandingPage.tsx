@@ -5,6 +5,7 @@ import { doc, getDoc, setDoc, collection, addDoc } from "firebase/firestore";
 import { db } from "../firebaseConfig";
 import { Timestamp } from "firebase/firestore";
 import GoogleSvg from "./GoogleSvg";
+import Logo from "./Logo";
 
 const LandingPage = () => {
   const navigate = useNavigate();
@@ -58,11 +59,13 @@ const LandingPage = () => {
   };
 
   return (
-    <div className="flex min-h-screen flex-col items-center justify-center">
-      <object data="./src/images/shiori-logo.svg" className="mb-4 w-44" />
+    <div className="flex min-h-screen flex-col items-center justify-center gap-6">
+      <div className="w-fit h-fit p-2.5 rounded-full  bg-white dark:bg-yellow-400 border border-yellow-600 text-black text-6xl">
+        <Logo/>
+      </div>
       <div className="mb-8 text-3xl font-bold">Welcome to Shiori</div>
       <button
-        className="flex items-center justify-center gap-1 rounded-full border border-gray-200 bg-white px-5 py-2 font-semibold text-gray-800 shadow transition duration-200 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-75 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200"
+        className="flex items-center justify-center gap-1 rounded-full border border-neutral-200 bg-white px-5 py-2 font-semibold text-neutral-800 shadow transition duration-200 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-75 dark:border-neutral-700 dark:bg-neutral-800 dark:text-neutral-200"
         onClick={handleSignIn}
       >
         <GoogleSvg />

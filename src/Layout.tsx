@@ -27,7 +27,7 @@ const Layout = () => {
   }, []);
 
   return (
-    <div className="flex h-screen flex-col items-center border bg-white p-0 duration-300 dark:bg-gray-900">
+    <div className="bg-test-bg m-0 min-h-screen bg-white p-0 duration-300 dark:bg-neutral-900">
       {isLoggedIn && <Navbar />}
       <div className="w-[600px]">
         <Routes>
