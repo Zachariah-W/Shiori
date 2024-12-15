@@ -33,11 +33,10 @@ const ImageSearch = ({
         <input
           type="text"
           placeholder="Enter search content..."
-          className="title-input w-70"
           onChange={(e) => {
             setInput(e.target.value);
           }}
-        ></input>
+        />
         <button
           className="ml-2 h-10 w-20 cursor-pointer rounded-[8px] border-none bg-gray-200 px-[8px] py-[5px] text-black hover:bg-gray-300 dark:bg-gray-700 dark:text-white dark:hover:bg-gray-600"
           onClick={async (e) => {
