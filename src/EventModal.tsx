@@ -13,15 +13,15 @@ const EventDialog = ({
 }) => (
   <Dialog.Root open={open} onOpenChange={onOpenChange}>
     <Dialog.Portal>
-      <Dialog.Overlay className="fixed inset-0 bg-gray-200 dark:bg-gray-900 opacity-70" />
-      <Dialog.Content className="fixed inset-0 m-auto bg-gray-300 dark:bg-gray-800 bg-graph-bg p-6 rounded-lg shadow-lg w-7/12 h-1/2  overflow-y-auto">
+      <Dialog.Overlay className="fixed inset-0 bg-gray-200 opacity-70 dark:bg-gray-900" />
+      <Dialog.Content className="fixed inset-0 m-auto h-1/2 w-7/12 overflow-y-auto rounded-lg bg-gray-300 bg-graph-bg p-6 shadow-lg dark:bg-gray-800">
         <Dialog.Title className="text-xl font-bold">
           {eventContent.title}
         </Dialog.Title>
         <Dialog.Description className="mt-2">
           {eventContent.content}
         </Dialog.Description>
-        <Dialog.Close className="absolute top-2 right-2 mt-2 mr-2 hover:bg-red-600 duration-180 rounded-full">
+        <Dialog.Close className="duration-180 absolute right-2 top-2 mr-2 mt-2 rounded-full hover:bg-red-600">
           <button>
             <IoClose />
           </button>

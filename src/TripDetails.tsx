@@ -47,10 +47,10 @@ const TripDetails = () => {
           `${user.uid}`,
           `trips`,
           `${id}`,
-          `events`
+          `events`,
         );
         const tripEventsSnap = (await getDocs(
-          tripEventsDetailRef
+          tripEventsDetailRef,
         )) as QuerySnapshot<Event>;
         if (tripEventsSnap.empty) return;
         const tempEventArray: Event[] = [];
@@ -75,17 +75,17 @@ const TripDetails = () => {
   return (
     <div className="min-w-fit">
       {trip && (
-        <article className="leading-loose text-left text-black dark:text-white">
+        <article className="text-left leading-loose text-black dark:text-white">
           {trip.image && (
             <img
               src={trip.image.urls.regular}
               alt={trip.image.alt_description}
-              className="rounded-md mb-2 w-full h-48 object-cover"
+              className="mb-2 h-48 w-full rounded-md object-cover"
             />
           )}
-          <div className="flex justify-between items-center">
+          <div className="flex items-center justify-between">
             <div className="m-2">
-              <h2 className="text-lg mb-2.5 font-semibold">
+              <h2 className="mb-2.5 text-lg font-semibold">
                 Location: {trip.country}
               </h2>
               <p>
@@ -95,7 +95,7 @@ const TripDetails = () => {
                     trip.startDate instanceof Date
                       ? trip.startDate
                       : trip.startDate.toDate(),
-                    "MM/dd/yyyy"
+                    "MM/dd/yyyy",
                   )}{" "}
                 ~{" "}
                 {trip.endDate &&
@@ -103,14 +103,14 @@ const TripDetails = () => {
                     trip.endDate instanceof Date
                       ? trip.endDate
                       : trip.endDate.toDate(),
-                    "MM/dd/yyyy"
+                    "MM/dd/yyyy",
                   )}
               </p>
             </div>
           </div>
           {events.length !== 0 && (
             <>
-              <p className="ml-2 font-bold text-lg text-black dark:text-white">
+              <p className="ml-2 text-lg font-bold text-black dark:text-white">
                 Trip Information:
               </p>
               {events.map((event, i) => (
@@ -126,7 +126,7 @@ const TripDetails = () => {
                   }}
                 >
                   <button
-                    className="ml-2 mt-2 rounded-sm text-black dark:text-white w-full"
+                    className="ml-2 mt-2 w-full rounded-sm text-black dark:text-white"
                     onClick={() => {
                       setDialogData({
                         id: event.id,
@@ -136,7 +136,7 @@ const TripDetails = () => {
                       setOpenDialog(true);
                     }}
                   >
-                    <div className="w-full p-2 text-left rounded-md dark:bg-gray-800 bg-gray-100 bg-dotted-bg border border-gray-200 dark:border-gray-700 dark:hover:bg-gray-700">
+                    <div className="w-full rounded-md border border-gray-200 bg-gray-100 bg-dotted-bg p-2 text-left dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700">
                       <p className="text-black dark:text-white">
                         Event: {event.title}
                       </p>
@@ -146,12 +146,12 @@ const TripDetails = () => {
               ))}
             </>
           )}
-          <div className="flex items-center justify-center gap-[20px] m-[15px]">
+          <div className="m-[15px] flex items-center justify-center gap-[20px]">
             <button
               className={deleteEditButton}
               onClick={async () => {
                 const userConfirmed = window.confirm(
-                  "You can't restore the data you delete, are you sure you want to delete?"
+                  "You can't restore the data you delete, are you sure you want to delete?",
                 );
                 if (!userConfirmed) {
                   return;
@@ -164,7 +164,7 @@ const TripDetails = () => {
                     `trips`,
                     `${id}`,
                     `events`,
-                    `${document.id}`
+                    `${document.id}`,
                   );
                   batch.delete(tempEventsDocHolder);
                 });
@@ -173,7 +173,7 @@ const TripDetails = () => {
                   `users`,
                   `${auth.currentUser?.uid}`,
                   `trips`,
-                  `${id}`
+                  `${id}`,
                 );
                 batch.delete(tempTripDocHolder);
                 await Promise.all(eventsDeletionPromises);
@@ -181,7 +181,7 @@ const TripDetails = () => {
                   db,
                   `users`,
                   `${auth.currentUser?.uid}`,
-                  `trips`
+                  `trips`,
                 );
                 const existingCountriesSnap = await getDocs(existingCountries);
                 const tempArray: string[] = [];
@@ -191,7 +191,7 @@ const TripDetails = () => {
                 const countryListRef = doc(
                   db,
                   `users`,
-                  `${auth.currentUser?.uid}`
+                  `${auth.currentUser?.uid}`,
                 );
                 const countryListSnap = await getDoc(countryListRef);
                 if (

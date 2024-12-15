@@ -47,8 +47,8 @@ const Create = () => {
   const allLabels = "text-left block font-semibold";
 
   return (
-    <div className="max-w-[400px] mx-auto my-0 text-center text-black dark:text-white">
-      <h2 className="text-[20px] mb-[30px] font-bold">Add a New Trip</h2>
+    <div className="mx-auto my-0 max-w-[400px] text-center text-black dark:text-white">
+      <h2 className="mb-[30px] text-[20px] font-bold">Add a New Trip</h2>
       <form
         onSubmit={async (e) => {
           e.preventDefault();
@@ -58,7 +58,7 @@ const Create = () => {
           }
           const batch = writeBatch(db);
           const createTripRef = doc(
-            collection(db, "users", currentUser.uid, "trips")
+            collection(db, "users", currentUser.uid, "trips"),
           );
 
           const fieldSubmit: {
@@ -87,8 +87,8 @@ const Create = () => {
                   currentUser.uid,
                   "trips",
                   createTripRef.id,
-                  "events"
-                )
+                  "events",
+                ),
               );
               batch.set(createEventsRef, event);
             });
@@ -159,7 +159,7 @@ const Create = () => {
                 return newEvent;
               });
             }}
-            className="text-gray-700 border py-1.5 border-gray-600 h-5 w-5 rounded-full cursor-pointer flex items-center justify-center hover:scale-105 hover:rotate-180 duration-150 dark:border-white"
+            className="flex h-5 w-5 cursor-pointer items-center justify-center rounded-full border border-gray-600 py-1.5 text-gray-700 duration-150 hover:rotate-180 hover:scale-105 dark:border-white"
           >
             <IoAdd className="h-4 w-4 dark:text-white" />
           </button>
@@ -173,10 +173,10 @@ const Create = () => {
               />
               <button
                 type="button"
-                className="border border-red-800 rounded-sm cursor-pointer w-32 h-6 text-red-800 hover:bg-red-800 hover:text-white"
+                className="h-6 w-32 cursor-pointer rounded-sm border border-red-800 text-red-800 hover:bg-red-800 hover:text-white"
                 onClick={() => {
                   const userConfirmed = window.confirm(
-                    "Your data will not be actually deleted until you click on finish editing"
+                    "Your data will not be actually deleted until you click on finish editing",
                   );
                   if (!userConfirmed) return;
                   setEvents((prevEvents) => {
@@ -191,10 +191,10 @@ const Create = () => {
               </button>
             </div>
           ))}
-        <hr className="h-[1px] bg-gradient-to-r from-transparent via-gray-500 to-transparent ml-[5%] mr-[5%] mb-[20px] mt-[20px] border-none" />
+        <hr className="mb-[20px] ml-[5%] mr-[5%] mt-[20px] h-[1px] border-none bg-gradient-to-r from-transparent via-gray-500 to-transparent" />
         <button
           type="submit"
-          className="bg-gray-200 text-black hover:bg-gray-300 border-none py-[5px] px-[8px] rounded-[8px] cursor-pointer dark:bg-gray-700 dark:hover:bg-gray-600 dark:text-white"
+          className="cursor-pointer rounded-[8px] border-none bg-gray-200 px-[8px] py-[5px] text-black hover:bg-gray-300 dark:bg-gray-700 dark:text-white dark:hover:bg-gray-600"
         >
           Add Trip
         </button>

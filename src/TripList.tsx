@@ -14,7 +14,7 @@ const TripList = ({
 }) => {
   return (
     <div className="trip-list">
-      <h1 className="font-semibold text-xl text-black dark:text-white">
+      <h1 className="text-xl font-semibold text-black dark:text-white">
         {title}
       </h1>
       {trips.map((trip, i) => {
@@ -30,11 +30,11 @@ const TripList = ({
               damping: 20,
             }}
           >
-            <div className=" py-2 my-2 px-2 border border-gray-300 text-left dark:bg-gray-800 dark:border-gray-600 hover:bg-slate-100 dark:hover:bg-gray-700 rounded-xl transition-all duration-300 bg-dotted-bg">
+            <div className="my-2 rounded-xl border border-gray-300 bg-dotted-bg px-2 py-2 text-left transition-all duration-300 hover:bg-slate-100 dark:border-gray-600 dark:bg-gray-800 dark:hover:bg-gray-700">
               <Link className="no-underline" to={`/trip/${trip.id}`}>
-                <div className="flex justify-between items-center h-16">
+                <div className="flex h-16 items-center justify-between">
                   <div className="ml-1">
-                    <h2 className="mt-1 text-xl text-black dark:text-white font-semibold flex items-center gap-2">
+                    <h2 className="mt-1 flex items-center gap-2 text-xl font-semibold text-black dark:text-white">
                       {trip.country}
                       {lookup.byCountry(trip.country)?.internet !=
                         undefined && (
@@ -58,7 +58,7 @@ const TripList = ({
                           trip.startDate instanceof Date
                             ? trip.startDate
                             : trip.startDate.toDate(),
-                          "MM/dd/yyyy"
+                          "MM/dd/yyyy",
                         )}{" "}
                       ~{" "}
                       {trip.endDate &&
@@ -66,13 +66,13 @@ const TripList = ({
                           trip.endDate instanceof Date
                             ? trip.endDate
                             : trip.endDate.toDate(),
-                          "MM/dd/yyyy"
+                          "MM/dd/yyyy",
                         )}
                     </p>
                   </div>
                   {trip.image && (
                     <div
-                      className="bg-cover bg-center w-1/2 h-full rounded-md"
+                      className="h-full w-1/2 rounded-md bg-cover bg-center"
                       style={{
                         backgroundImage: `url(${trip.image.urls.regular})`,
                       }}

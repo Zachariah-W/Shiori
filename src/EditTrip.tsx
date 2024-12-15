@@ -38,7 +38,7 @@ const EditTrip = () => {
   const [ogCountry, setOgCountry] = useState<string>();
   const navigate = useNavigate();
   const [unsplashPhoto, setUnsplashPhoto] = useState<UnsplashImage | undefined>(
-    undefined
+    undefined,
   );
 
   const getInfo = () => {
@@ -66,10 +66,10 @@ const EditTrip = () => {
           `${user.uid}`,
           `trips`,
           `${id}`,
-          `events`
+          `events`,
         );
         const eventsSnap = (await getDocs(
-          eventsRef
+          eventsRef,
         )) as QuerySnapshot<EventDetails>;
         const tempEvents = new Map<string, EditEvent>();
         eventsSnap.forEach((doc) => {
@@ -93,8 +93,8 @@ const EditTrip = () => {
   if (!trip) return <div></div>;
 
   return (
-    <div className="max-w-[400px] mx-auto my-0 text-center">
-      <h2 className="text-[20px] font-bold text-black dark:text-white  mb-[30px]">
+    <div className="mx-auto my-0 max-w-[400px] text-center">
+      <h2 className="mb-[30px] text-[20px] font-bold text-black dark:text-white">
         Edit Mode
       </h2>
       <form
@@ -118,7 +118,7 @@ const EditTrip = () => {
               `users`,
               `${currentUser.uid}`,
               `trips`,
-              `${id}`
+              `${id}`,
             );
             const updateData: {
               country: string;
@@ -141,7 +141,7 @@ const EditTrip = () => {
               db,
               `users`,
               `${auth.currentUser?.uid}`,
-              `trips`
+              `trips`,
             );
             const existingCountriesSnap = await getDocs(existingCountries);
             const tempArray: string[] = [];
@@ -150,7 +150,7 @@ const EditTrip = () => {
             });
             const countryListRef = doc(db, "users", currentUser.uid);
             let countryNum = tempArray.filter(
-              (country) => country === ogCountry
+              (country) => country === ogCountry,
             ).length;
             if (countryNum == 1) {
               batch.update(countryListRef, {
@@ -173,8 +173,8 @@ const EditTrip = () => {
                     `${currentUser.uid}`,
                     `trips`,
                     `${id}`,
-                    `events`
-                  )
+                    `events`,
+                  ),
                 );
                 batch.set(newEventRef, event);
               } else if (event.status == "updated") {
@@ -185,7 +185,7 @@ const EditTrip = () => {
                   `trips`,
                   `${id}`,
                   `events`,
-                  `${key}`
+                  `${key}`,
                 );
                 batch.update(updateEventRef, event);
               } else if (event.status == "deleted") {
@@ -196,7 +196,7 @@ const EditTrip = () => {
                   `trips`,
                   `${id}`,
                   `events`,
-                  `${key}`
+                  `${key}`,
                 );
                 batch.delete(deletEventRef);
               }
@@ -259,7 +259,7 @@ const EditTrip = () => {
                 return newEvent;
               })
             }
-            className="text-gray-700 border py-1.5 border-gray-600 h-5 w-5 rounded-full cursor-pointer flex items-center justify-center hover:scale-105 hover:rotate-180 duration-150 dark:border-white"
+            className="flex h-5 w-5 cursor-pointer items-center justify-center rounded-full border border-gray-600 py-1.5 text-gray-700 duration-150 hover:rotate-180 hover:scale-105 dark:border-white"
           >
             <IoAdd className="h-4 w-4 dark:text-white" />
           </button>
@@ -295,10 +295,10 @@ const EditTrip = () => {
                 />
                 <button
                   type="button"
-                  className="border border-red-800 rounded-sm cursor-pointer w-32 h-6 text-red-800 hover:bg-red-800 hover:text-white"
+                  className="h-6 w-32 cursor-pointer rounded-sm border border-red-800 text-red-800 hover:bg-red-800 hover:text-white"
                   onClick={() => {
                     const userConfirmed = window.confirm(
-                      "Your data will not be actually deleted until you click on finish editing"
+                      "Your data will not be actually deleted until you click on finish editing",
                     );
                     if (!userConfirmed) return;
                     setEvents((prevEvents) => {
@@ -327,7 +327,7 @@ const EditTrip = () => {
         <br />
         <button
           type="submit"
-          className="text-white border-none p-[8px] rounded-[8px] cursor-pointer bg-black dark:bg-white dark:text-black"
+          className="cursor-pointer rounded-[8px] border-none bg-black p-[8px] text-white dark:bg-white dark:text-black"
         >
           Finish Edit
         </button>

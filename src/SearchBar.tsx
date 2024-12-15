@@ -10,10 +10,10 @@ const SearchBar = ({
 
   return (
     <div className="flex items-center">
-      <div className="max-w-[200px] h-[30px] flex items-center pl-4 transition-all hover:bg-gray-200 duration-500 font-semibold rounded-md cursor-pointer dark:hover:bg-gray-700 text-black dark:text-white">
-        <FaSearch className="text-lg mr-2 text-black dark:text-white" />
+      <div className="flex h-[30px] max-w-[200px] cursor-pointer items-center rounded-md pl-4 font-semibold text-black transition-all duration-500 hover:bg-gray-200 dark:text-white dark:hover:bg-gray-700">
+        <FaSearch className="mr-2 text-lg text-black dark:text-white" />
         <input
-          className="bg-transparent border-none w-full pl-1 text-sm outline-none focus:outline-none"
+          className="w-full border-none bg-transparent pl-1 text-sm outline-none focus:outline-none"
           placeholder="Search Countries..."
           value={searchTerm}
           onChange={(e) => {

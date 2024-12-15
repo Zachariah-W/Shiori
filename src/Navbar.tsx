@@ -7,10 +7,10 @@ const navbarLinks =
 const Navbar = () => {
   const { theme, setTheme } = useTheme();
   return (
-    <nav className=" py-6 flex items-center max-w-[600px] mx-auto">
+    <nav className="mx-auto flex max-w-[600px] items-center py-6">
       <div className="flex align-middle">
-        <object data="./src/images/shiori-logo.svg" className="w-8 mr-2" />
-        <h1 className="text-black dark:text-white font-bold text-2xl ">
+        <object data="./src/images/shiori-logo.svg" className="mr-2 w-8" />
+        <h1 className="text-2xl font-bold text-black dark:text-white">
           Shiori
         </h1>
       </div>

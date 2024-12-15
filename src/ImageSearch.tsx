@@ -29,7 +29,7 @@ const ImageSearch = ({
 
   return (
     <div>
-      <div className="flex flex-row items-center mb-2">
+      <div className="mb-2 flex flex-row items-center">
         <input
           type="text"
           placeholder="Enter search content..."
@@ -39,7 +39,7 @@ const ImageSearch = ({
           }}
         ></input>
         <button
-          className="bg-gray-200 text-black hover:bg-gray-300 border-none py-[5px] px-[8px] rounded-[8px] cursor-pointer dark:bg-gray-700 dark:hover:bg-gray-600 dark:text-white ml-2 w-20 h-10"
+          className="ml-2 h-10 w-20 cursor-pointer rounded-[8px] border-none bg-gray-200 px-[8px] py-[5px] text-black hover:bg-gray-300 dark:bg-gray-700 dark:text-white dark:hover:bg-gray-600"
           onClick={async (e) => {
             e.preventDefault();
             const url = `https://api.unsplash.com/search/photos?page=1&query=${input}&orientation=landscape&per_page=5`;
@@ -73,7 +73,7 @@ const ImageSearch = ({
                       },
                     },
                   };
-                })
+                }),
               );
             } catch (error: unknown) {
               console.error(error);
@@ -84,15 +84,15 @@ const ImageSearch = ({
         </button>
       </div>
       {photos.length > 0 && (
-        <div className="hidden-scrollbar flex snap-x gap-6 overflow-x-scroll p-5 border border-black rounded-xl bg-dotted-bg">
+        <div className="hidden-scrollbar flex snap-x gap-6 overflow-x-scroll rounded-xl border border-black bg-dotted-bg p-5">
           {photos.map((photo, i) => (
             <div key={i} className="snap-start scroll-mx-6">
               <button
                 type="button"
                 className={
                   unsplashPhoto === photo
-                    ? `w-36 h-20 relative overflow-hidden rounded-md border-2 border-gray-600 scale-105 duration-150`
-                    : `w-36 h-20 relative overflow-hidden rounded-md hover:scale-105 duration-150`
+                    ? `relative h-20 w-36 scale-105 overflow-hidden rounded-md border-2 border-gray-600 duration-150`
+                    : `relative h-20 w-36 overflow-hidden rounded-md duration-150 hover:scale-105`
                 }
                 onClick={() =>
                   onPhotoChange(unsplashPhoto === photo ? undefined : photo)
@@ -101,10 +101,10 @@ const ImageSearch = ({
                 <img
                   src={photo.urls.small}
                   alt={photo.alt_description}
-                  className="border border-gray-900 object-cover w-full h-full rounded-md"
+                  className="h-full w-full rounded-md border border-gray-900 object-cover"
                 />
               </button>
-              <p className="text-center mt-2 text-xs">
+              <p className="mt-2 text-center text-xs">
                 Photo By {photo.user.name}
               </p>
             </div>

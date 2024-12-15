@@ -90,7 +90,7 @@ const Home = () => {
 
   return (
     <div>
-      <div className="flex items-center gap-4 mt-1 max-w-[600px]">
+      <div className="mt-1 flex max-w-[600px] items-center gap-4">
         <div className="flex items-center gap-5 text-sm text-black dark:text-white">
           <DropdownMenu
             onOpenChange={() => {
@@ -98,7 +98,7 @@ const Home = () => {
             }}
           >
             <DropdownMenuTrigger asChild>
-              <Button className="w-40 h-8 font-semibold text-black bg-white border border-input dark:border-input-dark hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600 gap-5 p-0 flex items-center rounded-md outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2">
+              <Button className="dark:border-input-dark flex h-8 w-40 items-center gap-5 rounded-md border border-input bg-white p-0 font-semibold text-black outline-none hover:bg-gray-200 focus:ring-2 focus:ring-ring focus:ring-offset-2 dark:bg-gray-700 dark:hover:bg-gray-600">
                 <span>Select Country</span>
                 <ChevronDown className="h-4 w-4 opacity-50" />
               </Button>
@@ -124,7 +124,7 @@ const Home = () => {
                     e.preventDefault();
                     if (countryFilter.includes(country)) {
                       setCountryFilter(
-                        countryFilter.filter((c) => c !== country)
+                        countryFilter.filter((c) => c !== country),
                       );
                     } else {
                       setCountryFilter([...countryFilter, country]);
@@ -142,18 +142,18 @@ const Home = () => {
           onValueChange={(value) => {
             if (value === "earliest") {
               const sortEarliest = [...dataCollectionHolder].sort(
-                (a, b) => a.startDate.toMillis() - b.startDate.toMillis()
+                (a, b) => a.startDate.toMillis() - b.startDate.toMillis(),
               );
               setDataCollectionHolder(sortEarliest);
             } else if (value === "latest") {
               const sortLatest = [...dataCollectionHolder].sort(
-                (a, b) => b.startDate.toMillis() - a.startDate.toMillis()
+                (a, b) => b.startDate.toMillis() - a.startDate.toMillis(),
               );
               setDataCollectionHolder(sortLatest);
             }
           }}
         >
-          <SelectTrigger className="w-45 h-8 font-semibold text-black dark:bg-gray-700 border border-input dark:border-input-dark hover:bg-gray-200 dark:hover:bg-gray-600 dark:text-white gap-5 px-3 py-2 rounded-md focus:ring-2 focus:ring-ring focus:ring-offset-2">
+          <SelectTrigger className="w-45 dark:border-input-dark h-8 gap-5 rounded-md border border-input px-3 py-2 font-semibold text-black hover:bg-gray-200 focus:ring-2 focus:ring-ring focus:ring-offset-2 dark:bg-gray-700 dark:text-white dark:hover:bg-gray-600">
             <SelectValue placeholder="Sort Time" className="pl-2" />
           </SelectTrigger>
           <SelectContent>

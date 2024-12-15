@@ -26,9 +26,9 @@ const Layout = () => {
   }, []);
 
   return (
-    <div className="bg-white min-h-screen p-0  m-0 dark:bg-gray-900 bg-test-bg duration-300">
+    <div className="bg-test-bg m-0 min-h-screen bg-white p-0 duration-300 dark:bg-gray-900">
       {isLoggedIn && <Navbar />}
-      <div className="max-w-[600px] mx-auto">
+      <div className="mx-auto max-w-[600px]">
         <Routes>
           <Route path="/" element={<LandingPage />} />
           {isLoggedIn && (
