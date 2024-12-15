@@ -33,6 +33,11 @@ input[type="text"]{
   .hidden-scrollbar::-webkit-scrollbar {
     display: none;
   }
+
+  
+  .w-layout {
+    @apply w-full max-w-[800px] mx-auto
+  }
 }
 
 @layer base {

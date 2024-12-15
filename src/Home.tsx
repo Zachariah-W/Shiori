@@ -90,7 +90,7 @@ const Home = () => {
 
   return (
     <div>
-      <div className="mt-1 flex max-w-[600px] items-center gap-4">
+      <div className="mt-1 flex w-layout items-center gap-4">
         <div className="flex items-center gap-5 text-sm text-black dark:text-white">
           <DropdownMenu
             onOpenChange={() => {
