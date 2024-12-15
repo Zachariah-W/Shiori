@@ -167,9 +167,20 @@ const Home = () => {
         </Select>
       </div>
       <br />
-      {dataCollectionHolder.length > 0 && (
-        <TripList trips={dataCollectionHolder} title="Trips" />
-      )}
+      <div className="w-layout">
+        <h1 className="text-xl font-semibold text-black dark:text-white mt-6 mb-4">
+          Trips
+        </h1>
+        {dataCollectionHolder.length > 0 ? (
+          <TripList trips={dataCollectionHolder} />
+        ):
+          <div className="bg-neutral-100 dark:bg-neutral-800 border-transparent rounded-xl p-6 flex items-center justify-center h-52">
+            <h2 className="text-lg text-center font-medium text-neutral-500">
+              No trips found
+            </h2>
+          </div>
+        }
+      </div>
     </div>
   );
 };

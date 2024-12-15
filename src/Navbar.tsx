@@ -7,7 +7,7 @@ const Navbar = () => {
   return (
     <nav className="w-layout flex items-center justify-between py-6">
       <Link to="/Home">
-        <button className="-ml-2 flex cursor-pointer items-center rounded-xl bg-transparent p-2 pl-3 pr-4 transition-all hover:bg-neutral-200/50 active:scale-95 dark:hover:bg-neutral-800">
+        <button className="-ml-2 flex cursor-pointer items-center rounded-xl bg-transparent p-2 pl-3 pr-4 transition-all hover:bg-neutral-100 active:scale-95 dark:hover:bg-neutral-800">
           <div className="h-fit w-fit rounded-full text-4xl text-orange-500 dark:text-orange-500">
             <Logo />
           </div>
