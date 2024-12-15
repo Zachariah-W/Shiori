@@ -98,7 +98,7 @@ const Home = () => {
             }}
           >
             <DropdownMenuTrigger asChild>
-              <Button className="dark:border-input-dark flex h-8 w-40 items-center gap-5 rounded-md border border-input bg-white p-0 font-semibold text-black outline-none hover:bg-gray-200 focus:ring-2 focus:ring-ring focus:ring-offset-2 dark:bg-gray-700 dark:hover:bg-gray-600">
+              <Button className="flex h-8 w-40 items-center gap-5 bg-gray-100 p-0 font-semibold text-black hover:bg-gray-200 dark:bg-gray-800 dark:text-white dark:hover:bg-gray-700">
                 <span>Select Country</span>
                 <ChevronDown className="h-4 w-4 opacity-50" />
               </Button>
@@ -106,46 +106,48 @@ const Home = () => {
             <DropdownMenuContent
               className="w-40"
               onInteractOutside={() => {
-                if (countryFilter.length === 0) {
-                  getMainData();
-                } else if (
-                  JSON.stringify(prevCountryFilter.sort()) !==
-                  JSON.stringify(countryFilter.sort())
-                ) {
-                  getFilteredData();
-                }
+                countryFilter.length === 0
+                  ? getMainData()
+                  : JSON.stringify(prevCountryFilter.sort()) !==
+                      JSON.stringify(countryFilter.sort()) && getFilteredData();
               }}
             >
-              {countryList.map((country, i) => (
-                <DropdownMenuCheckboxItem
-                  key={i}
-                  checked={countryFilter.includes(country)}
-                  onSelect={(e) => {
-                    e.preventDefault();
-                    if (countryFilter.includes(country)) {
-                      setCountryFilter(
-                        countryFilter.filter((c) => c !== country),
-                      );
-                    } else {
-                      setCountryFilter([...countryFilter, country]);
-                    }
-                  }}
-                >
-                  {country}
-                </DropdownMenuCheckboxItem>
-              ))}
+              {countryList.map((country, i) => {
+                return (
+                  <DropdownMenuCheckboxItem
+                    key={i}
+                    checked={countryFilter.includes(country)}
+                    onSelect={(e) => {
+                      e.preventDefault();
+                      countryFilter.includes(country)
+                        ? (() => {
+                            setCountryFilter(
+                              countryFilter.filter((c) => c !== country),
+                            );
+                            console.log(countryFilter);
+                          })()
+                        : (() => {
+                            setCountryFilter([...countryFilter, country]);
+                            console.log(countryFilter);
+                          })();
+                    }}
+                  >
+                    {country}
+                  </DropdownMenuCheckboxItem>
+                );
+              })}
             </DropdownMenuContent>
           </DropdownMenu>
         </div>
         <p className="text-black dark:text-white">|</p>
         <Select
           onValueChange={(value) => {
-            if (value === "earliest") {
+            if (value == "earliest") {
               const sortEarliest = [...dataCollectionHolder].sort(
                 (a, b) => a.startDate.toMillis() - b.startDate.toMillis(),
               );
               setDataCollectionHolder(sortEarliest);
-            } else if (value === "latest") {
+            } else if (value == "latest") {
               const sortLatest = [...dataCollectionHolder].sort(
                 (a, b) => b.startDate.toMillis() - a.startDate.toMillis(),
               );
@@ -153,7 +155,7 @@ const Home = () => {
             }
           }}
         >
-          <SelectTrigger className="w-45 dark:border-input-dark h-8 gap-5 rounded-md border border-input px-3 py-2 font-semibold text-black hover:bg-gray-200 focus:ring-2 focus:ring-ring focus:ring-offset-2 dark:bg-gray-700 dark:text-white dark:hover:bg-gray-600">
+          <SelectTrigger className="w-45 h-8 gap-5 bg-gray-100 font-semibold text-black hover:bg-gray-200 dark:bg-gray-800 dark:text-white dark:hover:bg-gray-700">
             <SelectValue placeholder="Sort Time" className="pl-2" />
           </SelectTrigger>
           <SelectContent>
