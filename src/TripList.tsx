@@ -13,7 +13,7 @@ const TripList = ({
   title: string;
 }) => {
   return (
-    <div className="trip-list">
+    <div className="w-layout">
       <h1 className="text-xl font-semibold text-black dark:text-white">
         {title}
       </h1>
@@ -21,16 +21,16 @@ const TripList = ({
         return (
           <motion.div
             key={i}
-            initial={{ y: "50vh" }}
-            animate={{ y: 0 }}
+            initial={{ y: 100, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
             transition={{
-              delay: i * 0.2,
+              delay: i * 0.1,
               type: "spring",
               stiffness: 200,
               damping: 20,
             }}
           >
-            <div className="my-2 rounded-xl border border-gray-300 bg-dotted-bg px-2 py-2 text-left transition-all duration-300 hover:bg-slate-100 dark:border-gray-600 dark:bg-gray-800 dark:hover:bg-gray-700">
+            <div className="my-2 rounded-xl border-2 border-neutral-200 bg-dotted px-4 py-2 text-left transition-all duration-300 hover:bg-neutral-100 dark:border-neutral-700 dark:bg-neutral-800 dark:hover:bg-neutral-700">
               <Link className="no-underline" to={`/trip/${trip.id}`}>
                 <div className="flex h-16 items-center justify-between">
                   <div className="ml-1">
