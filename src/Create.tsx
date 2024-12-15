@@ -73,7 +73,7 @@ const Create = () => {
           };
 
           if (trip.image !== undefined) {
-            fieldSubmit.image == trip.image;
+            fieldSubmit.image = trip.image;
           }
 
           batch.set(createTripRef, fieldSubmit);
