@@ -7,6 +7,7 @@ import TripDetails from "./TripDetails";
 import EditTrip from "./EditTrip";
 import LandingPage from "./LandingPage";
 import Navbar from "./Navbar";
+import Footer from "./Footer";
 
 const Layout = () => {
   const navigate = useNavigate();
@@ -26,9 +27,9 @@ const Layout = () => {
   }, []);
 
   return (
-    <div className="bg-test-bg m-0 min-h-screen bg-white p-0 duration-300 dark:bg-gray-900">
+    <div className="flex h-screen flex-col items-center border bg-white p-0 duration-300 dark:bg-gray-900">
       {isLoggedIn && <Navbar />}
-      <div className="mx-auto max-w-[600px]">
+      <div className="w-[600px]">
         <Routes>
           <Route path="/" element={<LandingPage />} />
           {isLoggedIn && (
@@ -41,6 +42,7 @@ const Layout = () => {
           )}
         </Routes>
       </div>
+      <Footer />
     </div>
   );
 };
