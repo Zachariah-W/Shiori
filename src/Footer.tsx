@@ -11,27 +11,22 @@ import { useTheme } from "./ThemeContext";
 const Footer = () => {
   const { theme, setTheme } = useTheme();
   return (
-    <div className="w-layout bg-dotted-bg bottom-0 flex h-12 flex-row items-center justify-between gap-2 rounded-t-md border border-gray-200 bg-gray-100 bg-dotted pl-4 pr-6 dark:border-gray-800 dark:bg-slate-800">
-      <p className="text-xs">
+    <div className="w-layout bg-dotted flex h-12 flex-row items-center justify-between gap-2 rounded-t-2xl border-2 border-neutral-200 dark:border-neutral-700 bg-neutral-100 p-6 dark:bg-neutral-800 text-xs">
+      <p>
         Design & Engineered by <span className="underline">ZW</span>
       </p>
-      <p>|</p>
-      <p className="text-xs">
+      <p>
         Polished by <span className="underline">501A</span>
       </p>
-      <p>|</p>
-      <p className="text-xs underline">Privacy Policy</p>
-      <p>|</p>
-      <p className="text-xs underline">How to use Shiori</p>
-      <p>|</p>
+      <p>Privacy Policy</p>
+      <p>How to use Shiori</p>
       <Select
-        onValueChange={() => {
-          setTheme(theme === "light" ? "dark" : "light");
-        }}
-        defaultValue="Dark"
+        onValueChange={() => setTheme(theme === "light" ? "dark" : "light")}
+        defaultValue="dark"
+        aria-label="Theme"
       >
         <SelectTrigger
-          className="h-6 w-14 rounded-sm border border-gray-600 bg-gray-100 text-xs dark:bg-gray-800 dark:text-white"
+          className="h-6 w-14 rounded-sm border border-gray-600 bg-neutral-100 text-xs dark:bg-gray-800 dark:text-white"
           chevron={false}
         >
           <SelectValue />
@@ -39,7 +34,7 @@ const Footer = () => {
         <SelectContent className="w-14">
           <SelectGroup>
             <SelectItem value="light">Light</SelectItem>
-            <SelectItem value="Dark">Dark</SelectItem>
+            <SelectItem value="dark">Dark</SelectItem>
           </SelectGroup>
         </SelectContent>
       </Select>
