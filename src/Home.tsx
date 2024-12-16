@@ -90,9 +90,12 @@ const Home = () => {
   }, [loading]);
 
   return (
-    <div>
-      <div className="w-layout mt-1 flex items-center gap-4">
-        <div className="flex items-center gap-5 text-sm text-black dark:text-white">
+    <section className="w-layout">
+      <div className="flex items-center justify-between">
+        <h1 className="mb-4 mt-6 text-xl font-semibold text-black dark:text-white">
+          Trips
+        </h1>
+        <div className="flex items-center gap-2">
           <DropdownMenu
             onOpenChange={() => {
               setPrevCountryFilter(countryFilter);
@@ -136,53 +139,43 @@ const Home = () => {
               })}
             </DropdownMenuContent>
           </DropdownMenu>
-        </div>
-        <p className="text-black dark:text-white">|</p>
-        <Select
-          onValueChange={(value) => {
-            if (value == "earliest") {
-              const sortEarliest = [...dataCollectionHolder].sort(
-                (a, b) => a.startDate.toMillis() - b.startDate.toMillis(),
-              );
-              setDataCollectionHolder(sortEarliest);
-            } else if (value == "latest") {
-              const sortLatest = [...dataCollectionHolder].sort(
-                (a, b) => b.startDate.toMillis() - a.startDate.toMillis(),
-              );
-              setDataCollectionHolder(sortLatest);
-            }
-          }}
-        >
-          <SelectTrigger
-            className="h-8 w-36 gap-5 bg-gray-100 font-semibold text-black hover:bg-gray-200 dark:bg-gray-800 dark:text-white dark:hover:bg-gray-700"
-            chevron={true}
+          <Select
+            onValueChange={(value) => {
+              if (value == "earliest") {
+                const sortEarliest = [...dataCollectionHolder].sort(
+                  (a, b) => a.startDate.toMillis() - b.startDate.toMillis(),
+                );
+                setDataCollectionHolder(sortEarliest);
+              } else if (value == "latest") {
+                const sortLatest = [...dataCollectionHolder].sort(
+                  (a, b) => b.startDate.toMillis() - a.startDate.toMillis(),
+                );
+                setDataCollectionHolder(sortLatest);
+              }
+            }}
           >
-            <SelectValue placeholder="Sort Time" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectGroup>
-              <SelectItem value="earliest">Sort By Earliest</SelectItem>
-              <SelectItem value="latest">Sort By Latest</SelectItem>
-            </SelectGroup>
-          </SelectContent>
-        </Select>
+            <SelectTrigger>
+              <SelectValue placeholder="Sort Time" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectGroup>
+                <SelectItem value="earliest">Sort By Earliest</SelectItem>
+                <SelectItem value="latest">Sort By Latest</SelectItem>
+              </SelectGroup>
+            </SelectContent>
+          </Select>
+        </div>
       </div>
-      <br />
-      <div className="w-layout">
-        <h1 className="mb-4 mt-6 text-xl font-semibold text-black dark:text-white">
-          Trips
-        </h1>
-        {dataCollectionHolder.length > 0 ? (
-          <TripList trips={dataCollectionHolder} />
-        ) : (
-          <div className="flex h-52 items-center justify-center rounded-xl border-transparent bg-neutral-100 p-6 dark:bg-neutral-800">
-            <h2 className="text-center text-lg font-medium text-neutral-500">
-              No trips found
-            </h2>
-          </div>
-        )}
-      </div>
-    </div>
+      {dataCollectionHolder.length > 0 ? (
+        <TripList trips={dataCollectionHolder} />
+      ) : (
+        <div className="flex h-52 items-center justify-center rounded-xl border-transparent bg-neutral-100 p-6 dark:bg-neutral-800">
+          <h2 className="text-center text-lg font-medium text-neutral-500">
+            No trips found
+          </h2>
+        </div>
+      )}
+    </section>
   );
 };
 
