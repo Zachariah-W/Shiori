@@ -31,6 +31,7 @@ import { UnsplashImage } from "./ImageSearch";
 export type FirestoreTrip = {
   id: string;
   country: string;
+  title: string;
   startDate: Timestamp;
   endDate: Timestamp;
   image: UnsplashImage;
