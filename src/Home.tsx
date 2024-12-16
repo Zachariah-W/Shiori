@@ -88,8 +88,10 @@ const Home = () => {
 
   const getSearchData = async (e: string) => {
     const tripSnap = await getDocs(tripsRef);
-    if (tripSnap.empty || e === "") {
+    if (tripSnap.empty) {
       return;
+    } else if (e == "") {
+      getMainData();
     }
     const tempTripsArray: FirestoreTrip[] = [];
     tripSnap.forEach((doc) => {
