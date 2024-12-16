@@ -111,7 +111,7 @@ const Home = () => {
         <h1 className="mb-4 mt-6 text-xl font-semibold text-black dark:text-white">
           Trips
         </h1>
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-0.5">
           <SearchBar
             onSearch={(e) => {
               getSearchData(e);
@@ -125,11 +125,12 @@ const Home = () => {
             <DropdownMenuTrigger asChild>
               <Button variant={"dropdown"} size={"sm"}>
                 <span>Select Country</span>
-                <FiChevronDown className="opacity-50" />
+                <FiChevronDown />
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent
               className="w-40"
+              align="end"
               onInteractOutside={() => {
                 if (countryFilter.length === 0) {
                   getMainData();
@@ -181,7 +182,7 @@ const Home = () => {
             <SelectTrigger>
               <SelectValue placeholder="Sort Time" />
             </SelectTrigger>
-            <SelectContent>
+            <SelectContent align="end">
               <SelectGroup>
                 <SelectItem value="earliest">Sort By Earliest</SelectItem>
                 <SelectItem value="latest">Sort By Latest</SelectItem>
@@ -193,7 +194,7 @@ const Home = () => {
       {dataCollectionHolder.length > 0 ? (
         <TripList trips={dataCollectionHolder} />
       ) : (
-        <div className="flex h-52 items-center justify-center rounded-xl border border-neutral-200 bg-neutral-100 p-6 dark:border-neutral-700 dark:bg-neutral-800">
+        <div className="flex h-52 items-center justify-center rounded-xl border border-neutral-200 bg-neutral-100 p-6 dark:border-neutral-700/50 dark:bg-neutral-800/50">
           <h2 className="text-center text-lg font-medium text-neutral-500">
             No trips found
           </h2>
