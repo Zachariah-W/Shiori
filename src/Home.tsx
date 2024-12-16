@@ -110,6 +110,7 @@ const Home = () => {
             </DropdownMenuTrigger>
             <DropdownMenuContent
               className="w-40"
+              align="end"
               onInteractOutside={() => {
                 if (countryFilter.length === 0) {
                   getMainData();
