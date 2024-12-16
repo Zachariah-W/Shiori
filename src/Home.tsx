@@ -17,7 +17,6 @@ import {
   DropdownMenuContent,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { ChevronDown } from "lucide-react";
 import {
   Select,
   SelectContent,
@@ -27,6 +26,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { UnsplashImage } from "./ImageSearch";
+import { FiChevronDown } from "react-icons/fi";
 
 export type FirestoreTrip = {
   id: string;
@@ -102,9 +102,9 @@ const Home = () => {
             }}
           >
             <DropdownMenuTrigger asChild>
-              <Button className="flex h-8 w-40 items-center gap-5 bg-gray-100 p-0 font-semibold text-black hover:bg-gray-200 dark:bg-gray-800 dark:text-white dark:hover:bg-gray-700">
+              <Button variant={"dropdown"} size={"sm"}>
                 <span>Select Country</span>
-                <ChevronDown className="h-4 w-4 opacity-50" />
+                <FiChevronDown className="opacity-50"/>
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent
@@ -174,7 +174,7 @@ const Home = () => {
       {dataCollectionHolder.length > 0 ? (
         <TripList trips={dataCollectionHolder} />
       ) : (
-        <div className="flex h-52 items-center justify-center rounded-xl border-transparent bg-neutral-100 p-6 dark:bg-neutral-800">
+        <div className="flex h-52 items-center justify-center rounded-xl  bg-neutral-100 p-6 dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700">
           <h2 className="text-center text-lg font-medium text-neutral-500">
             No trips found
           </h2>

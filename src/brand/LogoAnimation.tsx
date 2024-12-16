@@ -25,7 +25,7 @@ export default function LogoAnimation({
         }
       }}
       onMouseLeave={() => !isPlaying && handleAnimationComplete()}
-      className="flex items-center gap-1.5"
+      className="flex items-center gap-0.5"
       id="lottie"
       {...props}
     >
