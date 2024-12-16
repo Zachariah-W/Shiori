@@ -112,7 +112,10 @@ const Home = () => {
               onInteractOutside={() => {
                 if (countryFilter.length === 0) {
                   getMainData();
-                } else if (JSON.stringify(prevCountryFilter.sort()) !== JSON.stringify(countryFilter.sort())) {
+                } else if (
+                  JSON.stringify(prevCountryFilter.sort()) !==
+                  JSON.stringify(countryFilter.sort())
+                ) {
                   getFilteredData();
                 }
               }}
@@ -125,7 +128,9 @@ const Home = () => {
                     onSelect={(e) => {
                       e.preventDefault();
                       if (countryFilter.includes(country)) {
-                        setCountryFilter(countryFilter.filter((c) => c !== country));
+                        setCountryFilter(
+                          countryFilter.filter((c) => c !== country),
+                        );
                         console.log(countryFilter);
                       } else {
                         setCountryFilter([...countryFilter, country]);

@@ -22,11 +22,13 @@ export type NewEvent = {
 const Create = () => {
   const [events, setEvents] = useState<Map<string, NewEvent>>();
   const [trip, setTrip] = useState<{
+    title: string;
     startDate: Date | undefined;
     endDate: Date | undefined;
     country: string;
     image: UnsplashImage | undefined;
   }>({
+    title: "",
     startDate: undefined,
     endDate: undefined,
     country: "",
@@ -62,11 +64,13 @@ const Create = () => {
           );
 
           const fieldSubmit: {
+            title: string;
             country: string;
             startDate: Date | undefined;
             endDate: Date | undefined;
             image?: UnsplashImage;
           } = {
+            title: trip.title,
             country: trip.country,
             startDate: trip.startDate,
             endDate: trip.endDate,
@@ -107,6 +111,17 @@ const Create = () => {
           navigate("/Home");
         }}
       >
+        <label className={allLabels}> Trip Title:</label>
+        <input
+          type="text"
+          placeholder="Please type in the trip title ..."
+          onChange={(e) => {
+            setTrip({
+              ...trip,
+              title: e.target.value,
+            });
+          }}
+        />
         <label className={allLabels}>Country:</label>
         <input
           type="text"
