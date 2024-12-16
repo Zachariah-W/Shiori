@@ -90,7 +90,7 @@ const Home = () => {
 
   return (
     <div>
-      <div className="mt-1 flex w-layout items-center gap-4">
+      <div className="w-layout mt-1 flex items-center gap-4">
         <div className="flex items-center gap-5 text-sm text-black dark:text-white">
           <DropdownMenu
             onOpenChange={() => {
@@ -155,8 +155,11 @@ const Home = () => {
             }
           }}
         >
-          <SelectTrigger className="w-45 h-8 gap-5 bg-gray-100 font-semibold text-black hover:bg-gray-200 dark:bg-gray-800 dark:text-white dark:hover:bg-gray-700">
-            <SelectValue placeholder="Sort Time" className="pl-2" />
+          <SelectTrigger
+            className="h-8 w-36 gap-5 bg-gray-100 font-semibold text-black hover:bg-gray-200 dark:bg-gray-800 dark:text-white dark:hover:bg-gray-700"
+            chevron={true}
+          >
+            <SelectValue placeholder="Sort Time" />
           </SelectTrigger>
           <SelectContent>
             <SelectGroup>
@@ -168,18 +171,18 @@ const Home = () => {
       </div>
       <br />
       <div className="w-layout">
-        <h1 className="text-xl font-semibold text-black dark:text-white mt-6 mb-4">
+        <h1 className="mb-4 mt-6 text-xl font-semibold text-black dark:text-white">
           Trips
         </h1>
         {dataCollectionHolder.length > 0 ? (
           <TripList trips={dataCollectionHolder} />
-        ):
-          <div className="bg-neutral-100 dark:bg-neutral-800 border-transparent rounded-xl p-6 flex items-center justify-center h-52">
-            <h2 className="text-lg text-center font-medium text-neutral-500">
+        ) : (
+          <div className="flex h-52 items-center justify-center rounded-xl border-transparent bg-neutral-100 p-6 dark:bg-neutral-800">
+            <h2 className="text-center text-lg font-medium text-neutral-500">
               No trips found
             </h2>
           </div>
-        }
+        )}
       </div>
     </div>
   );

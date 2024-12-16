@@ -28,8 +28,8 @@ const Layout = () => {
 
   return (
     <div className="bg-test-bg m-0 flex min-h-screen flex-col items-center bg-white p-0 duration-300 dark:bg-neutral-900">
-      {isLoggedIn && <Navbar />}
-      <div className="w-full">
+      <div className="min-h-screen w-full">
+        {isLoggedIn && <Navbar />}
         <Routes>
           <Route path="/" element={<LandingPage />} />
           {isLoggedIn && (
