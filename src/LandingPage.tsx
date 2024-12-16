@@ -5,7 +5,9 @@ import { doc, getDoc, setDoc, collection, addDoc } from "firebase/firestore";
 import { db } from "../firebaseConfig";
 import { Timestamp } from "firebase/firestore";
 import GoogleSvg from "./GoogleSvg";
-import Logo from "./Logo";
+// import Logo from "./brand/Logo";
+import LogoAnimation from "./brand/LogoAnimation";
+import ShioriLogoAnimation from "./brand/shiori-logo-animation.json";
 
 const LandingPage = () => {
   const navigate = useNavigate();
@@ -62,7 +64,10 @@ const LandingPage = () => {
     <div className="flex min-h-screen flex-col items-center justify-center gap-6">
       <section className="flex items-center gap-2.5">
         <div className="h-fit w-fit rounded-full p-2.5 text-6xl text-orange-600">
-          <Logo />
+          {/* <Logo /> */}
+          <LogoAnimation
+            src={ShioriLogoAnimation}
+          />
         </div>
         <div className="grid gap-1.5 text-left">
           <h1 className="text-2xl font-bold">Shiori</h1>
