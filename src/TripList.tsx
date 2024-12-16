@@ -5,18 +5,14 @@ import { format } from "date-fns";
 import ReactCountryFlag from "react-country-flag";
 import lookup from "country-code-lookup";
 
-const TripList = ({
-  trips,
-}: {
-  trips: FirestoreTrip[];
-}) => {
+const TripList = ({ trips }: { trips: FirestoreTrip[] }) => {
   return (
     <div className="grid grid-cols-2 gap-3">
       {trips.map((trip, i) => (
         <motion.div
           key={i}
-          initial={{ y: 100, opacity: 0, rotateZ:8 }}
-          animate={{ y: 0, opacity: 1, rotateZ:0 }}
+          initial={{ y: 100, opacity: 0, rotateZ: 8 }}
+          animate={{ y: 0, opacity: 1, rotateZ: 0 }}
           transition={{
             delay: i * 0.1,
             type: "spring",
@@ -29,6 +25,8 @@ const TripList = ({
               <div className="flex h-16 items-center justify-between">
                 <div>
                   <h2 className="flex items-center gap-2 text-xl font-semibold text-black dark:text-white">
+                      {trip.title}
+                      <p>|</p>
                     {trip.country}
                     {lookup.byCountry(trip.country)?.internet !=
                       undefined && (

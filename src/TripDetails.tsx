@@ -86,6 +86,9 @@ const TripDetails = () => {
           <div className="flex items-center justify-between">
             <div className="m-2">
               <h2 className="mb-2.5 text-lg font-semibold">
+                Title: {trip.title}
+              </h2>
+              <h2 className="mb-2.5 text-lg font-semibold">
                 Location: {trip.country}
               </h2>
               <p>
@@ -136,7 +139,7 @@ const TripDetails = () => {
                       setOpenDialog(true);
                     }}
                   >
-                    <div className="w-full rounded-md border border-gray-200 bg-gray-100 bg-dotted-bg p-2 text-left dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700">
+                    <div className="bg-dotted-bg w-full rounded-md border border-gray-200 bg-gray-100 p-2 text-left dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700">
                       <p className="text-black dark:text-white">
                         Event: {event.title}
                       </p>

@@ -31,6 +31,7 @@ import { FiChevronDown } from "react-icons/fi";
 export type FirestoreTrip = {
   id: string;
   country: string;
+  title: string;
   startDate: Timestamp;
   endDate: Timestamp;
   image: UnsplashImage;

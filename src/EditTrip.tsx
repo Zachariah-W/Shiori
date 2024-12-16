@@ -53,6 +53,7 @@ const EditTrip = () => {
           setStartDate(formattedTripStartDate);
           setEndDate(formattedTripEndDate);
           setOgData([
+            `${tripSnap.data().title}`,
             `${tripSnap.data().country}`,
             `${formattedTripStartDate}`,
             `${formattedTripEndDate}`,
@@ -104,6 +105,7 @@ const EditTrip = () => {
           if (!currentUser) return;
           const batch = writeBatch(db);
           const currentData = [
+            `${trip.title}`,
             `${trip?.country}`,
             `${tempStartDate}`,
             `${tempEndDate}`,
@@ -121,11 +123,13 @@ const EditTrip = () => {
               `${id}`,
             );
             const updateData: {
+              title: string;
               country: string;
               startDate: Date | undefined;
               endDate: Date | undefined;
               image?: UnsplashImage;
             } = {
+              title: trip.title,
               country: trip.country,
               startDate: tempStartDate,
               endDate: tempEndDate,
@@ -206,6 +210,20 @@ const EditTrip = () => {
           navigate("/Home");
         }}
       >
+        <label className={allLabels}>Trip Title:</label>
+        <input
+          className="title-input"
+          type="text"
+          placeholder="Please type in the trip title ..."
+          onChange={(e) => {
+            setTrip({
+              ...trip,
+              title: e.target.value,
+            });
+          }}
+          value={trip.title}
+          required
+        />
         <label className={allLabels}>Country:</label>
         <input
           className="title-input"
