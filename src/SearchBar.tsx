@@ -14,13 +14,20 @@ const SearchBar = ({
         <FaSearch className="mr-2 text-lg text-black dark:text-white" />
         <input
           className="w-full border-none bg-transparent pl-1 text-sm outline-none focus:outline-none"
-          placeholder="Search Countries..."
+          placeholder="Search title..."
           value={searchTerm}
           onChange={(e) => {
             setSearchTerm(e.target.value);
-            onSearch(e.target.value);
           }}
         />
+        <button
+          className="rounded-md border border-red-500 p-1"
+          onClick={() => {
+            onSearch(searchTerm);
+          }}
+        >
+          Search
+        </button>
       </div>
     </div>
   );

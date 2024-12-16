@@ -25,11 +25,10 @@ const TripList = ({ trips }: { trips: FirestoreTrip[] }) => {
               <div className="flex h-16 items-center justify-between">
                 <div>
                   <h2 className="flex items-center gap-2 text-xl font-semibold text-black dark:text-white">
-                      {trip.title}
-                      <p>|</p>
+                    {trip.title}
+                    <p>|</p>
                     {trip.country}
-                    {lookup.byCountry(trip.country)?.internet !=
-                      undefined && (
+                    {lookup.byCountry(trip.country)?.internet != undefined && (
                       <ReactCountryFlag
                         countryCode={`${
                           lookup.byCountry(trip.country)?.internet

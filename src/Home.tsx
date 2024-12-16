@@ -27,6 +27,7 @@ import {
 } from "@/components/ui/select";
 import { UnsplashImage } from "./ImageSearch";
 import { FiChevronDown } from "react-icons/fi";
+import SearchBar from "./SearchBar";
 
 export type FirestoreTrip = {
   id: string;
@@ -85,6 +86,20 @@ const Home = () => {
     setLoading(false);
   };
 
+  const getSearchData = async (e: string) => {
+    const tripSnap = await getDocs(tripsRef);
+    if (tripSnap.empty || e === "") {
+      return;
+    }
+    const tempTripsArray: FirestoreTrip[] = [];
+    tripSnap.forEach((doc) => {
+      if (doc.data().title.toUpperCase() === e.toUpperCase()) {
+        tempTripsArray.push({ ...doc.data(), id: doc.id } as FirestoreTrip);
+      }
+    });
+    setDataCollectionHolder(tempTripsArray);
+  };
+
   useEffect(() => {
     getMainData();
     getSortCountryData();
@@ -97,6 +112,11 @@ const Home = () => {
           Trips
         </h1>
         <div className="flex items-center gap-2">
+          <SearchBar
+            onSearch={(e) => {
+              getSearchData(e);
+            }}
+          />
           <DropdownMenu
             onOpenChange={() => {
               setPrevCountryFilter(countryFilter);
@@ -105,7 +125,7 @@ const Home = () => {
             <DropdownMenuTrigger asChild>
               <Button variant={"dropdown"} size={"sm"}>
                 <span>Select Country</span>
-                <FiChevronDown className="opacity-50"/>
+                <FiChevronDown className="opacity-50" />
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent
@@ -132,10 +152,8 @@ const Home = () => {
                         setCountryFilter(
                           countryFilter.filter((c) => c !== country),
                         );
-                        console.log(countryFilter);
                       } else {
                         setCountryFilter([...countryFilter, country]);
-                        console.log(countryFilter);
                       }
                     }}
                   >
@@ -175,7 +193,7 @@ const Home = () => {
       {dataCollectionHolder.length > 0 ? (
         <TripList trips={dataCollectionHolder} />
       ) : (
-        <div className="flex h-52 items-center justify-center rounded-xl  bg-neutral-100 p-6 dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700">
+        <div className="flex h-52 items-center justify-center rounded-xl border border-neutral-200 bg-neutral-100 p-6 dark:border-neutral-700 dark:bg-neutral-800">
           <h2 className="text-center text-lg font-medium text-neutral-500">
             No trips found
           </h2>
