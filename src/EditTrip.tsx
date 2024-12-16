@@ -149,7 +149,7 @@ const EditTrip = () => {
               tempArray.push(doc.data().country);
             });
             const countryListRef = doc(db, "users", currentUser.uid);
-            let countryNum = tempArray.filter(
+            const countryNum = tempArray.filter(
               (country) => country === ogCountry,
             ).length;
             if (countryNum == 1) {

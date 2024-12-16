@@ -19,7 +19,7 @@ import { format } from "date-fns";
 import EventDialog from "./EventModal";
 
 const TripDetails = () => {
-  let { id } = useParams();
+  const { id } = useParams();
   const navigate = useNavigate();
   const batch = writeBatch(db);
   const [trip, setTrip] = useState<FirestoreTrip>();
@@ -65,7 +65,7 @@ const TripDetails = () => {
   };
 
   useEffect(() => {
-    id === undefined && navigate("/Home");
+    if (id === undefined) navigate("/Home");
     getTripData();
   }, [loading]);
 

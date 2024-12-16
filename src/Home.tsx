@@ -67,8 +67,9 @@ const Home = () => {
   const getSortCountryData = async () => {
     const countryListRef = doc(db, `users`, `${auth.currentUser?.uid}`);
     const countryListSnap = await getDoc(countryListRef);
-    countryListSnap.exists() &&
+    if (countryListSnap.exists()) {
       setCountryList(countryListSnap.data().countryList as string[]);
+    }
   };
 
   const getMainData = async () => {
@@ -106,10 +107,11 @@ const Home = () => {
             <DropdownMenuContent
               className="w-40"
               onInteractOutside={() => {
-                countryFilter.length === 0
-                  ? getMainData()
-                  : JSON.stringify(prevCountryFilter.sort()) !==
-                      JSON.stringify(countryFilter.sort()) && getFilteredData();
+                if (countryFilter.length === 0) {
+                  getMainData();
+                } else if (JSON.stringify(prevCountryFilter.sort()) !== JSON.stringify(countryFilter.sort())) {
+                  getFilteredData();
+                }
               }}
             >
               {countryList.map((country, i) => {
@@ -119,17 +121,13 @@ const Home = () => {
                     checked={countryFilter.includes(country)}
                     onSelect={(e) => {
                       e.preventDefault();
-                      countryFilter.includes(country)
-                        ? (() => {
-                            setCountryFilter(
-                              countryFilter.filter((c) => c !== country),
-                            );
-                            console.log(countryFilter);
-                          })()
-                        : (() => {
-                            setCountryFilter([...countryFilter, country]);
-                            console.log(countryFilter);
-                          })();
+                      if (countryFilter.includes(country)) {
+                        setCountryFilter(countryFilter.filter((c) => c !== country));
+                        console.log(countryFilter);
+                      } else {
+                        setCountryFilter([...countryFilter, country]);
+                        console.log(countryFilter);
+                      }
                     }}
                   >
                     {country}
