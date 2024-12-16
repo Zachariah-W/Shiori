@@ -93,7 +93,7 @@ const Home = () => {
     }
     const tempTripsArray: FirestoreTrip[] = [];
     tripSnap.forEach((doc) => {
-      if (doc.data().title.toUpperCase() === e.toUpperCase()) {
+      if (doc.data().title.toUpperCase().search(e.toUpperCase()) > 0) {
         tempTripsArray.push({ ...doc.data(), id: doc.id } as FirestoreTrip);
       }
     });

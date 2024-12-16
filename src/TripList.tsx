@@ -21,10 +21,13 @@ const TripList = ({ trips }: { trips: FirestoreTrip[] }) => {
             damping: 20,
           }}
         >
-          <img
-            src={trip.image.urls.regular}
-            className="absolute left-0 top-0 h-48 w-full rounded-xl border border-b-2 border-neutral-200 bg-cover bg-center p-1 text-left transition-all duration-300 hover:bg-neutral-100 dark:border-neutral-700 dark:bg-neutral-800 dark:hover:bg-neutral-700"
-          />
+          {trip.image !== undefined && (
+            <img
+              src={trip.image.urls.regular}
+              className="absolute left-0 top-0 h-48 w-full rounded-xl border border-b-2 border-neutral-200 bg-cover bg-center p-1 text-left transition-all duration-300 hover:bg-neutral-100 dark:border-neutral-700 dark:bg-neutral-800 dark:hover:bg-neutral-700"
+            />
+          )}
+
           <Link
             className="absolute left-0 top-0 flex h-48 w-full items-end rounded-b-xl bg-gradient-to-tr from-neutral-800 via-transparent to-transparent p-6 no-underline"
             to={`/trip/${trip.id}`}
