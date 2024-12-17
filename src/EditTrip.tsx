@@ -94,10 +94,8 @@ const EditTrip = () => {
   if (!trip) return <div></div>;
 
   return (
-    <div className="mx-auto my-0 max-w-[400px] text-center">
-      <h2 className="mb-[30px] text-[20px] font-bold text-black dark:text-white">
-        Edit Mode
-      </h2>
+    <div className="w-layout text-center text-black dark:text-white">
+      <h2 className="mb-[30px] text-[20px] font-bold">Edit Mode</h2>
       <form
         onSubmit={async (e) => {
           e.preventDefault();
@@ -212,7 +210,6 @@ const EditTrip = () => {
       >
         <label className={allLabels}>Trip Title:</label>
         <input
-          className="title-input"
           type="text"
           placeholder="Please type in the trip title ..."
           onChange={(e) => {
@@ -226,7 +223,6 @@ const EditTrip = () => {
         />
         <label className={allLabels}>Country:</label>
         <input
-          className="title-input"
           type="text"
           placeholder="Please type in the official country name..."
           onChange={(e) => {
@@ -251,7 +247,6 @@ const EditTrip = () => {
           }}
           placeholderText="Choose a Date"
           wrapperClassName="w-full"
-          className="title-input"
         />
         <label className={allLabels}>Search New Image:</label>
         <ImageSearch

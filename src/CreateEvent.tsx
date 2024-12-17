@@ -19,7 +19,6 @@ const CreateEvent = ({
         required
       />
       <textarea
-        className="content-textarea"
         value={event.content}
         onChange={(e) => onEventChange({ ...event, content: e.target.value })}
         placeholder="Type your event content..."

@@ -3,7 +3,6 @@
 @tailwind components;
 @tailwind utilities;
 
-/* base styles */
 * {
   margin: 0;
   font-family: "Manrope", sans-serif;
@@ -18,12 +17,16 @@ p {
   @apply font-semibold;
 }
 
-input[type="text"]{
-  @apply h-11 mx-0 my-2.5 box-border block w-full cursor-pointer resize-none rounded-xl border-2 border-transparent bg-neutral-200 dark:bg-neutral-800  px-3 py-1.5 font-medium leading-6 text-neutral-800 dark:text-neutral-200 outline-none transition-all duration-200 focus:bg-neutral-100 dark:focus:bg-neutral-900 focus:border-neutral-300 dark:focus:border-neutral-700 placeholder:text-neutral-400 dark:placeholder:text-neutral-500;
+input[type="text"] {
+  @apply mx-0 my-2.5 box-border block h-11 w-full cursor-pointer resize-none rounded-xl border-2 border-transparent bg-neutral-200 px-3 py-1.5 font-medium leading-6 text-neutral-800 outline-none transition-all duration-200 placeholder:text-neutral-400 focus:border-neutral-300 focus:bg-neutral-100 dark:bg-neutral-800 dark:text-neutral-200 dark:placeholder:text-neutral-500 dark:focus:border-neutral-700 dark:focus:bg-neutral-900;
+}
+
+textarea {
+  @apply mx-0 my-2.5 box-border block h-20 w-full cursor-pointer resize-none rounded-xl border-2 border-transparent bg-neutral-200 px-3 py-1.5 font-medium leading-6 text-neutral-800 outline-none transition-all duration-200 placeholder:text-neutral-400 focus:border-neutral-300 focus:bg-neutral-100 dark:bg-neutral-800 dark:text-neutral-200 dark:placeholder:text-neutral-500 dark:focus:border-neutral-700 dark:focus:bg-neutral-900;
 }
 
 #lottie path {
-  @apply stroke-current fill-current;
+  @apply fill-current stroke-current;
 }
 
 @layer components {
@@ -38,9 +41,8 @@ input[type="text"]{
     display: none;
   }
 
-  
   .w-layout {
-    @apply w-full max-w-[800px] mx-auto
+    @apply mx-auto w-full max-w-[800px];
   }
 }
 

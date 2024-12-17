@@ -83,7 +83,7 @@ const ImageSearch = ({
         </button>
       </div>
       {photos.length > 0 && (
-        <div className="hidden-scrollbar flex snap-x gap-6 overflow-x-scroll rounded-xl border border-black bg-dotted-bg p-5">
+        <div className="hidden-scrollbar bg-dotted-bg mb-2 flex snap-x gap-6 overflow-x-scroll rounded-xl border border-black p-5">
           {photos.map((photo, i) => (
             <div key={i} className="snap-start scroll-mx-6">
               <button
