@@ -21,17 +21,18 @@ const TripList = ({ trips }: { trips: FirestoreTrip[] }) => {
             damping: 20,
           }}
           whileTap={{ scale: 0.95, transition: { duration: 0.05 } }}
-          // whileHover={{ scale: 1.01, transition: { duration: 0.05 } }}
         >
-          {trip.image !== undefined && (
+          {trip.image !== undefined ? (
             <img
               src={trip.image.urls.regular}
-              className="absolute left-0 top-0 h-48 w-full rounded-xl border border-b-2 border-neutral-300 bg-cover bg-center shadow-md text-left transition-all duration-300 bg-neutral-100 dark:border-neutral-700 dark:bg-neutral-800"
+              className="absolute left-0 top-0 h-48 w-full rounded-xl border border-b-2 border-neutral-300 bg-neutral-100 bg-cover bg-center text-left shadow-md transition-all duration-300 dark:border-neutral-700 dark:bg-neutral-800"
             />
+          ) : (
+            <div className="absolute left-0 top-0 h-48 w-full rounded-xl border border-b-2 border-neutral-300 bg-neutral-100 bg-dotted bg-center text-left shadow-md transition-all duration-300 dark:border-neutral-700 dark:bg-neutral-800" />
           )}
 
           <Link
-            className="absolute left-0 top-0 flex h-48 w-full items-end rounded-b-xl bg-gradient-to-t from-neutral-700 dark:from-neutral-800 via-transparent to-transparent p-6 no-underline"
+            className="absolute left-0 top-0 flex h-48 w-full items-end rounded-b-xl bg-gradient-to-t from-neutral-700 via-transparent to-transparent p-6 no-underline dark:from-neutral-800"
             to={`/trip/${trip.id}`}
           >
             <div className="h-fit w-fit">
@@ -54,7 +55,7 @@ const TripList = ({ trips }: { trips: FirestoreTrip[] }) => {
                   )}
                 </h2>
 
-                <p className="text-white/60 font-normal">
+                <p className="font-normal text-white/60">
                   Date:{" "}
                   {trip.startDate &&
                     format(
