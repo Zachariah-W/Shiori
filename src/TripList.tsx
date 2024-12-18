@@ -32,15 +32,16 @@ const TripList = ({ trips }: { trips: FirestoreTrip[] }) => {
           )}
 
           <Link
-            className="absolute left-0 top-0 flex h-48 w-full items-end rounded-b-xl bg-gradient-to-t from-neutral-700 via-transparent to-transparent p-6 no-underline dark:from-neutral-800"
+            className="absolute left-0 top-0 flex h-48 w-full items-end overflow-hidden rounded-b-xl bg-gradient-to-t from-neutral-700 via-transparent to-transparent p-6 no-underline dark:from-neutral-800"
             to={`/trip/${trip.id}`}
           >
             <div className="h-fit w-fit">
               <div>
+                <p className="absolute -right-11 top-7 w-44 rotate-45 transform bg-orange-500 py-1 pl-2 text-center text-sm font-semibold text-white shadow-lg">
+                  {trip.country}
+                </p>
                 <h2 className="flex items-center gap-2 text-xl font-semibold text-white">
                   {trip.title}
-                  <p>|</p>
-                  {trip.country}
                   {lookup.byCountry(trip.country)?.internet != undefined && (
                     <ReactCountryFlag
                       countryCode={`${
