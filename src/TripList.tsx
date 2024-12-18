@@ -37,7 +37,7 @@ const TripList = ({ trips }: { trips: FirestoreTrip[] }) => {
           >
             <div className="h-fit w-fit">
               <div>
-                <p className="absolute -right-11 top-7 w-44 rotate-45 transform bg-orange-500 py-1 pl-2 text-center text-sm font-semibold text-white shadow-lg">
+                <p className="absolute -right-11 top-7 w-44 rotate-45 transform bg-orange-500 py-1 pl-2 text-center text-sm font-bold text-neutral-200 shadow-lg">
                   {trip.country}
                 </p>
                 <h2 className="flex items-center gap-2 text-xl font-semibold text-white">
