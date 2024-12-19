@@ -9,7 +9,7 @@ const CreateEvent = ({
   onEventChange: (updatedEvent: EditEvent | NewEvent) => void;
 }) => {
   return (
-    <div>
+    <div className="w-full">
       <input
         className="title-input"
         type="text"

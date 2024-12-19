@@ -54,7 +54,7 @@ const Footer = () => {
         >
           <SelectValue />
         </SelectTrigger>
-        <SelectContent className="w-14">
+        <SelectContent>
           <SelectGroup>
             <SelectItem value="light">Light</SelectItem>
             <SelectItem value="dark">Dark</SelectItem>

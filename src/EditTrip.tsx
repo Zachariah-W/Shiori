@@ -16,8 +16,9 @@ import {
 import { auth, db } from "../firebaseConfig";
 import { FirestoreTrip } from "./Home";
 import { onAuthStateChanged } from "firebase/auth";
-import { IoAdd } from "react-icons/io5";
+import { FiPlus } from "react-icons/fi";
 import ImageSearch, { UnsplashImage } from "./ImageSearch";
+import { FiTrash2 } from "react-icons/fi";
 
 type EventDetails = {
   title: string;
@@ -255,7 +256,7 @@ const EditTrip = () => {
             setUnsplashPhoto(e);
           }}
         />
-        <div className="flex items-center justify-between">
+        <div className="mt-1 flex flex-row items-center justify-between">
           <label className={allLabels}>Trip Information:</label>
           <button
             type="button"
@@ -272,16 +273,19 @@ const EditTrip = () => {
                 return newEvent;
               })
             }
-            className="flex h-5 w-5 cursor-pointer items-center justify-center rounded-full border border-gray-600 py-1.5 text-gray-700 duration-150 hover:rotate-180 hover:scale-105 dark:border-white"
+            className="cursor-pointer rounded-full border border-gray-600 p-1.5 font-bold text-gray-700 duration-200 hover:rotate-180 dark:border-white"
           >
-            <IoAdd className="h-4 w-4 dark:text-white" />
+            <FiPlus className="dark:text-white" />
           </button>
         </div>
         {events &&
           Array.from(events.entries()).map(([key, event]) => {
             if (event.status === "deleted") return null;
             return (
-              <div className="pb-3" key={key}>
+              <div
+                className="flex flex-row items-center justify-between gap-1.5"
+                key={key}
+              >
                 <CreateEvent
                   event={event}
                   onEventChange={(updatedEvent) => {
@@ -308,7 +312,7 @@ const EditTrip = () => {
                 />
                 <button
                   type="button"
-                  className="h-6 w-32 cursor-pointer rounded-sm border border-red-800 text-red-800 hover:bg-red-800 hover:text-white"
+                  className="cursor-pointer items-center rounded-full border border-red-600 p-1.5 text-red-600 transition-all duration-500 ease-in-out hover:bg-red-600 hover:text-white dark:border-red-800 dark:text-red-800 dark:hover:bg-red-800 dark:hover:text-neutral-300"
                   onClick={() => {
                     const userConfirmed = window.confirm(
                       "Your data will not be actually deleted until you click on finish editing",
@@ -331,16 +335,14 @@ const EditTrip = () => {
                     });
                   }}
                 >
-                  Delete Event
+                  <FiTrash2 />
                 </button>
               </div>
             );
           })}
-        <br />
-        <br />
         <button
           type="submit"
-          className="cursor-pointer rounded-[8px] border-none bg-black p-[8px] text-white dark:bg-white dark:text-black"
+          className="my-4 transform cursor-pointer rounded-lg bg-gradient-to-r from-neutral-400 to-neutral-500 p-2 text-lg font-semibold text-neutral-50 shadow-md transition-all duration-300 ease-in-out hover:scale-105 hover:shadow-xl active:scale-100 dark:bg-gradient-to-r dark:from-neutral-700 dark:to-neutral-800 dark:text-white dark:hover:scale-105 dark:hover:shadow-lg dark:focus:ring-2 dark:focus:ring-neutral-400"
         >
           Finish Edit
         </button>

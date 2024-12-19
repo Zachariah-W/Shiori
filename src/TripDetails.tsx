@@ -1,6 +1,5 @@
 import { useParams, useNavigate } from "react-router-dom";
-import { IoTrash } from "react-icons/io5";
-import { MdModeEdit } from "react-icons/md";
+import { FiEdit, FiTrash2 } from "react-icons/fi";
 import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
 import { Event, FirestoreTrip } from "./Home";
@@ -69,9 +68,6 @@ const TripDetails = () => {
     getTripData();
   }, [loading]);
 
-  const deleteEditButton =
-    "bg-transparent border border-gray-500 rounded-full p-2 cursor-pointer hover:scale-105 transition duration-300";
-
   return (
     <div className="min-w-fit">
       {trip && (
@@ -93,7 +89,7 @@ const TripDetails = () => {
               <h2 className="mb-2.5 text-lg font-semibold">
                 Location: {trip.country}
               </h2>
-              <p>
+              <p className="text-lg font-semibold">
                 Date:{" "}
                 {trip.startDate &&
                   format(
@@ -118,42 +114,46 @@ const TripDetails = () => {
               <p className="ml-2 text-lg font-bold text-black dark:text-white">
                 Trip Information:
               </p>
-              {events.map((event, i) => (
-                <motion.div
-                  key={i}
-                  initial={{ y: "50vh" }}
-                  animate={{ y: 0 }}
-                  transition={{
-                    delay: i * 0.2,
-                    type: "spring",
-                    stiffness: 180,
-                    damping: 22,
-                  }}
-                >
-                  <button
-                    className="ml-2 mt-2 w-full rounded-sm text-black dark:text-white"
-                    onClick={() => {
-                      setDialogData({
-                        id: event.id,
-                        title: event.title,
-                        content: event.content,
-                      });
-                      setOpenDialog(true);
+              <div className="grid h-auto w-screen grid-cols-3 gap-5 pl-2 pr-5">
+                {events.map((event, i) => (
+                  <motion.div
+                    key={i}
+                    initial={{ y: 100, opacity: 0, rotateZ: 8 }}
+                    animate={{ y: 0, opacity: 1, rotateZ: 0 }}
+                    transition={{
+                      delay: i * 0.1,
+                      type: "spring",
+                      stiffness: 200,
+                      damping: 20,
                     }}
+                    whileTap={{ scale: 0.95, transition: { duration: 0.05 } }}
                   >
-                    <div className="bg-dotted-bg w-full rounded-md border border-gray-200 bg-gray-100 p-2 text-left dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700">
-                      <p className="text-black dark:text-white">
-                        Event: {event.title}
-                      </p>
-                    </div>
-                  </button>
-                </motion.div>
-              ))}
+                    <button
+                      className="ml-2 mt-2 w-full rounded-sm text-black dark:text-white"
+                      onClick={() => {
+                        setDialogData({
+                          id: event.id,
+                          title: event.title,
+                          content: event.content,
+                        });
+                        setOpenDialog(true);
+                      }}
+                    >
+                      <div className="bg-dotted-bg dark:border-netural-700 border-netural-200 flex h-20 w-full flex-col gap-1 rounded-md border bg-neutral-100 bg-dotted p-2 pl-3 text-left hover:bg-neutral-200 dark:bg-neutral-900 dark:hover:bg-neutral-800">
+                        <p className="text-lg text-black dark:text-white">
+                          {event.title}
+                        </p>
+                        <p className="truncate text-sm">{event.content}</p>
+                      </div>
+                    </button>
+                  </motion.div>
+                ))}
+              </div>
             </>
           )}
-          <div className="m-[15px] flex items-center justify-center gap-[20px]">
+          <div className="m-7 flex items-center justify-center gap-5">
             <button
-              className={deleteEditButton}
+              className="cursor-pointer items-center rounded-full border border-red-600 p-2 text-red-600 transition-all duration-500 ease-in-out hover:bg-red-600 hover:text-white dark:border-red-800 dark:text-red-800 dark:hover:bg-red-800 dark:hover:text-neutral-300"
               onClick={async () => {
                 const userConfirmed = window.confirm(
                   "You can't restore the data you delete, are you sure you want to delete?",
@@ -220,13 +220,13 @@ const TripDetails = () => {
                 navigate("/Home");
               }}
             >
-              <IoTrash />
+              <FiTrash2 />
             </button>
             <button
-              className={deleteEditButton}
+              className="cursor-pointer items-center rounded-full border border-black p-2 font-semibold transition-all duration-500 hover:bg-neutral-800 hover:text-neutral-200 dark:border-neutral-300 dark:hover:bg-neutral-300 dark:hover:text-black"
               onClick={() => navigate(`/edittrip/${id}`)}
             >
-              <MdModeEdit />
+              <FiEdit />
             </button>
           </div>
         </article>

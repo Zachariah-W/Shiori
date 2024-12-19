@@ -11,8 +11,8 @@ import {
   writeBatch,
 } from "firebase/firestore";
 import CreateEvent from "./CreateEvent";
-import { IoAdd } from "react-icons/io5";
 import ImageSearch, { UnsplashImage } from "./ImageSearch";
+import { FiPlus, FiTrash2 } from "react-icons/fi";
 
 export type NewEvent = {
   title: string;
@@ -151,14 +151,14 @@ const Create = () => {
           wrapperClassName="w-full"
           className="title-input"
         />
-        <p className={allLabels}>Search Image:</p>
+        <label className={allLabels}>Search Image:</label>
         <ImageSearch
           unsplashPhoto={trip.image}
           onPhotoChange={(e) => {
             setTrip({ ...trip, image: e });
           }}
         />
-        <div className="flex items-center justify-between">
+        <div className="mt-1 flex flex-row items-center justify-between">
           <label className={allLabels}>Trip Description:</label>
           <button
             type="button"
@@ -173,21 +173,24 @@ const Create = () => {
                 return newEvent;
               });
             }}
-            className="flex h-5 w-5 cursor-pointer items-center justify-center rounded-full border border-gray-600 py-1.5 text-gray-700 duration-150 hover:rotate-180 hover:scale-105 dark:border-white"
+            className="cursor-pointer rounded-full border border-gray-600 p-1.5 font-bold duration-200 hover:rotate-180 dark:border-neutral-300"
           >
-            <IoAdd className="h-4 w-4 dark:text-white" />
+            <FiPlus className="dark:text-white" />
           </button>
         </div>
         {events &&
           Array.from(events.entries()).map(([key, event]) => (
-            <div className="pb-3" key={key}>
+            <div
+              className="flex flex-row items-center justify-between gap-1.5"
+              key={key}
+            >
               <CreateEvent
                 event={event}
                 onEventChange={(newEvent) => handleEventChange(key, newEvent)}
               />
               <button
                 type="button"
-                className="h-6 w-32 cursor-pointer rounded-sm border border-red-800 text-red-800 hover:bg-red-800 hover:text-white"
+                className="cursor-pointer items-center rounded-full border border-red-600 p-1.5 text-red-600 transition-all duration-500 ease-in-out hover:bg-red-600 hover:text-white dark:border-red-800 dark:text-red-800 dark:hover:bg-red-800 dark:hover:text-neutral-300"
                 onClick={() => {
                   const userConfirmed = window.confirm(
                     "Your data will not be actually deleted until you click on finish editing",
@@ -201,14 +204,13 @@ const Create = () => {
                   });
                 }}
               >
-                Delete Event
+                <FiTrash2 />
               </button>
             </div>
           ))}
-        <hr className="mb-[20px] ml-[5%] mr-[5%] mt-[20px] h-[1px] border-none bg-gradient-to-r from-transparent via-gray-500 to-transparent" />
         <button
           type="submit"
-          className="cursor-pointer rounded-[8px] border-none bg-gray-200 px-[8px] py-[5px] text-black hover:bg-gray-300 dark:bg-gray-700 dark:text-white dark:hover:bg-gray-600"
+          className="my-4 transform cursor-pointer rounded-lg bg-gradient-to-r from-neutral-400 to-neutral-500 p-2 text-lg font-semibold text-neutral-50 shadow-md transition-all duration-300 ease-in-out hover:scale-105 hover:shadow-xl active:scale-100 dark:bg-gradient-to-r dark:from-neutral-700 dark:to-neutral-800 dark:text-white dark:hover:scale-105 dark:hover:shadow-lg dark:focus:ring-2 dark:focus:ring-neutral-400"
         >
           Add Trip
         </button>

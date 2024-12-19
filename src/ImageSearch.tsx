@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { FiSearch } from "react-icons/fi";
 
 export type UnsplashImage = {
   urls: {
@@ -29,7 +30,7 @@ const ImageSearch = ({
 
   return (
     <div>
-      <div className="mb-2 flex flex-row items-center">
+      <div className="mb-2 flex flex-row items-center justify-between gap-1.5">
         <input
           type="text"
           placeholder="Enter search content..."
@@ -38,7 +39,7 @@ const ImageSearch = ({
           }}
         />
         <button
-          className="ml-2 h-10 w-20 cursor-pointer rounded-[8px] border-none bg-gray-200 px-[8px] py-[5px] text-black hover:bg-gray-300 dark:bg-gray-700 dark:text-white dark:hover:bg-gray-600"
+          className="cursor-pointer items-center rounded-full border border-black p-1.5 font-semibold transition-all duration-500 hover:bg-neutral-800 hover:text-neutral-200 dark:border-neutral-300 dark:hover:bg-neutral-300 dark:hover:text-black"
           onClick={async (e) => {
             e.preventDefault();
             const url = `https://api.unsplash.com/search/photos?page=1&query=${input}&orientation=landscape&per_page=5`;
@@ -79,7 +80,7 @@ const ImageSearch = ({
             }
           }}
         >
-          Search
+          <FiSearch />
         </button>
       </div>
       {photos.length > 0 && (
