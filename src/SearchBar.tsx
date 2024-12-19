@@ -10,18 +10,27 @@ const SearchBar = ({
   onSearch: (searchTerms: string) => void;
 }) => {
   const [searchTerm, setSearchTerm] = useState<string>("");
-  const [userInputting, setUserInputting] = useState<boolean>(false);
+  const [isTyping, setIsTyping] = useState<boolean>(false);
+  const [isSearching, setIsSearching] = useState<boolean>(false);
 
   useEffect(() => {
-    const timer = setTimeout(() => {
-      onSearch(searchTerm);
-    }, 500);
-    return () => clearTimeout(timer);
-  }, [searchTerm, onSearch]);
+    if (isTyping) {
+      setIsSearching(false);
+      const timer = setTimeout(() => {
+        setIsTyping(false);
+        setIsSearching(true);
+        onSearch(searchTerm);
+      }, 1500);
+      return () => clearTimeout(timer);
+    } else if (isSearching) {
+      const checkTimer = setTimeout(() => setIsSearching(false), 1000);
+      return () => clearTimeout(checkTimer);
+    }
+  }, [searchTerm, isTyping, isSearching, onSearch]);
 
   return (
     <div className="flex items-center gap-2">
-      {userInputting && (
+      {isTyping && (
         <motion.div
           initial={{ rotate: 0 }}
           animate={{ rotate: 360 }}
@@ -30,11 +39,11 @@ const SearchBar = ({
           <FiLoader />
         </motion.div>
       )}
-      {!userInputting && (
+      {!isTyping && isSearching && (
         <motion.div
           initial={{ opacity: 0 }}
-          animate={{ opacity: [0, 0.5, 1, 1, 0] }}
-          transition={{ duration: 1.5, times: [0, 0.2, 0.5, 0.8, 1] }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.3 }}
         >
           <FiCheck />
         </motion.div>
@@ -46,8 +55,8 @@ const SearchBar = ({
           placeholder="Search title..."
           value={searchTerm}
           onChange={(e) => {
-            setUserInputting(true);
             setSearchTerm(e.target.value);
+            setIsTyping(true);
           }}
         />
       </div>
