@@ -46,12 +46,12 @@ export type Event = {
 };
 
 const Home = () => {
-  const [dataCollectionHolder, setDataCollectionHolder] = useState<
-    FirestoreTrip[]
-  >([]);
+  const [dataCollection, setDataCollection] = useState<FirestoreTrip[]>([]);
+  const [filteredData, setFilteredData] = useState<FirestoreTrip[]>([]);
   const [countryFilter, setCountryFilter] = useState<string[]>([]);
   const [countryList, setCountryList] = useState<string[]>([]);
   const [prevCountryFilter, setPrevCountryFilter] = useState<string[]>([]);
+  const [loading, setLoading] = useState(true);
   const tripsRef = collection(db, `users`, `${auth.currentUser?.uid}`, `trips`);
 
   const getFilteredData = async () => {
@@ -61,10 +61,8 @@ const Home = () => {
     querySnapShot.forEach((doc) => {
       tempArray.push({ ...doc.data(), id: doc.id } as FirestoreTrip);
     });
-    setDataCollectionHolder(tempArray);
+    setDataCollection(tempArray);
   };
-
-  const [loading, setLoading] = useState(true);
 
   const getSortCountryData = async () => {
     const countryListRef = doc(db, `users`, `${auth.currentUser?.uid}`);
@@ -81,25 +79,30 @@ const Home = () => {
       tripsSnap.forEach((doc) => {
         tempTripsArray.push({ ...doc.data(), id: doc.id } as FirestoreTrip);
       });
-      setDataCollectionHolder(tempTripsArray);
+      setDataCollection(tempTripsArray);
+      setFilteredData(tempTripsArray);
     }
     setLoading(false);
   };
 
   const getSearchData = async (e: string) => {
+    if (e.trim() === "") {
+      setFilteredData(dataCollection);
+      return;
+    }
+
     const tripSnap = await getDocs(tripsRef);
     if (tripSnap.empty) {
       return;
-    } else if (e == "") {
-      getMainData();
     }
+
     const tempTripsArray: FirestoreTrip[] = [];
     tripSnap.forEach((doc) => {
-      if (doc.data().title.toUpperCase().search(e.toUpperCase()) > 0) {
+      if (doc.data().title.toUpperCase().includes(e.toUpperCase())) {
         tempTripsArray.push({ ...doc.data(), id: doc.id } as FirestoreTrip);
       }
     });
-    setDataCollectionHolder(tempTripsArray);
+    setFilteredData(tempTripsArray);
   };
 
   useEffect(() => {
@@ -169,15 +172,15 @@ const Home = () => {
           <Select
             onValueChange={(value) => {
               if (value == "earliest") {
-                const sortEarliest = [...dataCollectionHolder].sort(
+                const sortEarliest = [...dataCollection].sort(
                   (a, b) => a.startDate.toMillis() - b.startDate.toMillis(),
                 );
-                setDataCollectionHolder(sortEarliest);
+                setDataCollection(sortEarliest);
               } else if (value == "latest") {
-                const sortLatest = [...dataCollectionHolder].sort(
+                const sortLatest = [...dataCollection].sort(
                   (a, b) => b.startDate.toMillis() - a.startDate.toMillis(),
                 );
-                setDataCollectionHolder(sortLatest);
+                setDataCollection(sortLatest);
               }
             }}
           >
@@ -193,8 +196,8 @@ const Home = () => {
           </Select>
         </div>
       </div>
-      {dataCollectionHolder.length > 0 ? (
-        <TripList trips={dataCollectionHolder} />
+      {filteredData.length > 0 ? (
+        <TripList trips={filteredData} />
       ) : (
         <div className="flex h-52 items-center justify-center rounded-xl border border-neutral-200 bg-neutral-100 p-6 dark:border-neutral-700/50 dark:bg-neutral-800/50">
           <h2 className="text-center text-lg font-medium text-neutral-500">
