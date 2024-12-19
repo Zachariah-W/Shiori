@@ -70,18 +70,20 @@ const TripDetails = () => {
   }, [loading]);
 
   const deleteEditButton =
-    "bg-transparent border border-gray-500 rounded-full p-2 cursor-pointer hover:scale-125 transition duration-300";
+    "bg-transparent border border-gray-500 rounded-full p-2 cursor-pointer hover:scale-105 transition duration-300";
 
   return (
     <div className="min-w-fit">
       {trip && (
         <article className="text-left leading-loose text-black dark:text-white">
-          {trip.image && (
+          {trip.image ? (
             <img
               src={trip.image.urls.regular}
               alt={trip.image.alt_description}
               className="mb-2 h-48 w-full rounded-md object-cover"
             />
+          ) : (
+            <div className="mb-2 h-48 w-full rounded-md bg-dotted" />
           )}
           <div className="flex items-center justify-between">
             <div className="m-2">
