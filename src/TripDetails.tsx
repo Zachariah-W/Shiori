@@ -15,7 +15,13 @@ import {
 } from "firebase/firestore";
 import { onAuthStateChanged } from "firebase/auth";
 import { format } from "date-fns";
-import EventDialog from "./EventModal";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "./components/ui/dialog";
 
 const TripDetails = () => {
   const { id } = useParams();
@@ -231,13 +237,18 @@ const TripDetails = () => {
           </div>
         </article>
       )}
-      <EventDialog
-        open={openDialog}
-        eventContent={dialogData}
-        onOpenChange={() => {
-          setOpenDialog(!openDialog);
-        }}
-      />
+      <Dialog open={openDialog} onOpenChange={() => setOpenDialog(!openDialog)}>
+        <DialogContent className="max-h-screen-md max-w-screen-md overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle>{dialogData.title}</DialogTitle>
+            <DialogDescription className="max-h-screen-md max-w-screen-md">
+              <div className="max-h-96 overflow-y-auto break-words py-2 pr-8">
+                {dialogData.content}
+              </div>
+            </DialogDescription>
+          </DialogHeader>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };
