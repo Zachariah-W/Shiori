@@ -61,7 +61,7 @@ const Home = () => {
     querySnapShot.forEach((doc) => {
       tempArray.push({ ...doc.data(), id: doc.id } as FirestoreTrip);
     });
-    setDataCollection(tempArray);
+    setFilteredData(tempArray);
   };
 
   const getSortCountryData = async () => {
@@ -90,12 +90,10 @@ const Home = () => {
       setFilteredData(dataCollection);
       return;
     }
-
     const tripSnap = await getDocs(tripsRef);
     if (tripSnap.empty) {
       return;
     }
-
     const tempTripsArray: FirestoreTrip[] = [];
     tripSnap.forEach((doc) => {
       if (doc.data().title.toUpperCase().includes(e.toUpperCase())) {
@@ -171,17 +169,17 @@ const Home = () => {
           </DropdownMenu>
           <Select
             onValueChange={(value) => {
-              if (value == "earliest") {
-                const sortEarliest = [...dataCollection].sort(
+              let sortedData = [...filteredData];
+              if (value === "earliest") {
+                sortedData.sort(
                   (a, b) => a.startDate.toMillis() - b.startDate.toMillis(),
                 );
-                setDataCollection(sortEarliest);
-              } else if (value == "latest") {
-                const sortLatest = [...dataCollection].sort(
+              } else if (value === "latest") {
+                sortedData.sort(
                   (a, b) => b.startDate.toMillis() - a.startDate.toMillis(),
                 );
-                setDataCollection(sortLatest);
               }
+              setFilteredData(sortedData);
             }}
           >
             <SelectTrigger>
