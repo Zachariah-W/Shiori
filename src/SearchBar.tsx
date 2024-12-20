@@ -48,7 +48,7 @@ const SearchBar = ({
           <FiCheck />
         </motion.div>
       )}
-      <div className="flex h-8 w-44 cursor-pointer items-center rounded-md pl-4 font-semibold text-black transition-all duration-500 hover:bg-gray-200 dark:text-white dark:hover:bg-gray-700">
+      <div className="flex h-8 w-40 cursor-pointer items-center rounded-md pl-4 font-semibold text-black transition-all duration-500 hover:bg-gray-200 dark:text-white dark:hover:bg-gray-700">
         <FaSearch className="mr-2 text-lg text-black dark:text-white" />
         <input
           className="w-full border-none bg-transparent pl-1 text-sm outline-none focus:outline-none"

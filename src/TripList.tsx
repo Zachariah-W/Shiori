@@ -40,7 +40,7 @@ const TripList = ({ trips }: { trips: FirestoreTrip[] }) => {
                 <p className="absolute -right-11 top-7 w-44 rotate-45 transform bg-orange-500 bg-dotted py-1 pl-2 text-center text-sm font-bold text-neutral-200 shadow-lg">
                   {trip.country}
                 </p>
-                <h2 className="flex items-center gap-2 text-xl font-semibold text-white">
+                <p className="flex w-80 items-center gap-2 truncate text-lg font-semibold text-white">
                   {trip.title}
                   {lookup.byCountry(trip.country)?.internet != undefined && (
                     <ReactCountryFlag
@@ -54,7 +54,7 @@ const TripList = ({ trips }: { trips: FirestoreTrip[] }) => {
                       aria-label={trip.country}
                     />
                   )}
-                </h2>
+                </p>
                 <DateDisplay
                   className={`text-white`}
                   startDate={trip.startDate}
