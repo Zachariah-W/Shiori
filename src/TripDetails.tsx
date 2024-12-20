@@ -129,7 +129,7 @@ const TripDetails = () => {
                       }}
                     >
                       <div className="bg-dotted-bg dark:border-netural-700 border-netural-200 flex h-20 w-full flex-col gap-1 rounded-md border bg-neutral-100 bg-dotted p-2 pl-3 text-left hover:bg-neutral-200 dark:bg-neutral-900 dark:hover:bg-neutral-800">
-                        <p className="text-lg text-black dark:text-white">
+                        <p className="truncate text-lg text-black dark:text-white">
                           {event.title}
                         </p>
                         <p className="truncate text-sm">{event.content}</p>
@@ -221,9 +221,13 @@ const TripDetails = () => {
         </article>
       )}
       <Dialog open={openDialog} onOpenChange={() => setOpenDialog(!openDialog)}>
-        <DialogContent className="max-h-screen-md max-w-screen-md overflow-y-auto">
+        <DialogContent className="max-h-screen-md hidden-scrollbar max-w-screen-md overflow-y-auto">
           <DialogHeader>
-            <DialogTitle>{dialogData.title}</DialogTitle>
+            <DialogTitle className="max-w-screen-sm">
+              <div className="overflow-y-auto break-words py-2">
+                {dialogData.title}
+              </div>
+            </DialogTitle>
             <DialogDescription className="max-h-screen-md max-w-screen-md">
               <div className="max-h-96 overflow-y-auto break-words py-2 pr-8">
                 {dialogData.content}
