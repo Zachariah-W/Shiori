@@ -140,10 +140,11 @@ const EditTrip = () => {
 
             batch.update(tripDocRef, updateData);
 
+            const countryListRef = doc(db, "users", currentUser.uid);
             const existingCountries = collection(
               db,
               `users`,
-              `${auth.currentUser?.uid}`,
+              `${currentUser.uid}`,
               `trips`,
             );
             const existingCountriesSnap = await getDocs(existingCountries);
@@ -151,15 +152,17 @@ const EditTrip = () => {
             existingCountriesSnap.forEach((doc) => {
               tempArray.push(doc.data().country);
             });
-            const countryListRef = doc(db, "users", currentUser.uid);
-            const countryNum = tempArray.filter(
+
+            const countryOccurrences = tempArray.filter(
               (country) => country === ogCountry,
             ).length;
-            if (countryNum == 1) {
+
+            if (countryOccurrences === 1 && ogCountry !== trip.country) {
               batch.update(countryListRef, {
-                countryList: arrayRemove(`${ogCountry}`),
+                countryList: arrayRemove(ogCountry),
               });
             }
+
             if (!tempArray.includes(trip.country)) {
               batch.update(countryListRef, {
                 countryList: arrayUnion(trip.country),
