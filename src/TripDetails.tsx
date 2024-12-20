@@ -14,7 +14,6 @@ import {
   writeBatch,
 } from "firebase/firestore";
 import { onAuthStateChanged } from "firebase/auth";
-import { format } from "date-fns";
 import {
   Dialog,
   DialogContent,
@@ -22,6 +21,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "./components/ui/dialog";
+import DateDisplay from "./DateDisplay";
 
 const TripDetails = () => {
   const { id } = useParams();
@@ -95,24 +95,7 @@ const TripDetails = () => {
               <h2 className="mb-2.5 text-lg font-semibold">
                 Location: {trip.country}
               </h2>
-              <p className="text-lg font-semibold">
-                Date:{" "}
-                {trip.startDate &&
-                  format(
-                    trip.startDate instanceof Date
-                      ? trip.startDate
-                      : trip.startDate.toDate(),
-                    "MM/dd/yyyy",
-                  )}{" "}
-                ~{" "}
-                {trip.endDate &&
-                  format(
-                    trip.endDate instanceof Date
-                      ? trip.endDate
-                      : trip.endDate.toDate(),
-                    "MM/dd/yyyy",
-                  )}
-              </p>
+              <DateDisplay startDate={trip.startDate} endDate={trip.endDate} />
             </div>
           </div>
           {events.length !== 0 && (

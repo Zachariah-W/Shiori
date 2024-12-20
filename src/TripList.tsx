@@ -1,9 +1,9 @@
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { FirestoreTrip } from "./Home";
-import { format } from "date-fns";
 import ReactCountryFlag from "react-country-flag";
 import lookup from "country-code-lookup";
+import DateDisplay from "./DateDisplay";
 
 const TripList = ({ trips }: { trips: FirestoreTrip[] }) => {
   return (
@@ -55,25 +55,10 @@ const TripList = ({ trips }: { trips: FirestoreTrip[] }) => {
                     />
                   )}
                 </h2>
-
-                <p className="font-normal text-neutral-200">
-                  Date:{" "}
-                  {trip.startDate &&
-                    format(
-                      trip.startDate instanceof Date
-                        ? trip.startDate
-                        : trip.startDate.toDate(),
-                      "MM/dd/yyyy",
-                    )}{" "}
-                  ~{" "}
-                  {trip.endDate &&
-                    format(
-                      trip.endDate instanceof Date
-                        ? trip.endDate
-                        : trip.endDate.toDate(),
-                      "MM/dd/yyyy",
-                    )}
-                </p>
+                <DateDisplay
+                  startDate={trip.startDate}
+                  endDate={trip.endDate}
+                />
               </div>
             </div>
           </Link>

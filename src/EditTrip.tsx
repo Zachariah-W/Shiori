@@ -246,7 +246,7 @@ const EditTrip = () => {
             setStartDate(start || undefined);
             setEndDate(end || undefined);
           }}
-          placeholderText="Choose a Date"
+          placeholderText="Choose a Date (If it is a one day trip , choose the exact same date)"
           wrapperClassName="w-full"
         />
         <label className={allLabels}>Search New Image:</label>
