@@ -20,7 +20,7 @@ const LandingPage = () => {
       const userDoc = await getDoc(userRef);
       if (!userDoc.exists()) {
         await setDoc(userRef, {
-          countryList: ["Example Trip"],
+          countryList: ["Example"],
         });
         const tripsCollectionRef = collection(
           db,
@@ -29,7 +29,8 @@ const LandingPage = () => {
           `trips`,
         );
         const tripDocRef = await addDoc(tripsCollectionRef, {
-          country: "Example Trip",
+          title: "Your trip title",
+          country: "Example",
           startDate: Timestamp.fromDate(new Date("2024-09-1")),
           endDate: Timestamp.fromDate(new Date("2024-09-30")),
         });

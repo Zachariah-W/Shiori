@@ -104,8 +104,11 @@ const Home = () => {
   };
 
   useEffect(() => {
-    getMainData();
-    getSortCountryData();
+    const fetchData = async () => {
+      await getMainData();
+      await getSortCountryData();
+    };
+    fetchData();
   }, [loading]);
 
   return (
