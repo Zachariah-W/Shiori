@@ -32,7 +32,7 @@ const TripList = ({ trips }: { trips: FirestoreTrip[] }) => {
           )}
 
           <Link
-            className="absolute left-0 top-0 flex h-48 w-full items-end overflow-hidden rounded-b-xl bg-gradient-to-t from-neutral-700 via-transparent to-transparent p-6 no-underline dark:from-neutral-800"
+            className="absolute left-0 top-0 flex h-48 w-full items-end overflow-hidden rounded-b-xl bg-gradient-to-t from-neutral-500 via-transparent to-transparent p-6 no-underline dark:from-neutral-800"
             to={`/trip/${trip.id}`}
           >
             <div className="h-fit w-fit">
@@ -56,6 +56,7 @@ const TripList = ({ trips }: { trips: FirestoreTrip[] }) => {
                   )}
                 </h2>
                 <DateDisplay
+                  className={`text-white`}
                   startDate={trip.startDate}
                   endDate={trip.endDate}
                 />

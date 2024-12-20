@@ -2,9 +2,11 @@ import { format } from "date-fns";
 import { Timestamp } from "firebase/firestore";
 
 const DateDisplay = ({
+  className,
   startDate,
   endDate,
 }: {
+  className: string;
   startDate: Timestamp;
   endDate: Timestamp;
 }) => {
@@ -20,12 +22,12 @@ const DateDisplay = ({
 
   if (formatStartDate !== formatEndDate) {
     return (
-      <p>
+      <p className={className}>
         Date: {formatStartDate} ~ {formatEndDate}
       </p>
     );
   } else {
-    return <p>Date: {formatStartDate}</p>;
+    return <p className={className}>Date: {formatStartDate}</p>;
   }
 };
 

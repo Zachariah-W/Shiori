@@ -89,13 +89,15 @@ const TripDetails = () => {
           )}
           <div className="flex items-center justify-between">
             <div className="m-2">
-              <h2 className="mb-2.5 text-lg font-semibold">
-                Title: {trip.title}
-              </h2>
-              <h2 className="mb-2.5 text-lg font-semibold">
+              <p className="mb-2 text-lg font-semibold">Title: {trip.title}</p>
+              <p className="mb-2 text-lg font-semibold">
                 Location: {trip.country}
-              </h2>
-              <DateDisplay startDate={trip.startDate} endDate={trip.endDate} />
+              </p>
+              <DateDisplay
+                className={`mb-2 text-lg font-semibold`}
+                startDate={trip.startDate}
+                endDate={trip.endDate}
+              />
             </div>
           </div>
           {events.length !== 0 && (
