@@ -8,6 +8,7 @@ import EditTrip from "./EditTrip";
 import LandingPage from "./LandingPage";
 import Navbar from "./Navbar";
 import Footer from "./Footer";
+import Data from "./Data";
 
 const Layout = () => {
   const navigate = useNavigate();
@@ -38,6 +39,7 @@ const Layout = () => {
               <Route path="/create" element={<Create />} />
               <Route path="/trip/:id" element={<TripDetails />} />
               <Route path="/edittrip/:id" element={<EditTrip />} />
+              <Route path="/data" element={<Data />} />
             </>
           )}
         </Routes>

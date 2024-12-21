@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import LogoAnimation from "./brand/LogoAnimation";
 import shioriLogo from "./brand/shiori-logo-animation.json";
+import { FiDatabase, FiFileText } from "react-icons/fi";
 
 const Navbar = () => {
   return (
@@ -19,10 +20,17 @@ const Navbar = () => {
       </Link>
       <div className="ml-auto flex items-center gap-2.5">
         <Link
-          to="/create"
-          className="cursor-pointer rounded-xl p-2 font-semibold text-black no-underline transition-all hover:scale-105 hover:bg-neutral-100 active:scale-100 dark:text-white dark:hover:bg-neutral-800"
+          to="/data"
+          className="flex w-fit cursor-pointer flex-row items-center gap-1 rounded-xl p-2 font-semibold text-black no-underline transition-all hover:scale-105 hover:bg-neutral-100 active:scale-100 dark:text-white dark:hover:bg-neutral-800"
         >
-          New Trip
+          <FiDatabase />
+          Data
+        </Link>
+        <Link
+          to="/create"
+          className="flex cursor-pointer flex-row items-center gap-1 rounded-xl p-2 font-semibold text-black no-underline transition-all hover:scale-105 hover:bg-neutral-100 active:scale-100 dark:text-white dark:hover:bg-neutral-800"
+        >
+          <FiFileText /> New Trip
         </Link>
       </div>
     </nav>
