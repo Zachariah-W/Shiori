@@ -22,7 +22,7 @@ const Footer = () => {
   const [policyClick, setPolicyClick] = useState<boolean>(false);
   const [guideClick, setGuideClick] = useState<boolean>(false);
   return (
-    <div className="w-layout flex flex-row items-center justify-between gap-2 rounded-t-2xl border-2 border-neutral-200 bg-neutral-100 bg-dotted p-6 text-xs dark:border-neutral-800 dark:bg-neutral-900">
+    <div className="w-layout mt-2 flex flex-row items-center justify-between gap-2 rounded-t-2xl border-2 border-neutral-200 bg-neutral-100 bg-dotted p-6 text-xs dark:border-neutral-800 dark:bg-neutral-900">
       <p>
         Made by <span className="underline">ZW</span>
       </p>
