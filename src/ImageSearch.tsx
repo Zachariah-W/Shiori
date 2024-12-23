@@ -105,7 +105,15 @@ const ImageSearch = ({
                 />
               </button>
               <p className="mt-2 text-center text-xs">
-                Photo By {photo.user.name}
+                Photo by{" "}
+                <a
+                  href={`${photo.user.links.html}?utm_source=your_app_name&utm_medium=referral`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-orange-500 hover:underline"
+                >
+                  {photo.user.name}
+                </a>
               </p>
             </div>
           ))}

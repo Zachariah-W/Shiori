@@ -136,6 +136,22 @@ const EditTrip = () => {
 
             if (unsplashPhoto !== undefined) {
               updateData.image = unsplashPhoto;
+              const downloadUrl = trip.image.links.download_location;
+              (async () => {
+                try {
+                  const response = await fetch(downloadUrl, {
+                    method: "POST",
+                    headers: {
+                      Authorization: `Client-ID ${import.meta.env.VITE_UNSPLASH_ACCESS_KEY}`,
+                    },
+                  });
+                  if (!response.ok) {
+                    throw new Error(`${response.status}`);
+                  }
+                } catch (error: unknown) {
+                  console.error(error);
+                }
+              })();
             }
 
             batch.update(tripDocRef, updateData);
