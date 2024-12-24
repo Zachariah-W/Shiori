@@ -1,50 +1,55 @@
-# React + TypeScript + Vite
+![Shiori Banner Image](/public/shiori-banner.jpg)
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+# Shiori - Trip Planner & Manager
 
-Currently, two official plugins are available:
+Shiori is a simple and user-friendly trip planner and manager that helps you organize and document your trips. You can plan your trips, add events, and capture your memories all in one place.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+### Features:
 
-## Expanding the ESLint configuration
+- **Create New Trips**: Add a trip with essential details like title, location, dates, and images.
+- **Event Tracking**: Add events during your trip to document activities, with titles and descriptions.
+- **Trip Overview**: See all trips on the home screen with basic information. Click on a trip for detailed views.
+- **Trip Management**: Edit or delete trips as needed.
+- **Travel Data Insights**: Track your travel data and history.
+- **Google Authentication**: Log in using your Google account to securely access and manage your trips.
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+---
 
-- Configure the top-level `parserOptions` property like this:
+## Tech Stack
 
-```js
-export default tseslint.config({
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
-```
+Shiori is built with the following technologies:
 
-- Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
-- Optionally add `...tseslint.configs.stylisticTypeChecked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
+- **Frontend**:
+  - **React** (for building the user interface)
+  - **TypeScript** (for type-safe JavaScript)
+  - **Tailwind CSS** (for utility-first CSS styling)
+  - **Framer Motion** (for animations)
+  - **Lottie** (for animated graphics)
+  - **Vite** (for fast bundling and hot-reloading)
+- **Backend**:
 
-```js
-// eslint.config.js
-import react from 'eslint-plugin-react'
+  - **Firebase** (for authentication and backend services)
 
-export default tseslint.config({
-  // Set the react version
-  settings: { react: { version: '18.3' } },
-  plugins: {
-    // Add the react plugin
-    react,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended rules
-    ...react.configs.recommended.rules,
-    ...react.configs['jsx-runtime'].rules,
-  },
-})
-```
+- **Other Tools**:
+  - **Git** & **GitHub** (for version control and collaboration)
+  - **Figma** (for UI/UX design)
+  - **Unsplash API** (for banner/cover image selection)
+
+---
+
+## Installation Instructions
+
+To run Shiori locally, follow these steps:
+
+### Prerequisites
+
+- **Node.js** (v14 or higher)
+- **npm** (Node Package Manager)
+- **Firebase account** for Firebase configuration (authentication, database, etc.)
+
+### Steps
+
+1. **Clone the repository**:
+   ```bash
+   git clone https://github.com/yourusername/shiori.git
+   ```
