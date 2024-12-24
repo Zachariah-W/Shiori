@@ -35,6 +35,7 @@ const Create = () => {
     image: undefined,
   });
   const navigate = useNavigate();
+  const [countryValid, setCountryValid] = useState<boolean>(true);
 
   const handleEventChange = (id: string, updatedEvent: NewEvent) => {
     setEvents((prevEvents) => {
@@ -58,6 +59,22 @@ const Create = () => {
           if (currentUser === null) {
             return;
           }
+
+          try {
+            const response = await fetch(
+              `https://restcountries.com/v3.1/name/${trip.country}?fullText=true`,
+            );
+            if (!response.ok) {
+              setCountryValid(false);
+              return;
+            }
+            setCountryValid(true);
+          } catch (error) {
+            console.error("Error validating country:", error);
+            setCountryValid(false);
+            return;
+          }
+
           const batch = writeBatch(db);
           const createTripRef = doc(
             collection(db, "users", currentUser.uid, "trips"),
@@ -143,12 +160,19 @@ const Create = () => {
           type="text"
           placeholder="Please type in the official country name..."
           onChange={(e) => {
+            const formatCountry =
+              e.target.value.charAt(0).toUpperCase() + e.target.value.slice(1);
             setTrip({
               ...trip,
-              country: e.target.value,
+              country: formatCountry,
             });
           }}
         />
+        {!countryValid && (
+          <div className="mt-1 text-sm text-red-500">
+            Please enter a valid country name.
+          </div>
+        )}
         <label className={allLabels}>Trip Date:</label>
         <DatePicker
           selected={trip.startDate}
