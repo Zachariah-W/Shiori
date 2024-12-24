@@ -51,20 +51,22 @@ To run Shiori locally, follow these steps:
 ### Steps
 
 1. **Clone the repository**:
+
    ```bash
    git clone https://github.com/yourusername/shiori.git
    ```
+
 2. **Navigate to the project folder:**:
 
-```bash
- cd shiori
-```
+   ```bash
+    cd shiori
+   ```
 
 3. **Install dependencies:**:
 
-```bash
- npm install
-```
+   ```bash
+    npm install
+   ```
 
 4. **Set up Firebase:**:
 
@@ -73,10 +75,9 @@ To run Shiori locally, follow these steps:
 - Add your Firebase project’s config to the project (use .env or configure directly in the app).
 
 5. **Run the application locally**:
-
-```bash
- npm run dev
-```
+   ```bash
+    npm run dev
+   ```
 
 ## Usage
 
@@ -110,4 +111,4 @@ To get started with Shiori, follow these simple steps:
 
 ## Contributing
 
-We welcome contributions to improve Shiori! To get started, follow these steps:
+We welcome contributions to improve Shiori!
