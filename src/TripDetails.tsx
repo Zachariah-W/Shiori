@@ -130,7 +130,7 @@ const TripDetails = () => {
                         setOpenDialog(true);
                       }}
                     >
-                      <div className="bg-dotted-bg dark:border-netural-700 border-netural-200 flex h-20 w-full flex-col gap-1 rounded-md border bg-neutral-100 bg-dotted p-2 pl-3 text-left hover:bg-neutral-200 dark:bg-neutral-700 dark:hover:bg-neutral-600">
+                      <div className="bg-dotted-bg dark:border-netural-700 border-netural-200 flex h-20 w-full flex-col gap-1 rounded-md border bg-neutral-100 bg-dotted p-2 pl-3 text-left hover:bg-neutral-200 dark:bg-neutral-800 dark:hover:bg-neutral-700">
                         <p className="truncate text-lg text-black dark:text-white">
                           {event.title}
                         </p>
