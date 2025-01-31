@@ -14,6 +14,7 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart";
+import { FiLoader } from "react-icons/fi";
 
 const Data = () => {
   const [countryVistNum, setCountryVistNum] = useState<Map<string, number>>(
@@ -68,20 +69,19 @@ const Data = () => {
   );
 
   return (
-    <div className="w-layout">
+    <div className="w-layout py-12">
       {loading ? (
-        <h2 className="text-center text-lg font-medium text-neutral-500">
+        <div className="flex items-center gap-2 text-lg text-neutral-500">
+          <FiLoader className="animate-spin" />
           Loading trips...
-        </h2>
+        </div>
       ) : countryVistNum.size === 0 ? (
-        <h2 className="text-center text-lg font-medium text-neutral-500">
-          No trips yet
-        </h2>
+        <h2 className="text-center text-lg text-neutral-500">No trips yet</h2>
       ) : (
         <>
           <div className="w-layout grid grid-cols-3 gap-4">
             <section className="col-span-2">
-              <h2 className="p-4">Trip Statistics</h2>
+              <h2 className="p-4 font-semibold">Trip Statistics</h2>
               <div className="h-fit w-full overflow-clip rounded-2xl border border-neutral-200 bg-white p-4 shadow-sm dark:border-neutral-800 dark:bg-neutral-900">
                 <ChartContainer config={chartConfig} className="min-h-10">
                   <ResponsiveContainer>
@@ -106,7 +106,7 @@ const Data = () => {
               </div>
             </section>
             <section>
-              <h2 className="p-4">Top Countries</h2>
+              <h2 className="p-4 font-semibold">Top Countries</h2>
               <ol className="list-inside list-decimal px-4">
                 {topVists.slice(0, 5).map(([countryName, count], index) => (
                   <li key={index}>

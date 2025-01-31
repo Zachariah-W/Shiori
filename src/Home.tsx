@@ -112,8 +112,8 @@ const Home = () => {
   }, [loading]);
 
   return (
-    <section className="w-layout">
-      <div className="flex items-center justify-between py-6">
+    <section className="w-layout grid gap-6 py-12">
+      <div className="flex items-center justify-between">
         <SearchBar onSearch={(e) => getSearchData(e)} />
         <div className="flex items-center gap-0.5">
           <DropdownMenu
@@ -123,7 +123,7 @@ const Home = () => {
           >
             <DropdownMenuTrigger asChild>
               <Button variant={"dropdown"} size={"sm"}>
-                <span>Select Country</span>
+                <span>Country</span>
                 <FiChevronDown />
               </Button>
             </DropdownMenuTrigger>
@@ -164,6 +164,7 @@ const Home = () => {
             </DropdownMenuContent>
           </DropdownMenu>
           <Select
+            defaultValue={"earliest"}
             onValueChange={(value) => {
               const sortedData = [...filteredData];
               if (value === "earliest") {
@@ -179,12 +180,12 @@ const Home = () => {
             }}
           >
             <SelectTrigger>
-              <SelectValue placeholder="Sort Time" />
+              <SelectValue />
             </SelectTrigger>
             <SelectContent align="end">
               <SelectGroup>
-                <SelectItem value="earliest">Sort By Earliest</SelectItem>
-                <SelectItem value="latest">Sort By Latest</SelectItem>
+                <SelectItem value="earliest">Earliest</SelectItem>
+                <SelectItem value="latest">Latest</SelectItem>
               </SelectGroup>
             </SelectContent>
           </Select>

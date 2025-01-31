@@ -50,7 +50,7 @@ const Create = () => {
   const allLabels = "text-left block font-semibold";
 
   return (
-    <div className="w-layout text-center text-black dark:text-white">
+    <div className="w-layout py-12 text-center text-black dark:text-white">
       <h2 className="mb-[30px] text-[20px] font-bold">Add a New Trip</h2>
       <form
         onSubmit={async (e) => {
