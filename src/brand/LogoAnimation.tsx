@@ -38,7 +38,7 @@ export default function LogoAnimation({
           width: "1em",
           height: "1em",
         }}
-        speed={1.3}
+        speed={1.5}
         onEvent={(event) => event === "complete" && handleAnimationComplete()}
       />
       {props.children}

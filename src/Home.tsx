@@ -172,7 +172,7 @@ const Home = () => {
           </DropdownMenu>
           <Select
             onValueChange={(value) => {
-              let sortedData = [...filteredData];
+              const sortedData = [...filteredData];
               if (value === "earliest") {
                 sortedData.sort(
                   (a, b) => a.startDate.toMillis() - b.startDate.toMillis(),
