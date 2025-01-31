@@ -16,51 +16,55 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import Logo from "./brand/Logo";
 
 const Footer = () => {
   const { theme, setTheme } = useTheme();
   const [policyClick, setPolicyClick] = useState<boolean>(false);
   const [guideClick, setGuideClick] = useState<boolean>(false);
   return (
-    <div className="w-layout mt-2 flex flex-row items-center justify-between gap-2 rounded-t-2xl border-2 border-neutral-200 bg-neutral-100 bg-dotted p-6 text-xs dark:border-neutral-800 dark:bg-neutral-900">
-      <p>
-        Made by <span className="underline">ZW</span>
-      </p>
-      <p>
-        Polished by <span className="underline">501A</span>
-      </p>
-      <button
-        onClick={() => {
-          setPolicyClick(true);
-        }}
-      >
-        Privacy Policy
-      </button>
-      <button
-        onClick={() => {
-          setGuideClick(true);
-        }}
-      >
-        User Guide
-      </button>
-      <Select
-        onValueChange={() => setTheme(theme === "light" ? "dark" : "light")}
-        defaultValue="dark"
-        aria-label="Theme"
-      >
-        <SelectTrigger
-          icon={theme === "light" ? <FiSun /> : <FiMoon />}
-          chevron={false}
+    <div className="w-layout grid overflow-clip rounded-t-3xl border-x border-t border-neutral-200 text-sm shadow-sm dark:border-neutral-800">
+      <div className="flex items-center gap-3 bg-neutral-50 p-8 dark:bg-neutral-800/40">
+        <div className="text-4xl text-orange-500">
+          <Logo />
+        </div>
+        <p className="text-sm">
+          Shiori, made by{" "}
+          <a
+            href="https://zachariahwang.vercel.app"
+            className="underline underline-offset-2"
+          >
+            ZW
+          </a>
+          <br />
+          Polished by 501A
+        </p>
+      </div>
+      <hr />
+      <div className="flex justify-between gap-4 px-8 py-5">
+        <div className="flex items-center gap-3 *:font-normal *:underline *:decoration-neutral-300 *:underline-offset-4 *:dark:decoration-neutral-600">
+          <button onClick={() => setPolicyClick(true)}>Privacy Policy</button>
+          <button onClick={() => setGuideClick(true)}>User Guide</button>
+        </div>
+        <Select
+          onValueChange={() => setTheme(theme === "light" ? "dark" : "light")}
+          defaultValue="dark"
+          aria-label="Theme"
         >
-          <SelectValue />
-        </SelectTrigger>
-        <SelectContent>
-          <SelectGroup>
-            <SelectItem value="light">Light</SelectItem>
-            <SelectItem value="dark">Dark</SelectItem>
-          </SelectGroup>
-        </SelectContent>
-      </Select>
+          <SelectTrigger
+            icon={theme === "light" ? <FiSun /> : <FiMoon />}
+            chevron={false}
+          >
+            <SelectValue />
+          </SelectTrigger>
+          <SelectContent align="end">
+            <SelectGroup>
+              <SelectItem value="light">Light</SelectItem>
+              <SelectItem value="dark">Dark</SelectItem>
+            </SelectGroup>
+          </SelectContent>
+        </Select>
+      </div>
       <Dialog
         open={policyClick}
         onOpenChange={() => {

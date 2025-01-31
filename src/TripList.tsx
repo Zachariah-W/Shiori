@@ -4,13 +4,14 @@ import { FirestoreTrip } from "./Home";
 import ReactCountryFlag from "react-country-flag";
 import lookup from "country-code-lookup";
 import DateDisplay from "./DateDisplay";
+import { cn } from "./lib/utils";
 
 const TripList = ({ trips }: { trips: FirestoreTrip[] }) => {
   return (
-    <div className="grid grid-cols-2 gap-3">
+    <div className="grid gap-3 sm:grid-cols-2">
       {trips.map((trip, i) => (
         <motion.div
-          className="relative h-48"
+          className="relative h-48 overflow-clip rounded-xl border border-neutral-200 dark:border-neutral-700/70"
           key={i}
           initial={{ y: 100, opacity: 0, rotateZ: 8 }}
           animate={{ y: 0, opacity: 1, rotateZ: 0 }}
@@ -25,41 +26,48 @@ const TripList = ({ trips }: { trips: FirestoreTrip[] }) => {
           {trip.image !== undefined ? (
             <img
               src={trip.image.urls.regular}
-              className="absolute left-0 top-0 h-48 w-full rounded-xl border border-b-2 border-neutral-300 bg-neutral-100 bg-cover bg-center text-left shadow-md transition-all duration-300 dark:border-neutral-700 dark:bg-neutral-800"
+              className="absolute left-0 top-0 h-48 w-full bg-neutral-100 bg-cover bg-center text-left shadow-md transition-all duration-300 dark:bg-neutral-800"
             />
           ) : (
-            <div className="absolute left-0 top-0 h-48 w-full rounded-xl border border-b-2 border-neutral-300 bg-neutral-100 bg-dotted bg-center text-left shadow-md transition-all duration-300 dark:border-neutral-700 dark:bg-neutral-800" />
+            <div className="absolute left-0 top-0 h-48 w-full bg-neutral-50 bg-dotted bg-center text-left shadow-md transition-all duration-300 dark:bg-neutral-900" />
           )}
 
           <Link
-            className="absolute left-0 top-0 flex h-48 w-full items-end overflow-hidden rounded-b-xl bg-gradient-to-t from-neutral-500 via-transparent to-transparent p-6 no-underline dark:from-neutral-800"
+            className={cn(
+              "absolute left-0 top-0 flex h-48 w-full items-end overflow-hidden rounded-b-xl p-6 no-underline",
+              trip.image !== undefined &&
+                "bg-gradient-to-t from-neutral-700 via-transparent to-transparent dark:from-neutral-800",
+            )}
             to={`/trip/${trip.id}`}
           >
             <div className="h-fit w-fit">
               <div>
-                <p className="absolute -right-11 top-7 w-44 rotate-45 transform bg-orange-500 bg-dotted py-1 pl-2 text-center text-sm font-bold text-neutral-200 shadow-lg">
-                  {trip.country}
-                </p>
-                <p className="flex w-80 items-center gap-2 truncate text-lg font-semibold text-white">
-                  {trip.title}
+                <p className="absolute -right-12 top-7 flex w-44 rotate-45 transform items-center justify-center gap-2 border bg-white py-1 pl-2 text-center text-sm font-bold text-orange-600 dark:border-neutral-700/70 dark:bg-neutral-800 dark:text-orange-500">
                   {lookup.byCountry(trip.country)?.internet != undefined && (
                     <ReactCountryFlag
                       countryCode={`${
                         lookup.byCountry(trip.country)?.internet
                       }`}
-                      style={{
-                        fontSize: "1.3em",
-                        paddingTop: "2px",
-                      }}
                       aria-label={trip.country}
                     />
                   )}
+                  {trip.country}
                 </p>
-                <DateDisplay
-                  className={`text-white`}
-                  startDate={trip.startDate}
-                  endDate={trip.endDate}
-                />
+                <hgroup
+                  className={cn(
+                    "text-black dark:text-white",
+                    trip.image && "text-white",
+                  )}
+                >
+                  <h2 className="flex w-80 items-center gap-2 truncate text-lg font-semibold">
+                    {trip.title}
+                  </h2>
+                  <DateDisplay
+                    className={``}
+                    startDate={trip.startDate}
+                    endDate={trip.endDate}
+                  />
+                </hgroup>
               </div>
             </div>
           </Link>

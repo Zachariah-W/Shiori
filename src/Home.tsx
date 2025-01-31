@@ -113,16 +113,9 @@ const Home = () => {
 
   return (
     <section className="w-layout">
-      <div className="flex items-center justify-between">
-        <h1 className="mb-4 mt-6 text-xl font-semibold text-black dark:text-white">
-          Trips
-        </h1>
+      <div className="flex items-center justify-between py-6">
+        <SearchBar onSearch={(e) => getSearchData(e)} />
         <div className="flex items-center gap-0.5">
-          <SearchBar
-            onSearch={(e) => {
-              getSearchData(e);
-            }}
-          />
           <DropdownMenu
             onOpenChange={() => {
               setPrevCountryFilter(countryFilter);
