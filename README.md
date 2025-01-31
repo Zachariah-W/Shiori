@@ -38,47 +38,6 @@ Shiori is built with the following technologies:
 
 ---
 
-## Installation Instructions
-
-To run Shiori locally, follow these steps:
-
-### Prerequisites
-
-- **Node.js** (v14 or higher)
-- **npm** (Node Package Manager)
-- **Firebase account** for Firebase configuration (authentication, database, etc.)
-
-### Steps
-
-1. **Clone the repository**:
-
-   ```bash
-   git clone https://github.com/yourusername/shiori.git
-   ```
-
-2. **Navigate to the project folder:**:
-
-   ```bash
-    cd shiori
-   ```
-
-3. **Install dependencies:**:
-
-   ```bash
-    npm install
-   ```
-
-4. **Set up Firebase:**:
-
-- Create a Firebase project on the Firebase Console.
-- Set up Firebase Authentication (Google Sign-in) in the Firebase Console.
-- Add your Firebase project’s config to the project (use .env or configure directly in the app).
-
-5. **Run the application locally**:
-   ```bash
-    npm run dev
-   ```
-
 ## Usage
 
 To get started with Shiori, follow these simple steps:
