@@ -112,17 +112,10 @@ const Home = () => {
   }, [loading]);
 
   return (
-    <section className="w-layout">
+    <section className="w-layout grid gap-6 py-12">
       <div className="flex items-center justify-between">
-        <h1 className="mb-4 mt-6 text-xl font-semibold text-black dark:text-white">
-          Trips
-        </h1>
+        <SearchBar onSearch={(e) => getSearchData(e)} />
         <div className="flex items-center gap-0.5">
-          <SearchBar
-            onSearch={(e) => {
-              getSearchData(e);
-            }}
-          />
           <DropdownMenu
             onOpenChange={() => {
               setPrevCountryFilter(countryFilter);
@@ -130,7 +123,7 @@ const Home = () => {
           >
             <DropdownMenuTrigger asChild>
               <Button variant={"dropdown"} size={"sm"}>
-                <span>Select Country</span>
+                <span>Country</span>
                 <FiChevronDown />
               </Button>
             </DropdownMenuTrigger>
@@ -171,8 +164,9 @@ const Home = () => {
             </DropdownMenuContent>
           </DropdownMenu>
           <Select
+            defaultValue={"earliest"}
             onValueChange={(value) => {
-              let sortedData = [...filteredData];
+              const sortedData = [...filteredData];
               if (value === "earliest") {
                 sortedData.sort(
                   (a, b) => a.startDate.toMillis() - b.startDate.toMillis(),
@@ -186,12 +180,12 @@ const Home = () => {
             }}
           >
             <SelectTrigger>
-              <SelectValue placeholder="Sort Time" />
+              <SelectValue />
             </SelectTrigger>
             <SelectContent align="end">
               <SelectGroup>
-                <SelectItem value="earliest">Sort By Earliest</SelectItem>
-                <SelectItem value="latest">Sort By Latest</SelectItem>
+                <SelectItem value="earliest">Earliest</SelectItem>
+                <SelectItem value="latest">Latest</SelectItem>
               </SelectGroup>
             </SelectContent>
           </Select>
